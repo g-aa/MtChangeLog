@@ -1,0 +1,21 @@
+{
+  "version": "1.0",
+  "defaultProvider": "cdnjs",
+  "libraries": [
+    {
+      "provider": "jsdelivr",
+      "library": "webix@8.4.0",
+      "destination": "wwwroot/lib/webix/"
+    },
+    {
+      "provider": "jsdelivr",
+      "library": "bootstrap@5.1.0",
+      "destination": "wwwroot/lib/bootstrap/"
+    },
+    {
+      "provider": "jsdelivr",
+      "library": "jquery@3.6.0",
+      "destination": "wwwroot/lib/jquery/"
+    }
+  ]
+}
