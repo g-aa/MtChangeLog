@@ -15,24 +15,24 @@ namespace MtChangeLog.WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AnalogModulesController : ControllerBase
+    public class AuthorsController : ControllerBase
     {
-        private readonly IAnalogModuleRepository repository;
+        private readonly IAuthorRepository repository;
 
-        public AnalogModulesController(IAnalogModuleRepository moduleRepository) 
+        public AuthorsController(IAuthorRepository repository) 
         {
-            this.repository = moduleRepository;
+            this.repository = repository;
         }
 
-        // GET: api/<AnalogModulesController>
+        // GET: api/<AuthorsController>
         [HttpGet]
-        public IEnumerable<AnalogModuleBase> Get()
+        public IEnumerable<AuthorBase> Get()
         {
             var result = this.repository.GetEntities();
             return result;
         }
 
-        // GET api/<AnalogModulesController>/00000000-0000-0000-0000-000000000000
+        // GET api/<AuthorsController>/00000000-0000-0000-0000-000000000000
         [HttpGet("{id}")]
         public IActionResult Get(Guid id)
         {
@@ -45,52 +45,29 @@ namespace MtChangeLog.WebAPI.Controllers
             {
                 return this.NotFound(ex.Message);
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
                 return this.BadRequest(ex.Message);
             }
         }
 
-        // GET api/<AnalogModulesController>/default
+        // GET api/<AuthorsController>/default
         [HttpGet("default")]
-        public IActionResult GetDefault() 
+        public IActionResult GetDefault()
         {
-            return this.Ok(AnalogModuleEditable.Default);
+            return this.Ok(AuthorBase.Default);
         }
 
-        // POST api/<AnalogModulesController>
+        // POST api/<AuthorsController>
         [HttpPost]
-        public IActionResult Post([FromBody] AnalogModuleEditable module)
+        public IActionResult Post([FromBody] AuthorBase entity)
         {
             try
             {
-                this.repository.AddEntity(module);
-                return this.Ok($"Analog module {module.DIVG} {module.Title} adding to the database");
+                this.repository.AddEntity(entity);
+                return this.Ok($"Author {entity.FirstName} {entity.LastName} adding to the database");
             }
             catch (ArgumentException ex)
-            {
-                return this.BadRequest(ex.Message);
-            }
-            catch (Exception ex) 
-            {
-                return this.BadRequest(ex.Message);
-            }
-        }
-
-        // PUT api/<AnalogModulesController>/00000000-0000-0000-0000-000000000000
-        [HttpPut("{id}")]
-        public IActionResult Put(Guid id, [FromBody] AnalogModuleEditable module)
-        {
-            try
-            {
-                if (id != module.Id) 
-                {
-                    throw new ArgumentException($"url id = {id} is not equal to model id = {module.Id}");
-                }
-                this.repository.UpdateEntity(module);
-                return this.Ok($"Analog module {module.DIVG} {module.Title} update in the database");
-            }
-            catch (ArgumentException ex) 
             {
                 return this.BadRequest(ex.Message);
             }
@@ -100,7 +77,30 @@ namespace MtChangeLog.WebAPI.Controllers
             }
         }
 
-        // DELETE api/<AnalogModulesController>/00000000-0000-0000-0000-000000000000
+        // PUT api/<AuthorsController>/00000000-0000-0000-0000-000000000000
+        [HttpPut("{id}")]
+        public IActionResult Put(Guid id, [FromBody] AuthorBase entity)
+        {
+            try
+            {
+                if (id != entity.Id)
+                {
+                    throw new ArgumentException($"url id = {id} is not equal to entity id = {entity.Id}");
+                }
+                this.repository.UpdateEntity(entity);
+                return this.Ok($"Author {entity.FirstName} {entity.LastName} update in the database");
+            }
+            catch (ArgumentException ex)
+            {
+                return this.BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return this.BadRequest(ex.Message);
+            }
+        }
+
+        // DELETE api/<AuthorsController>/00000000-0000-0000-0000-000000000000
         [HttpDelete("{id}")]
         public IActionResult Delete(Guid id)
         {
