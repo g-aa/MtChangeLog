@@ -40,8 +40,13 @@ namespace MtChangeLog.WebAPI
             });
 
             services.AddTransient<IAnalogModuleRepository, AnalogModuleRepository>();
+            services.AddTransient<IArmEditRepository, ArmEditRepositor>();
+            services.AddTransient<IAuthorRepository, AuthorRepository>();
+            services.AddTransient<ICommunicationRepository, CommunicationRepository>();
             services.AddTransient<IPlatformsRepository, PlatformsRepository>();
+            services.AddTransient<IProjectRevisionsRepository, ProjectRevisionsRepository>();
             services.AddTransient<IProjectVersionsRepository, ProjectVersionsRepository>();
+            services.AddTransient<IRelayAlgorithRepository, RelayAlgorithRepository>();
 
             services.AddControllers();
         }

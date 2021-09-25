@@ -15,82 +15,59 @@ namespace MtChangeLog.WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AnalogModulesController : ControllerBase
+    public class ArmEditsController : ControllerBase
     {
-        private readonly IAnalogModuleRepository moduleRepository;
+        private readonly IArmEditRepository repository;
 
-        public AnalogModulesController(IAnalogModuleRepository moduleRepository) 
+        public ArmEditsController(IArmEditRepository repository) 
         {
-            this.moduleRepository = moduleRepository;
+            this.repository = repository;
         }
 
-        // GET: api/<AnalogModulesController>
+        // GET: api/<ArmEditsController>
         [HttpGet]
-        public IEnumerable<AnalogModuleBase> Get()
+        public IEnumerable<ArmEditBase> Get()
         {
-            var result = this.moduleRepository.GetEntities();
+            var result = this.repository.GetEntities();
             return result;
         }
 
-        // GET api/<AnalogModulesController>/00000000-0000-0000-0000-000000000000
+        // GET api/<ArmEditsController>/00000000-0000-0000-0000-000000000000
         [HttpGet("{id}")]
         public IActionResult Get(Guid id)
         {
             try
             {
-                var result = this.moduleRepository.GetEntity(id);
+                var result = this.repository.GetEntity(id);
                 return this.Ok(result);
             }
             catch (ArgumentException ex)
             {
                 return this.NotFound(ex.Message);
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
                 return this.BadRequest(ex.Message);
             }
         }
 
-        // GET api/<AnalogModulesController>/default
+        // GET api/<ArmEditsController>/default
         [HttpGet("default")]
-        public IActionResult GetDefault() 
+        public IActionResult GetDefault()
         {
-            return this.Ok(AnalogModuleEditable.Default);
+            return this.Ok(ArmEditBase.Default);
         }
 
-        // POST api/<AnalogModulesController>
+        // POST api/<ArmEditsController>
         [HttpPost]
-        public IActionResult Post([FromBody] AnalogModuleEditable module)
+        public IActionResult Post([FromBody] ArmEditBase entity)
         {
             try
             {
-                this.moduleRepository.AddEntity(module);
-                return this.Ok($"Analog module {module.DIVG} {module.Title} adding to the database");
+                this.repository.AddEntity(entity);
+                return this.Ok($"ArmEdit {entity.DIVG} {entity.Version} adding to the database");
             }
             catch (ArgumentException ex)
-            {
-                return this.BadRequest(ex.Message);
-            }
-            catch (Exception ex) 
-            {
-                return this.BadRequest(ex.Message);
-            }
-        }
-
-        // PUT api/<AnalogModulesController>/00000000-0000-0000-0000-000000000000
-        [HttpPut("{id}")]
-        public IActionResult Put(Guid id, [FromBody] AnalogModuleEditable module)
-        {
-            try
-            {
-                if (id != module.Id) 
-                {
-                    throw new ArgumentException($"url id = {id} is not equal to model id = {module.Id}");
-                }
-                this.moduleRepository.UpdateEntity(module);
-                return this.Ok($"Analog module {module.DIVG} {module.Title} update in the database");
-            }
-            catch (ArgumentException ex) 
             {
                 return this.BadRequest(ex.Message);
             }
@@ -100,13 +77,36 @@ namespace MtChangeLog.WebAPI.Controllers
             }
         }
 
-        // DELETE api/<AnalogModulesController>/00000000-0000-0000-0000-000000000000
+        // PUT api/<ArmEditsController>/00000000-0000-0000-0000-000000000000
+        [HttpPut("{id}")]
+        public IActionResult Put(Guid id, [FromBody] ArmEditBase entity)
+        {
+            try
+            {
+                if (id != entity.Id)
+                {
+                    throw new ArgumentException($"url id = {id} is not equal to entity id = {entity.Id}");
+                }
+                this.repository.UpdateEntity(entity);
+                return this.Ok($"ArmEdit {entity.DIVG} {entity.Version} update in the database");
+            }
+            catch (ArgumentException ex)
+            {
+                return this.BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return this.BadRequest(ex.Message);
+            }
+        }
+
+        // DELETE api/<ArmEditsController>/00000000-0000-0000-0000-000000000000
         [HttpDelete("{id}")]
         public IActionResult Delete(Guid id)
         {
             try
             {
-                this.moduleRepository.DeleteEntity(id);
+                this.repository.DeleteEntity(id);
                 return this.Ok();
             }
             catch (Exception ex)
