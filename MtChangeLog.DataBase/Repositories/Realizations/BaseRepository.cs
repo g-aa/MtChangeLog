@@ -50,6 +50,16 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
             return dbAuthor;
         }
 
+        internal DbCommunication GetDbCommunication(Guid guid) 
+        {
+            var dbCommunication = this.context.Communications.FirstOrDefault(com => com.Id == guid);
+            if (dbCommunication is null) 
+            {
+                throw new ArgumentException($"The communication under id = {guid} was not found in database");
+            }
+            return dbCommunication;
+        }
+
         internal DbPlatform GetDbPlatform(Guid guid)
         {
             var dbPlatform = this.context.Platforms.Include(platform => platform.AnalogModules).FirstOrDefault(p => p.Id == guid);

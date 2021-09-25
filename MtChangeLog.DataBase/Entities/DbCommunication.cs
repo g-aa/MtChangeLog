@@ -19,6 +19,18 @@ namespace MtChangeLog.DataBase.Entities
             this.ProjectRevisions = new HashSet<DbProjectRevision>();    
         }
 
+        public DbCommunication(CommunicationBase other) : base(other) 
+        {
+            
+        }
+
+        public void Update(CommunicationBase other) 
+        {
+            this.Description = other.Description;
+            this.Protocols = other.Protocols;
+
+        }
+
         public CommunicationBase GetBase() 
         {
             return new CommunicationBase(this);
