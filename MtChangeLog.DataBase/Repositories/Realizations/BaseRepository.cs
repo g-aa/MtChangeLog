@@ -90,6 +90,16 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
             return dbProjectRevision;
         }
 
+        internal DbRelayAlgorithm GetDbRelayAlgorithm(Guid guid) 
+        {
+            var dbAlgorithm = this.context.RelayAlgorithms.FirstOrDefault(alg => alg.Id == guid);
+            if (dbAlgorithm is null) 
+            {
+                throw new ArgumentException($"The relay algorithm under id = {guid} was not found in database");
+            }
+            return dbAlgorithm;
+        }
+
         internal ICollection<DbAnalogModule> GetDbAnalogModules(IEnumerable<Guid> guids) 
         {
             var dbAnalogModules = this.context.AnalogModules.Where(am => guids.Contains(am.Id));

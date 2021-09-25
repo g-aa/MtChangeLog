@@ -36,7 +36,6 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
                 throw new ArgumentException($"ArmEdit {entity.DIVG} {entity.Version} is contained in database");
             }
             var dbArmEdit = new DbArmEdit(entity);
-
             this.context.ArmEdits.Add(dbArmEdit);
             this.context.SaveChanges();
         }
@@ -45,7 +44,6 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
         {
             DbArmEdit dbArmEdit = this.GetDbArmEdit(entity.Id);
             dbArmEdit.Update(entity);
-            // dbArmEdit.ProjectRevisions - не должно обновляеться !!!
             this.context.SaveChanges();
         }
 

@@ -26,10 +26,12 @@ namespace MtChangeLog.DataBase.Entities
 
         public void Update(ArmEditBase other) 
         {
+            // this.Id - не обновляеться !!!
             this.DIVG = other.DIVG;
             this.Date = other.Date;
             this.Description = other.Description;
             this.Version = other.Version;
+            // this.ProjectRevisions - не обновляеться !!!
         }
 
         public ArmEditBase GetBase() 
