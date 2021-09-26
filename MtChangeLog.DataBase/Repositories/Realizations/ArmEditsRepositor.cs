@@ -11,9 +11,9 @@ using System.Threading.Tasks;
 
 namespace MtChangeLog.DataBase.Repositories.Realizations
 {
-    public class ArmEditRepositor : BaseRepository, IArmEditRepository
+    public class ArmEditsRepositor : BaseRepository, IArmEditsRepository
     {
-        public ArmEditRepositor(ApplicationContext context) : base(context) 
+        public ArmEditsRepositor(ApplicationContext context) : base(context) 
         {
             
         }

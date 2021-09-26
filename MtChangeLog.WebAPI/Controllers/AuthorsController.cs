@@ -17,9 +17,9 @@ namespace MtChangeLog.WebAPI.Controllers
     [ApiController]
     public class AuthorsController : ControllerBase
     {
-        private readonly IAuthorRepository repository;
+        private readonly IAuthorsRepository repository;
 
-        public AuthorsController(IAuthorRepository repository) 
+        public AuthorsController(IAuthorsRepository repository) 
         {
             this.repository = repository;
         }

@@ -9,8 +9,8 @@ using System.Threading.Tasks;
 
 namespace MtChangeLog.DataBase.Repositories.Interfaces
 {
-    public interface IAuthorRepository : ICRUD<AuthorBase>
+    public interface IArmEditsRepository : ICRUD<ArmEditBase>
     {
-        IEnumerable<AuthorBase> GetEntities();
+        IEnumerable<ArmEditBase> GetEntities();
     }
 }

@@ -3,7 +3,6 @@
 using MtChangeLog.DataBase.Repositories.Interfaces;
 using MtChangeLog.DataObjects.Entities.Base;
 using MtChangeLog.DataObjects.Entities.Editable;
-using MtChangeLog.DataObjects.Enumerations;
 
 using System;
 using System.Collections.Generic;
@@ -16,24 +15,24 @@ namespace MtChangeLog.WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ProjectsVersionsController : ControllerBase
+    public class ProjectRevisionsController : ControllerBase
     {
-        private readonly IProjectVersionsRepository repository;
+        private readonly IProjectRevisionsRepository repository;
 
-        public ProjectsVersionsController(IProjectVersionsRepository repository) 
+        public ProjectRevisionsController(IProjectRevisionsRepository repository) 
         {
             this.repository = repository;
         }
 
-        // GET: api/<ProjectsVersionsController>
+        // GET: api/<ProjectRevisionsController>
         [HttpGet]
-        public IEnumerable<ProjectVersionBase> Get()
+        public IEnumerable<ProjectRevisionBase> Get()
         {
             var result = this.repository.GetEntities();
             return result;
         }
 
-        // GET api/<ProjectsVersionsController>/00000000-0000-0000-0000-000000000000
+        // GET api/<ProjectRevisionsController>/00000000-0000-0000-0000-000000000000
         [HttpGet("{id}")]
         public IActionResult Get(Guid id)
         {
@@ -42,9 +41,9 @@ namespace MtChangeLog.WebAPI.Controllers
                 var result = this.repository.GetEntity(id);
                 return this.Ok(result);
             }
-            catch (ArgumentException ex) 
+            catch (ArgumentException ex)
             {
-                return this.BadRequest(ex.Message);
+                return this.NotFound(ex.Message);
             }
             catch (Exception ex)
             {
@@ -52,51 +51,21 @@ namespace MtChangeLog.WebAPI.Controllers
             }
         }
 
-        // GET api/<ProjectsVersionsController>/default
+        // GET api/<ProjectRevisionsController>/default
         [HttpGet("default")]
         public IActionResult GetDefault()
         {
-            return this.Ok(ProjectVersionEditable.Default);
+            return this.Ok(ProjectRevisionBase.Default);
         }
 
-        // GET api/<ProjectsVersionsController>/statuses
-        [HttpGet("statuses")]
-        public IActionResult GetProjectStatuses() 
-        {
-            return this.Ok(Enum.GetNames(typeof(Status)));
-        }
-
-        // POST api/<ProjectsVersionsController>
+        // POST api/<ProjectRevisionsController>
         [HttpPost]
-        public IActionResult Post([FromBody] ProjectVersionEditable projectVersion)
+        public IActionResult Post([FromBody] ProjectRevisionEditable entity)
         {
             try
             {
-                this.repository.AddEntity(projectVersion);
-                return this.Ok($"The project version {projectVersion.DIVG}, {projectVersion.Title} addig to the database");
-            }
-            catch(ArgumentException ex) 
-            {
-                return this.BadRequest(ex.Message);
-            }
-            catch (Exception ex)
-            {
-                return this.BadRequest(ex.Message);
-            }
-        }
-
-        // PUT api/<ProjectsVersionsController>/00000000-0000-0000-0000-000000000000
-        [HttpPut("{id}")]
-        public IActionResult Put(Guid id, [FromBody] ProjectVersionEditable projectVersion)
-        {
-            try
-            {
-                if (id != projectVersion.Id)
-                {
-                    throw new ArgumentException($"url id = {id} is not equal to project version id = {projectVersion.Id}");
-                }
-                this.repository.UpdateEntity(projectVersion);
-                return this.Ok($"Project version {projectVersion.DIVG}, {projectVersion.Title} update in the database");
+                this.repository.AddEntity(entity);
+                return this.Ok($"Project revision {entity.Date} {entity.Revision} adding to the database");
             }
             catch (ArgumentException ex)
             {
@@ -108,7 +77,30 @@ namespace MtChangeLog.WebAPI.Controllers
             }
         }
 
-        // DELETE api/<ProjectsVersionsController>/00000000-0000-0000-0000-000000000000
+        // PUT api/<ProjectRevisionsController>/00000000-0000-0000-0000-000000000000
+        [HttpPut("{id}")]
+        public IActionResult Put(Guid id, [FromBody] ProjectRevisionEditable entity)
+        {
+            try
+            {
+                if (id != entity.Id)
+                {
+                    throw new ArgumentException($"url id = {id} is not equal to entity id = {entity.Id}");
+                }
+                this.repository.UpdateEntity(entity);
+                return this.Ok($"Project revision {entity.Date} {entity.Revision} update in the database");
+            }
+            catch (ArgumentException ex)
+            {
+                return this.BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return this.BadRequest(ex.Message);
+            }
+        }
+
+        // DELETE api/<ProjectRevisionsController>/00000000-0000-0000-0000-000000000000
         [HttpDelete("{id}")]
         public IActionResult Delete(Guid id)
         {

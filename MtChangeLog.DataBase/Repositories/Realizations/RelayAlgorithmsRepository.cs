@@ -11,9 +11,9 @@ using System.Threading.Tasks;
 
 namespace MtChangeLog.DataBase.Repositories.Realizations
 {
-    public class RelayAlgorithRepository : BaseRepository, IRelayAlgorithRepository
+    public class RelayAlgorithmsRepository : BaseRepository, IRelayAlgorithmsRepository
     {
-        public RelayAlgorithRepository(ApplicationContext context) : base(context) 
+        public RelayAlgorithmsRepository(ApplicationContext context) : base(context) 
         {
             
         }

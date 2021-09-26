@@ -17,9 +17,9 @@ namespace MtChangeLog.WebAPI.Controllers
     [ApiController]
     public class AnalogModulesController : ControllerBase
     {
-        private readonly IAnalogModuleRepository repository;
+        private readonly IAnalogModulesRepository repository;
 
-        public AnalogModulesController(IAnalogModuleRepository repository) 
+        public AnalogModulesController(IAnalogModulesRepository repository) 
         {
             this.repository = repository;
         }

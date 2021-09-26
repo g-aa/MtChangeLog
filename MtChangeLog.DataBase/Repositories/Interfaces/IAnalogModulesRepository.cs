@@ -9,8 +9,8 @@ using System.Threading.Tasks;
 
 namespace MtChangeLog.DataBase.Repositories.Interfaces
 {
-    public interface ICommunicationRepository : ICRUD<CommunicationBase>
+    public interface IAnalogModulesRepository : ICRUD<AnalogModuleEditable>
     {
-        IEnumerable<CommunicationBase> GetEntities();
+        IEnumerable<AnalogModuleBase> GetEntities();
     }
 }

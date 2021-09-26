@@ -9,8 +9,8 @@ using System.Threading.Tasks;
 
 namespace MtChangeLog.DataBase.Repositories.Interfaces
 {
-    public interface IRelayAlgorithRepository : ICRUD<RelayAlgorithmBase>
+    public interface IAuthorsRepository : ICRUD<AuthorBase>
     {
-        IEnumerable<RelayAlgorithmBase> GetEntities();
+        IEnumerable<AuthorBase> GetEntities();
     }
 }

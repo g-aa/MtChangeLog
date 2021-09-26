@@ -12,9 +12,9 @@ using System.Threading.Tasks;
 
 namespace MtChangeLog.DataBase.Repositories.Realizations
 {
-    public class AnalogModuleRepository : BaseRepository, IAnalogModuleRepository
+    public class AnalogModulesRepository : BaseRepository, IAnalogModulesRepository
     {
-        public AnalogModuleRepository(ApplicationContext context) : base(context)
+        public AnalogModulesRepository(ApplicationContext context) : base(context)
         {
 
         }

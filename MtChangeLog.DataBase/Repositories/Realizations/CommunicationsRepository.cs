@@ -11,9 +11,9 @@ using System.Threading.Tasks;
 
 namespace MtChangeLog.DataBase.Repositories.Realizations
 {
-    public class CommunicationRepository : BaseRepository, ICommunicationRepository
+    public class CommunicationsRepository : BaseRepository, ICommunicationsRepository
     {
-        public CommunicationRepository(ApplicationContext context) : base(context) 
+        public CommunicationsRepository(ApplicationContext context) : base(context) 
         {
             
         }

@@ -39,14 +39,14 @@ namespace MtChangeLog.WebAPI
                 // options.UseNpgsql(sPgSqlConnection);
             });
 
-            services.AddTransient<IAnalogModuleRepository, AnalogModuleRepository>();
-            services.AddTransient<IArmEditRepository, ArmEditRepositor>();
-            services.AddTransient<IAuthorRepository, AuthorRepository>();
-            services.AddTransient<ICommunicationRepository, CommunicationRepository>();
+            services.AddTransient<IAnalogModulesRepository, AnalogModulesRepository>();
+            services.AddTransient<IArmEditsRepository, ArmEditsRepositor>();
+            services.AddTransient<IAuthorsRepository, AuthorsRepository>();
+            services.AddTransient<ICommunicationsRepository, CommunicationsRepository>();
             services.AddTransient<IPlatformsRepository, PlatformsRepository>();
             services.AddTransient<IProjectRevisionsRepository, ProjectRevisionsRepository>();
             services.AddTransient<IProjectVersionsRepository, ProjectVersionsRepository>();
-            services.AddTransient<IRelayAlgorithRepository, RelayAlgorithRepository>();
+            services.AddTransient<IRelayAlgorithmsRepository, RelayAlgorithmsRepository>();
 
             services.AddControllers();
         }

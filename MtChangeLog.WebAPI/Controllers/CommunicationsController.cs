@@ -17,9 +17,9 @@ namespace MtChangeLog.WebAPI.Controllers
     [ApiController]
     public class CommunicationsController : ControllerBase
     {
-        private readonly ICommunicationRepository repository;
+        private readonly ICommunicationsRepository repository;
 
-        public CommunicationsController(ICommunicationRepository repository) 
+        public CommunicationsController(ICommunicationsRepository repository) 
         {
             this.repository = repository;
         }

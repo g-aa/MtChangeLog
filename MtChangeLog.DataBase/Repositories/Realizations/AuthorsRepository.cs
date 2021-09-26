@@ -11,9 +11,9 @@ using System.Threading.Tasks;
 
 namespace MtChangeLog.DataBase.Repositories.Realizations
 {
-    public class AuthorRepository : BaseRepository, IAuthorRepository
+    public class AuthorsRepository : BaseRepository, IAuthorsRepository
     {
-        public AuthorRepository(ApplicationContext context) : base(context) 
+        public AuthorsRepository(ApplicationContext context) : base(context) 
         {
             
         }

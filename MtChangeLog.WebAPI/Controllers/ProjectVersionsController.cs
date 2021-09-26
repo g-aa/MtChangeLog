@@ -3,6 +3,7 @@
 using MtChangeLog.DataBase.Repositories.Interfaces;
 using MtChangeLog.DataObjects.Entities.Base;
 using MtChangeLog.DataObjects.Entities.Editable;
+using MtChangeLog.DataObjects.Enumerations;
 
 using System;
 using System.Collections.Generic;
@@ -15,24 +16,24 @@ namespace MtChangeLog.WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ArmEditsController : ControllerBase
+    public class ProjectVersionsController : ControllerBase
     {
-        private readonly IArmEditsRepository repository;
+        private readonly IProjectVersionsRepository repository;
 
-        public ArmEditsController(IArmEditsRepository repository) 
+        public ProjectVersionsController(IProjectVersionsRepository repository) 
         {
             this.repository = repository;
         }
 
-        // GET: api/<ArmEditsController>
+        // GET: api/<ProjectsVersionsController>
         [HttpGet]
-        public IEnumerable<ArmEditBase> Get()
+        public IEnumerable<ProjectVersionBase> Get()
         {
             var result = this.repository.GetEntities();
             return result;
         }
 
-        // GET api/<ArmEditsController>/00000000-0000-0000-0000-000000000000
+        // GET api/<ProjectsVersionsController>/00000000-0000-0000-0000-000000000000
         [HttpGet("{id}")]
         public IActionResult Get(Guid id)
         {
@@ -41,9 +42,9 @@ namespace MtChangeLog.WebAPI.Controllers
                 var result = this.repository.GetEntity(id);
                 return this.Ok(result);
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException ex) 
             {
-                return this.NotFound(ex.Message);
+                return this.BadRequest(ex.Message);
             }
             catch (Exception ex)
             {
@@ -51,23 +52,30 @@ namespace MtChangeLog.WebAPI.Controllers
             }
         }
 
-        // GET api/<ArmEditsController>/default
+        // GET api/<ProjectsVersionsController>/default
         [HttpGet("default")]
         public IActionResult GetDefault()
         {
-            return this.Ok(ArmEditBase.Default);
+            return this.Ok(ProjectVersionEditable.Default);
         }
 
-        // POST api/<ArmEditsController>
+        // GET api/<ProjectsVersionsController>/statuses
+        [HttpGet("statuses")]
+        public IActionResult GetProjectStatuses() 
+        {
+            return this.Ok(Enum.GetNames(typeof(Status)));
+        }
+
+        // POST api/<ProjectsVersionsController>
         [HttpPost]
-        public IActionResult Post([FromBody] ArmEditBase entity)
+        public IActionResult Post([FromBody] ProjectVersionEditable projectVersion)
         {
             try
             {
-                this.repository.AddEntity(entity);
-                return this.Ok($"ArmEdit {entity.DIVG} {entity.Version} adding to the database");
+                this.repository.AddEntity(projectVersion);
+                return this.Ok($"The project version {projectVersion.DIVG}, {projectVersion.Title} addig to the database");
             }
-            catch (ArgumentException ex)
+            catch(ArgumentException ex) 
             {
                 return this.BadRequest(ex.Message);
             }
@@ -77,18 +85,18 @@ namespace MtChangeLog.WebAPI.Controllers
             }
         }
 
-        // PUT api/<ArmEditsController>/00000000-0000-0000-0000-000000000000
+        // PUT api/<ProjectsVersionsController>/00000000-0000-0000-0000-000000000000
         [HttpPut("{id}")]
-        public IActionResult Put(Guid id, [FromBody] ArmEditBase entity)
+        public IActionResult Put(Guid id, [FromBody] ProjectVersionEditable projectVersion)
         {
             try
             {
-                if (id != entity.Id)
+                if (id != projectVersion.Id)
                 {
-                    throw new ArgumentException($"url id = {id} is not equal to entity id = {entity.Id}");
+                    throw new ArgumentException($"url id = {id} is not equal to project version id = {projectVersion.Id}");
                 }
-                this.repository.UpdateEntity(entity);
-                return this.Ok($"ArmEdit {entity.DIVG} {entity.Version} update in the database");
+                this.repository.UpdateEntity(projectVersion);
+                return this.Ok($"Project version {projectVersion.DIVG}, {projectVersion.Title} update in the database");
             }
             catch (ArgumentException ex)
             {
@@ -100,7 +108,7 @@ namespace MtChangeLog.WebAPI.Controllers
             }
         }
 
-        // DELETE api/<ArmEditsController>/00000000-0000-0000-0000-000000000000
+        // DELETE api/<ProjectsVersionsController>/00000000-0000-0000-0000-000000000000
         [HttpDelete("{id}")]
         public IActionResult Delete(Guid id)
         {
