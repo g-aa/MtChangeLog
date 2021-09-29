@@ -44,5 +44,12 @@ namespace MtChangeLog.DataObjects.Entities.Base
         {
             return $"id: {this.Id}, protocols: {this.Protocols}";
         }
+
+        public static CommunicationBase Default => new CommunicationBase() 
+        {
+            Id = Guid.Empty,
+            Protocols = "modbus-mt",
+            Description = "шаблон"
+        };
     }
 }

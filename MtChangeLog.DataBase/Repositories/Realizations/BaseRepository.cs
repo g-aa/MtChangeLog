@@ -40,6 +40,26 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
             return dbArmEdit;
         }
 
+        internal DbAuthor GetDbAuthor(Guid guid)
+        {
+            var dbAuthor = this.context.Authors.FirstOrDefault(author => author.Id == guid);
+            if (dbAuthor is null)
+            {
+                throw new ArgumentException($"The author under id = {guid} was not found in database");
+            }
+            return dbAuthor;
+        }
+
+        internal DbCommunication GetDbCommunication(Guid guid) 
+        {
+            var dbCommunication = this.context.Communications.FirstOrDefault(com => com.Id == guid);
+            if (dbCommunication is null) 
+            {
+                throw new ArgumentException($"The communication under id = {guid} was not found in database");
+            }
+            return dbCommunication;
+        }
+
         internal DbPlatform GetDbPlatform(Guid guid)
         {
             var dbPlatform = this.context.Platforms.Include(platform => platform.AnalogModules).FirstOrDefault(p => p.Id == guid);
@@ -52,17 +72,32 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
 
         internal DbProjectVersion GetDbProjectVersion(Guid guid)
         {
-            var dbProject = this.context.ProjectVersions.Include(pv => pv.AnalogModule).Include(pv => pv.Platform).FirstOrDefault(p => p.Id == guid);
-            if (dbProject is null)
+            var dbProjectVersion = this.context.ProjectVersions.Include(pv => pv.AnalogModule).Include(pv => pv.Platform).FirstOrDefault(pv => pv.Id == guid);
+            if (dbProjectVersion is null)
             {
                 throw new ArgumentException($"The project version under id = {guid} was not found in the database");
             }
-            return dbProject;
+            return dbProjectVersion;
         }
 
         internal DbProjectRevision GetDbProjectRevision(Guid guid)
         {
-            throw new NotImplementedException();
+            var dbProjectRevision = this.context.ProjectRevisions.Include(pr => pr.ProjectVersion).FirstOrDefault(pr => pr.Id == guid);
+            if (dbProjectRevision is null)
+            {
+                throw new ArgumentException($"The project revision under id = {guid} was not found in the database");
+            }
+            return dbProjectRevision;
+        }
+
+        internal DbRelayAlgorithm GetDbRelayAlgorithm(Guid guid) 
+        {
+            var dbAlgorithm = this.context.RelayAlgorithms.FirstOrDefault(alg => alg.Id == guid);
+            if (dbAlgorithm is null) 
+            {
+                throw new ArgumentException($"The relay algorithm under id = {guid} was not found in database");
+            }
+            return dbAlgorithm;
         }
 
         internal ICollection<DbAnalogModule> GetDbAnalogModules(IEnumerable<Guid> guids) 
@@ -85,6 +120,16 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
             return dbArmEdits.ToHashSet();
         }
 
+        internal ICollection<DbAuthor> GetDbAuthors(IEnumerable<Guid> guids)
+        {
+            var dbAuthors = this.context.Authors.Where(a => guids.Contains(a.Id));
+            if (dbAuthors is null)
+            {
+                throw new ArgumentException($"Not found authors by transmitted ids");
+            }
+            return dbAuthors.ToHashSet();
+        }
+
         internal ICollection<DbPlatform> GetDbPlatforms(IEnumerable<Guid> guids) 
         {
             var dbPlatforms = this.context.Platforms.Where(p => guids.Contains(p.Id));
@@ -105,9 +150,14 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
             return dbProjectVersions.ToHashSet();
         }
 
-        internal ICollection<DbProjectRevision> GetDbProjectRevisions(Guid guids) 
+        internal ICollection<DbProjectRevision> GetDbProjectRevisions(IEnumerable<Guid> guids) 
         {
-            throw new NotImplementedException();
+            var dbProjectRevisions = this.context.ProjectRevisions.Where(pr => guids.Contains(pr.Id));
+            if (dbProjectRevisions is null)
+            {
+                throw new ArgumentException($"Not found project revisions by transmitted ids");
+            }
+            return dbProjectRevisions.ToHashSet();
         }
     }
 }

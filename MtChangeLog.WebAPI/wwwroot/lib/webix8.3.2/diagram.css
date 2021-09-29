@@ -1,0 +1,81 @@
+.webix_diagram_item {
+    position: absolute;
+    text-align: center;
+    overflow: hidden;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 2px;
+  }
+  .webix_diagram_item_def {
+    background: #F4F5F9;
+    border: 1px solid #CCD7E6;
+  }
+  .webix_diagram_item_shape {
+    background: transparent;
+  }
+  .webix_diagram_item.webix_selected:not(.webix_diagram_item_shape) {
+    border-color: #1CA1C1;
+    background: #e8f6f9;
+    color: #475466;
+  }
+  .webix_diagram_item.webix_selected.webix_diagram_item_shape {
+    background: transparent;
+    color: #475466;
+  }
+  .webix_diagram_link,
+  .webix_diagram_arrow {
+    stroke: #CCD7E6;
+    stroke-width: 1;
+  }
+  .webix_diagram_link,
+  polyline.webix_diagram_arrow {
+    fill: none;
+  }
+  .webix_diagram_arrow {
+    fill: #FFFFFF;
+  }
+  .webix_diagram_text {
+    text-align: center;
+    padding: 4px 8px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .webix_diagram_text_inner {
+    line-height: 20px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .webix_diagram_item_text {
+    background: #FFFFFF;
+  }
+  .webix_diagram_item_text .webix_diagram_text {
+    padding: 2px;
+  }
+  .webix_diagram_item_org {
+    background: #FFFFFF;
+    border: 1px solid #2D9BF0;
+    border-left-width: 5px;
+  }
+  .webix_diagram_item_shape svg {
+    fill: #F4F5F9;
+    stroke: #CCD7E6;
+  }
+  .webix_selected.webix_diagram_item_shape svg {
+    stroke: #1CA1C1 !important;
+    fill: #e8f6f9 !important;
+  }
+  .webix_diagram_shape_alt {
+    fill: #CCD7E6;
+  }
+  .webix_diagram_measure_size .webix_diagram_text {
+    position: static !important;
+  }

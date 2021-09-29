@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-using MtChangeLog.DataBase.Entities;
 using MtChangeLog.DataBase.Repositories.Interfaces;
 using MtChangeLog.DataObjects.Entities.Base;
 using MtChangeLog.DataObjects.Entities.Editable;
@@ -18,18 +17,18 @@ namespace MtChangeLog.WebAPI.Controllers
     [ApiController]
     public class AnalogModulesController : ControllerBase
     {
-        private readonly IAnalogModuleRepository moduleRepository;
+        private readonly IAnalogModulesRepository repository;
 
-        public AnalogModulesController(IAnalogModuleRepository moduleRepository) 
+        public AnalogModulesController(IAnalogModulesRepository repository) 
         {
-            this.moduleRepository = moduleRepository;
+            this.repository = repository;
         }
 
         // GET: api/<AnalogModulesController>
         [HttpGet]
         public IEnumerable<AnalogModuleBase> Get()
         {
-            var result = this.moduleRepository.GetEntities();
+            var result = this.repository.GetEntities();
             return result;
         }
 
@@ -39,7 +38,7 @@ namespace MtChangeLog.WebAPI.Controllers
         {
             try
             {
-                var result = this.moduleRepository.GetEntity(id);
+                var result = this.repository.GetEntity(id);
                 return this.Ok(result);
             }
             catch (ArgumentException ex)
@@ -61,12 +60,12 @@ namespace MtChangeLog.WebAPI.Controllers
 
         // POST api/<AnalogModulesController>
         [HttpPost]
-        public IActionResult Post([FromBody] AnalogModuleEditable module)
+        public IActionResult Post([FromBody] AnalogModuleEditable entity)
         {
             try
             {
-                this.moduleRepository.AddEntity(module);
-                return this.Ok($"Analog module {module.DIVG} {module.Title} adding to the database");
+                this.repository.AddEntity(entity);
+                return this.Ok($"Analog module {entity.DIVG} {entity.Title} adding to the database");
             }
             catch (ArgumentException ex)
             {
@@ -80,16 +79,16 @@ namespace MtChangeLog.WebAPI.Controllers
 
         // PUT api/<AnalogModulesController>/00000000-0000-0000-0000-000000000000
         [HttpPut("{id}")]
-        public IActionResult Put(Guid id, [FromBody] AnalogModuleEditable module)
+        public IActionResult Put(Guid id, [FromBody] AnalogModuleEditable entity)
         {
             try
             {
-                if (id != module.Id) 
+                if (id != entity.Id) 
                 {
-                    throw new ArgumentException($"url id = {id} is not equal to model id = {module.Id}");
+                    throw new ArgumentException($"url id = {id} is not equal to entity id = {entity.Id}");
                 }
-                this.moduleRepository.UpdateEntity(module);
-                return this.Ok($"Analog module {module.DIVG} {module.Title} update in the database");
+                this.repository.UpdateEntity(entity);
+                return this.Ok($"Analog module {entity.DIVG} {entity.Title} update in the database");
             }
             catch (ArgumentException ex) 
             {
@@ -107,7 +106,7 @@ namespace MtChangeLog.WebAPI.Controllers
         {
             try
             {
-                this.moduleRepository.DeleteEntity(id);
+                this.repository.DeleteEntity(id);
                 return this.Ok();
             }
             catch (Exception ex)

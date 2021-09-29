@@ -1,13 +1,29 @@
 class EntitiesRepository {
     constructor() {
         this.urlAnalogModules = "/api/AnalogModules";
+        this.urlArmEdits = "/api/ArmEdits";
+        this.urlAuthors = "/api/Authors";
+        this.urlCommunications = "/api/Communications";
         this.urlPlatforms = "/api/Platforms";
-        this.urlProjectsVersions = "/api/ProjectsVersions";
-        this.urlProjectsRevisions = "/api/ProjectsRevisions";
+        this.urlProjectsVersions = "/api/ProjectVersions";
+        this.urlProjectsRevisions = "/api/ProjectRevisions";
+        this.urlRelayAlgorithms = "/api/RelayAlgorithms";
     }
 
     getAnalogModulesUrl() {
         return this.urlAnalogModules;
+    }
+
+    getArmEditsUrl() {
+        return this.urlArmEdits;
+    }
+
+    getAuthorsUrl() {
+        return this.urlAuthors;
+    }
+
+    getCommunicationsUrl() {
+        return this.urlCommunications;
     }
 
     getPlatformsUrl() {
@@ -16,6 +32,14 @@ class EntitiesRepository {
 
     getProjectsVersionsUrl() {
         return this.urlProjectsVersions;
+    }
+
+    getProjectsRevisionsUrl() {
+        return this.urlProjectsRevisions;
+    }
+
+    getRelayAlgorithmsUrl() {
+        return this.urlRelayAlgorithms;
     }
 
     async getEntitiesInfo(urlString) {

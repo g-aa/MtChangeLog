@@ -25,6 +25,16 @@ namespace MtChangeLog.DataBase.Entities
             
         }
 
+        public void Update(RelayAlgorithmBase other) 
+        {
+            // this.Id - не обновляется !!!
+            this.ANSI = other.ANSI;
+            this.Title = other.Title;
+            this.LogicalNode = other.LogicalNode;
+            this.Descriprion = other.Descriprion;
+            // this.ProjectRevisions - не обновляется !!!
+        }
+
         public RelayAlgorithmBase GetBase() 
         {
             return new RelayAlgorithmBase(this);

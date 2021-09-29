@@ -19,6 +19,18 @@ namespace MtChangeLog.DataBase.Entities
             this.ProjectRevisions = new HashSet<DbProjectRevision>();
         }
 
+        public DbAuthor(AuthorBase other) : base(other)
+        {
+            
+        }
+
+        public void Update(AuthorBase other) 
+        {
+            this.LastName = other.LastName;
+            this.FirstName = other.FirstName;
+            this.Position = other.Position;
+        }
+
         public AuthorBase GetBase() 
         {
             return new AuthorBase(this);

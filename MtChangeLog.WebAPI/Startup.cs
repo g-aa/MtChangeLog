@@ -32,16 +32,23 @@ namespace MtChangeLog.WebAPI
         {
             services.AddDbContext<ApplicationContext>(options =>
             {
+#if DEBUG
                 string sSqLiteConnection = Configuration["ConnectionStrings:SqLiteDbConnection"];
                 options.UseSqlite(sSqLiteConnection);
-
-                // string sPgSqlConnection = Configuration["ConnectionStrings:PostgreSqlDbConnection"];
-                // options.UseNpgsql(sPgSqlConnection);
+#else
+                string sPgSqlConnection = Configuration["ConnectionStrings:PostgreSqlDbConnection"];
+                options.UseNpgsql(sPgSqlConnection);
+#endif
             });
 
-            services.AddTransient<IAnalogModuleRepository, AnalogModuleRepository>();
+            services.AddTransient<IAnalogModulesRepository, AnalogModulesRepository>();
+            services.AddTransient<IArmEditsRepository, ArmEditsRepositor>();
+            services.AddTransient<IAuthorsRepository, AuthorsRepository>();
+            services.AddTransient<ICommunicationsRepository, CommunicationsRepository>();
             services.AddTransient<IPlatformsRepository, PlatformsRepository>();
+            services.AddTransient<IProjectRevisionsRepository, ProjectRevisionsRepository>();
             services.AddTransient<IProjectVersionsRepository, ProjectVersionsRepository>();
+            services.AddTransient<IRelayAlgorithmsRepository, RelayAlgorithmsRepository>();
 
             services.AddControllers();
         }

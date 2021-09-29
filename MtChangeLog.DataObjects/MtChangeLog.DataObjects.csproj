@@ -5,7 +5,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Entities\Information\" />
+    <Compile Remove="Entities\Information\**" />
+    <EmbeddedResource Remove="Entities\Information\**" />
+    <None Remove="Entities\Information\**" />
   </ItemGroup>
 
 </Project>

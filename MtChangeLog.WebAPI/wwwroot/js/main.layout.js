@@ -49,14 +49,38 @@ let getMainLayout = function () {
                                             }
                                             platformLayout.show();
                                             break;
-                                        case "projectTableLayout_id":
+                                        case "prjVersTableLayout_id":
                                             if(projectLayout == undefined || projectLayout == null) {
                                                 var projectLayout = new ProjectTableLayout(dLayout);
                                             }
                                             projectLayout.show();
                                             break;
-                                        case "revisionTable_id":
-
+                                        case "prjRevTableLayout_id":
+                                            
+                                            break;
+                                        case "armEditTableLayout_id":
+                                            if(armEditLayout == undefined || armEditLayout == null) {
+                                                var armEditLayout = new ArmEditTableLayout(dLayout);
+                                            }
+                                            armEditLayout.show();
+                                            break;
+                                        case "authorTableLayout_id":
+                                            if(authorLayout == undefined || authorLayout == null) {
+                                                var authorLayout = new AuthorTableLayout(dLayout);
+                                            }
+                                            authorLayout.show();
+                                            break;
+                                        case "communicationTableLayout_id":
+                                            if(comLayout == undefined || comLayout == null) {
+                                                var comLayout = new CommunicationTableLayout(dLayout);
+                                            }
+                                            comLayout.show();
+                                            break;
+                                        case "relayAlgorithmTableLayout_id":
+                                            if(algorithmLayout == undefined || algorithmLayout == null) {
+                                                var algorithmLayout = new RelayAlgorithmTableLayout(dLayout);
+                                            }
+                                            algorithmLayout.show();
                                             break;
                                         default:
                                             webix.message({
@@ -102,7 +126,7 @@ let getMainSidebarMenu = function() {
         {
             id:"analogModuleTableLayout_id",
             icon:"mdi mdi-table",
-            value:"таблица аналоговых модулей",
+            value:"аналоговые модули",
         },
         {
             id:"platformTableLayout_id",
@@ -110,14 +134,34 @@ let getMainSidebarMenu = function() {
             value:"таблица платформ БМРЗ",
         },
         {
-            id:"projectTableLayout_id",
+            id:"prjVersTableLayout_id",
             icon:"mdi mdi-table",
             value:"таблица версий БФПО",
         },
         {
-            id:"revisionTable_id",
+            id:"prjRevTableLayout_id",
             icon:"mdi mdi-table",
             value:"таблица редакций БФПО"
+        },
+        {
+            id:"armEditTableLayout_id",
+            icon:"mdi mdi-table",
+            value:"таблица версий ArmEdit"
+        },
+        {
+            id:"authorTableLayout_id",
+            icon:"mdi mdi-table",
+            value:"авторы проектов"
+        },
+        {
+            id:"communicationTableLayout_id",
+            icon:"mdi mdi-table",
+            value:"протоколы инф. обмена"
+        },
+        {
+            id:"relayAlgorithmTableLayout_id",
+            icon:"mdi mdi-table",
+            value:"алгоритмы РЗиА"
         }
     ];
     return result;
