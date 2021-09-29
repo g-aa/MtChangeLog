@@ -32,11 +32,13 @@ namespace MtChangeLog.WebAPI
         {
             services.AddDbContext<ApplicationContext>(options =>
             {
+#if DEBUG
                 string sSqLiteConnection = Configuration["ConnectionStrings:SqLiteDbConnection"];
                 options.UseSqlite(sSqLiteConnection);
-
-                // string sPgSqlConnection = Configuration["ConnectionStrings:PostgreSqlDbConnection"];
-                // options.UseNpgsql(sPgSqlConnection);
+#else
+                string sPgSqlConnection = Configuration["ConnectionStrings:PostgreSqlDbConnection"];
+                options.UseNpgsql(sPgSqlConnection);
+#endif
             });
 
             services.AddTransient<IAnalogModulesRepository, AnalogModulesRepository>();

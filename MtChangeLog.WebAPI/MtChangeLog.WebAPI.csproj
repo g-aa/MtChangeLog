@@ -5,6 +5,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="wwwroot\js\layouts\**" />
+    <Compile Remove="wwwroot\js\windows\**" />
+    <Content Remove="wwwroot\js\layouts\**" />
+    <Content Remove="wwwroot\js\windows\**" />
+    <EmbeddedResource Remove="wwwroot\js\layouts\**" />
+    <EmbeddedResource Remove="wwwroot\js\windows\**" />
+    <None Remove="wwwroot\js\layouts\**" />
+    <None Remove="wwwroot\js\windows\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\MtChangeLog.DataBase\MtChangeLog.DataBase.csproj" />
     <ProjectReference Include="..\MtChangeLog.DataObjects\MtChangeLog.DataObjects.csproj" />
   </ItemGroup>
@@ -13,11 +24,6 @@
     <Content Update="wwwroot\index.html">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="wwwroot\js\layouts\" />
-    <Folder Include="wwwroot\js\windows\" />
   </ItemGroup>
 
   <ProjectExtensions><VisualStudio><UserProperties appsettings_1json__JsonSchema="https://jenkins-x.io/schemas/jx-schema.json" properties_4launchsettings_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>

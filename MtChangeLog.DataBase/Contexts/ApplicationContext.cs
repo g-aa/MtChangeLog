@@ -12,9 +12,7 @@ namespace MtChangeLog.DataBase.Contexts
     {
         #region ProjectVersionEntities
         internal DbSet<DbPlatform> Platforms { get; set; }
-        
         internal DbSet<DbAnalogModule> AnalogModules { get; set; }
-        
         internal DbSet<DbProjectVersion> ProjectVersions { get; set; }
         #endregion
 
@@ -30,7 +28,7 @@ namespace MtChangeLog.DataBase.Contexts
         {
             //if (this.Platforms.Any()) 
             //{
-                this.Database.EnsureDeleted();    
+            //    this.Database.EnsureDeleted();    
             //}
             this.Database.EnsureCreated();
         }
