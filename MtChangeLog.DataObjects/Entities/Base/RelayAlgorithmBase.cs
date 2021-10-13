@@ -13,7 +13,7 @@ namespace MtChangeLog.DataObjects.Entities.Base
         public string Title { get; set; }
         public string ANSI { get; set; }
         public string LogicalNode {get; set;}
-        public string Descriprion { get; set; }
+        public string Description { get; set; }
 
         public RelayAlgorithmBase() 
         {
@@ -26,7 +26,7 @@ namespace MtChangeLog.DataObjects.Entities.Base
             this.Title = other.Title;
             this.ANSI = other.ANSI;
             this.LogicalNode = other.LogicalNode;
-            this.Descriprion = other.Descriprion;
+            this.Description = other.Description;
         }
 
         public bool Equals([AllowNull] RelayAlgorithmBase other) 
@@ -55,7 +55,7 @@ namespace MtChangeLog.DataObjects.Entities.Base
             Title = "наименование алгоритма РЗА",
             ANSI = "код ANSI",
             LogicalNode = "логический узел в МЭК-61850",
-            Descriprion = "шаблон функции релейной защиты"
+            Description = "шаблон функции релейной защиты"
         };
     }
 }

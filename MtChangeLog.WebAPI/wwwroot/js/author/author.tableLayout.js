@@ -9,8 +9,8 @@ class AuthorTableLayout{
             resizeColumn:true,
             columns:[
                 { id:"id",             adjust:true, header:["GUID:", ""] },
-                { id:"firstname",           adjust:true, header:["ДИВГ:", { content:"multiSelectFilter" }] },
-                { id:"lastname",        adjust:true, header:["Версия:", { content:"multiSelectFilter" }] },
+                { id:"firstName",           adjust:true, header:["Имя:", { content:"multiSelectFilter" }] },
+                { id:"lastName",        adjust:true, header:["Фамилия:", { content:"multiSelectFilter" }] },
                 { id:"position",    fillspace:true, header:["Должность:", { content:"multiSelectFilter" }] }
             ],
             data:[]

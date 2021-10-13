@@ -11,7 +11,7 @@ class RelayAlgorithmTableLayout{
                 { id:"id",          adjust:true, header:["GUID:", ""] },
                 { id:"title",       adjust:true, header:["Наименование:", { content:"multiSelectFilter" }] },
                 { id:"ansi",        adjust:true, header:["ANSI код:", { content:"multiSelectFilter" }] },
-                { id:"logicalnode", adjust:true, header:["LN:", { content:"multiSelectFilter" }] },
+                { id:"logicalNode", adjust:true, header:["LN:", { content:"multiSelectFilter" }] },
                 { id:"description", adjust:true, header:["Описание:", ""] }
             ],
             data:[]

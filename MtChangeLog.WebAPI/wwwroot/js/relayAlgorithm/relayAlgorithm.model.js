@@ -12,8 +12,8 @@ class RelayAlgorithm{
         // отправить данные:
         this.submit = async function(){
             let answer = await entitiesRepository.createEntity(this.url, this.editable);
-            if(typeof(beforeEnding) === "function"){
-                await beforeEnding(this.url, answer);
+            if(typeof(this.beforeEnding) === "function"){
+                await this.beforeEnding(this.url, answer);
             }
         };
     }
@@ -25,8 +25,8 @@ class RelayAlgorithm{
         // отправить данные:
         this.submit = async function(){
             let answer = await entitiesRepository.updateEntity(this.url, this.editable);
-            if(typeof(beforeEnding) === "function"){
-                await beforeEnding(this.url, answer);
+            if(typeof(this.beforeEnding) === "function"){
+                await this.beforeEnding(this.url, answer);
             }
         };
     }
@@ -53,11 +53,11 @@ class RelayAlgorithm{
     }
 
     getLogicalNode(){
-        return this.editable.logicalnode;
+        return this.editable.logicalNode;
     }
 
     setLogicalNode(newLN = ""){
-        this.editable.logicalnode = newLN;
+        this.editable.logicalNode = newLN;
     }
 
     getDescription(){

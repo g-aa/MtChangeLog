@@ -89,7 +89,7 @@ class ArmEditWindow {
                         labelWidth:lWidth,
                         value:_editableObj.getVersion(),
                         attributes:{
-                            maxlength:2
+                            maxlength:10
                         }, 
                         on:{
                             onChange: async function(newValue, oldValue, config){

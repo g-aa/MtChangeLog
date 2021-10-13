@@ -12,8 +12,8 @@ class Author{
         // отправить данные:
         this.submit = async function(){
             let answer = await entitiesRepository.createEntity(this.url, this.editable);
-            if(typeof(beforeEnding) === "function"){
-                await beforeEnding(this.url, answer);
+            if(typeof(this.beforeEnding) === "function"){
+                await this.beforeEnding(this.url, answer);
             }
         };
     }
@@ -25,8 +25,8 @@ class Author{
         // отправить данные:
         this.submit = async function(){
             let answer = await entitiesRepository.updateEntity(this.url, this.editable);
-            if(typeof(beforeEnding) === "function"){
-                await beforeEnding(this.url, answer);
+            if(typeof(this.beforeEnding) === "function"){
+                await this.beforeEnding(this.url, answer);
             }
         };
     }
@@ -37,19 +37,19 @@ class Author{
     }
 
     getFirstName(){
-        return this.editable.firstname;
+        return this.editable.firstName;
     }
 
     setFirstName(newName = ""){
-        this.editable.firstname = newName;
+        this.editable.firstName = newName;
     }
 
     getLastName(){
-        return this.editable.lastname;
+        return this.editable.lastName;
     }
 
     setLastName(newName = ""){
-        this.editable.lastname = newName;
+        this.editable.lastName = newName;
     }
 
     getPosition(){
