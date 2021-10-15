@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-
+using Microsoft.Extensions.Logging;
 using MtChangeLog.DataBase.Entities;
 using MtChangeLog.DataBase.Repositories.Interfaces;
 using MtChangeLog.DataObjects.Entities.Base;
@@ -19,10 +19,12 @@ namespace MtChangeLog.WebAPI.Controllers
     public class PlatformsController : ControllerBase
     {
         private readonly IPlatformsRepository platformsRepository;
+        private readonly ILogger logger;
 
-        public PlatformsController(IPlatformsRepository platformsRepository) 
+        public PlatformsController(IPlatformsRepository platformsRepository, ILogger<PlatformsController> logger) 
         { 
             this.platformsRepository = platformsRepository;
+            this.logger = logger;
         }
         
         // GET: api/<PlatformsController>

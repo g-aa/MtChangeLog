@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-
+using Microsoft.Extensions.Logging;
 using MtChangeLog.DataBase.Repositories.Interfaces;
 using MtChangeLog.DataObjects.Entities.Base;
 using MtChangeLog.DataObjects.Entities.Editable;
@@ -18,16 +18,19 @@ namespace MtChangeLog.WebAPI.Controllers
     public class AnalogModulesController : ControllerBase
     {
         private readonly IAnalogModulesRepository repository;
+        private readonly ILogger logger;
 
-        public AnalogModulesController(IAnalogModulesRepository repository) 
+        public AnalogModulesController(IAnalogModulesRepository repository, ILogger<AnalogModulesController> logger) 
         {
             this.repository = repository;
+            this.logger = logger;
         }
 
         // GET: api/<AnalogModulesController>
         [HttpGet]
         public IEnumerable<AnalogModuleBase> Get()
         {
+            logger.LogInformation("");
             var result = this.repository.GetEntities();
             return result;
         }

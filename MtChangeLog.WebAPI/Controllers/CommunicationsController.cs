@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-
+using Microsoft.Extensions.Logging;
 using MtChangeLog.DataBase.Repositories.Interfaces;
 using MtChangeLog.DataObjects.Entities.Base;
 using MtChangeLog.DataObjects.Entities.Editable;
@@ -18,10 +18,12 @@ namespace MtChangeLog.WebAPI.Controllers
     public class CommunicationsController : ControllerBase
     {
         private readonly ICommunicationsRepository repository;
+        private readonly ILogger logger;
 
-        public CommunicationsController(ICommunicationsRepository repository) 
+        public CommunicationsController(ICommunicationsRepository repository, ILogger<CommunicationsController> logger) 
         {
             this.repository = repository;
+            this.logger = logger;
         }
 
         // GET: api/<CommunicationsController>

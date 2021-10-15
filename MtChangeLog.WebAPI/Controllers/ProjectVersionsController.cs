@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-
+using Microsoft.Extensions.Logging;
 using MtChangeLog.DataBase.Repositories.Interfaces;
 using MtChangeLog.DataObjects.Entities.Base;
 using MtChangeLog.DataObjects.Entities.Editable;
@@ -19,10 +19,12 @@ namespace MtChangeLog.WebAPI.Controllers
     public class ProjectVersionsController : ControllerBase
     {
         private readonly IProjectVersionsRepository repository;
+        private readonly ILogger logger;
 
-        public ProjectVersionsController(IProjectVersionsRepository repository) 
+        public ProjectVersionsController(IProjectVersionsRepository repository, ILogger<ProjectVersionsController> logger) 
         {
             this.repository = repository;
+            this.logger = logger;
         }
 
         // GET: api/<ProjectsVersionsController>

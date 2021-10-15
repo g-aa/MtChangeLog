@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-
+using Microsoft.Extensions.Logging;
 using MtChangeLog.DataBase.Repositories.Interfaces;
 using MtChangeLog.DataObjects.Entities.Base;
 using MtChangeLog.DataObjects.Entities.Editable;
@@ -18,10 +18,12 @@ namespace MtChangeLog.WebAPI.Controllers
     public class ArmEditsController : ControllerBase
     {
         private readonly IArmEditsRepository repository;
+        private readonly ILogger logger;
 
-        public ArmEditsController(IArmEditsRepository repository) 
+        public ArmEditsController(IArmEditsRepository repository, ILogger<ArmEditsController> logger) 
         {
             this.repository = repository;
+            this.logger = logger;
         }
 
         // GET: api/<ArmEditsController>
