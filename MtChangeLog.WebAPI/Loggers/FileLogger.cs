@@ -32,7 +32,13 @@ namespace MtChangeLog.WebAPI.Loggers
             {
                 lock (this.objLock)
                 {
-                    File.AppendAllText(filePath, formatter(state, exception) + Environment.NewLine);
+                    string message = state.ToString();
+                    if (exception != null) 
+                    {
+                        message += exception.ToString();
+
+                    }
+                    File.AppendAllText(filePath, $"[{logLevel.ToString().ToUpper()}] - {DateTime.Now} - {message}{Environment.NewLine}");
                 }
             }
         }

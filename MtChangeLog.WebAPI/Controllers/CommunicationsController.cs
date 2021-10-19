@@ -31,6 +31,7 @@ namespace MtChangeLog.WebAPI.Controllers
         public IEnumerable<CommunicationBase> Get()
         {
             var result = this.repository.GetEntities();
+            this.logger.LogInformation($"HTTP GET - all Communications");
             return result;
         }
 
@@ -41,14 +42,17 @@ namespace MtChangeLog.WebAPI.Controllers
             try
             {
                 var result = this.repository.GetEntity(id);
+                this.logger.LogInformation($"HTTP GET - Communication by id = {id}");
                 return this.Ok(result);
             }
             catch (ArgumentException ex)
             {
+                this.logger.LogWarning(ex, $"HTTP GET - Communication: ");
                 return this.NotFound(ex.Message);
             }
             catch (Exception ex)
             {
+                this.logger.LogError(ex, $"HTTP GET - Communication: ");
                 return this.BadRequest(ex.Message);
             }
         }
@@ -67,14 +71,17 @@ namespace MtChangeLog.WebAPI.Controllers
             try
             {
                 this.repository.AddEntity(entity);
-                return this.Ok($"Communications {entity.Protocols} adding to the database");
+                this.logger.LogInformation($"HTTP POST - new Communication {entity}");
+                return this.Ok($"Communications {entity} adding to the database");
             }
             catch (ArgumentException ex)
             {
-                return this.BadRequest(ex.Message);
+                this.logger.LogWarning(ex, $"HTTP POST - new Communication: ");
+                return this.Conflict(ex.Message);
             }
             catch (Exception ex)
             {
+                this.logger.LogError(ex, $"HTTP POST - new Communication: ");
                 return this.BadRequest(ex.Message);
             }
         }
@@ -90,14 +97,17 @@ namespace MtChangeLog.WebAPI.Controllers
                     throw new ArgumentException($"url id = {id} is not equal to entity id = {entity.Id}");
                 }
                 this.repository.UpdateEntity(entity);
-                return this.Ok($"Communications {entity.Protocols} update in the database");
+                this.logger.LogInformation($"HTTP PUT - Communication by id = {id}");
+                return this.Ok($"Communications {entity} update in the database");
             }
             catch (ArgumentException ex)
             {
-                return this.BadRequest(ex.Message);
+                this.logger.LogWarning(ex, $"HTTP PUT - Communication: ");
+                return this.Conflict(ex.Message);
             }
             catch (Exception ex)
             {
+                this.logger.LogError(ex, $"HTTP PUT - Communication: ");
                 return this.BadRequest(ex.Message);
             }
         }
@@ -109,10 +119,12 @@ namespace MtChangeLog.WebAPI.Controllers
             try
             {
                 this.repository.DeleteEntity(id);
-                return this.Ok();
+                this.logger.LogInformation($"HTTP DELETE - Communication by id = {id}");
+                return this.Ok($"The Communication id = {id} has been successfully removed");
             }
             catch (Exception ex)
             {
+                this.logger.LogError(ex, $"HTTP DELETE - Communication: ");
                 return this.BadRequest(ex.Message);
             }
         }

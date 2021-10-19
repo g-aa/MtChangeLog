@@ -31,6 +31,7 @@ namespace MtChangeLog.WebAPI.Controllers
         public IEnumerable<RelayAlgorithmBase> Get()
         {
             var result = this.repository.GetEntities();
+            this.logger.LogInformation($"HTTP GET - all RelayAlgorithms");
             return result;
         }
 
@@ -41,14 +42,17 @@ namespace MtChangeLog.WebAPI.Controllers
             try
             {
                 var result = this.repository.GetEntity(id);
+                this.logger.LogInformation($"HTTP GET - RelayAlgorithm by id = {id}");
                 return this.Ok(result);
             }
             catch (ArgumentException ex)
             {
+                this.logger.LogWarning(ex, $"HTTP GET - RelayAlgorithm: ");
                 return this.NotFound(ex.Message);
             }
             catch (Exception ex)
             {
+                this.logger.LogError(ex, $"HTTP GET - RelayAlgorithm: ");
                 return this.BadRequest(ex.Message);
             }
         }
@@ -67,14 +71,17 @@ namespace MtChangeLog.WebAPI.Controllers
             try
             {
                 this.repository.AddEntity(entity);
-                return this.Ok($"Relay algorithm {entity.ANSI} {entity.Title} adding to the database");
+                this.logger.LogInformation($"HTTP POST - new RelayAlgorithm {entity}");
+                return this.Ok($"Relay algorithm {entity} adding to the database");
             }
             catch (ArgumentException ex)
             {
-                return this.BadRequest(ex.Message);
+                this.logger.LogWarning(ex, $"HTTP POST - new RelayAlgorithm: ");
+                return this.Conflict(ex.Message);
             }
             catch (Exception ex)
             {
+                this.logger.LogError(ex, $"HTTP POST - new RelayAlgorithm: ");
                 return this.BadRequest(ex.Message);
             }
         }
@@ -90,14 +97,17 @@ namespace MtChangeLog.WebAPI.Controllers
                     throw new ArgumentException($"url id = {id} is not equal to entity id = {entity.Id}");
                 }
                 this.repository.UpdateEntity(entity);
-                return this.Ok($"Relay algorithm {entity.ANSI} {entity.Title} update in the database");
+                this.logger.LogInformation($"HTTP PUT - RelayAlgorithm by id = {id}");
+                return this.Ok($"Relay algorithm {entity} update in the database");
             }
             catch (ArgumentException ex)
             {
-                return this.BadRequest(ex.Message);
+                this.logger.LogWarning(ex, $"HTTP PUT - RelayAlgorithm: ");
+                return this.Conflict(ex.Message);
             }
             catch (Exception ex)
             {
+                this.logger.LogError(ex, $"HTTP PUT - RelayAlgorithm: ");
                 return this.BadRequest(ex.Message);
             }
         }
@@ -109,10 +119,12 @@ namespace MtChangeLog.WebAPI.Controllers
             try
             {
                 this.repository.DeleteEntity(id);
-                return this.Ok();
+                this.logger.LogInformation($"HTTP DELETE - RelayAlgorithm by id = {id}");
+                return this.Ok($"The RelayAlgorithm id = {id} has been successfully removed");
             }
             catch (Exception ex)
             {
+                this.logger.LogError(ex, $"HTTP DELETE - RelayAlgorithm: ");
                 return this.BadRequest(ex.Message);
             }
         }

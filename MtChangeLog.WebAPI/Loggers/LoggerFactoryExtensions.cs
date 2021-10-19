@@ -16,7 +16,7 @@ namespace MtChangeLog.WebAPI.Loggers
             {
                 directory.Create();
             }
-            string filePath = Path.Combine(directory.FullName, $"journal-{DateTime.Now.ToString("yyyy-MM-dd hh.mm.ss")}.log");
+            string filePath = Path.Combine(directory.FullName, $"journal-{DateTime.Now.ToString("yyyy-MM-dd HH.mm.ss")}.log");
             loggerFactory.AddProvider(new FileLoggerProvider(filePath));
         }
     }

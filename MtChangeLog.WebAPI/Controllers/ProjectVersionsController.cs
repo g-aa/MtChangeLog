@@ -32,6 +32,7 @@ namespace MtChangeLog.WebAPI.Controllers
         public IEnumerable<ProjectVersionBase> Get()
         {
             var result = this.repository.GetEntities();
+            this.logger.LogInformation($"HTTP GET - all ProjectVersions");
             return result;
         }
 
@@ -42,14 +43,17 @@ namespace MtChangeLog.WebAPI.Controllers
             try
             {
                 var result = this.repository.GetEntity(id);
+                this.logger.LogInformation($"HTTP GET - ProjectVersion by id = {id}");
                 return this.Ok(result);
             }
             catch (ArgumentException ex) 
             {
-                return this.BadRequest(ex.Message);
+                this.logger.LogWarning(ex, $"HTTP GET - ProjectVersion: ");
+                return this.NotFound(ex.Message);
             }
             catch (Exception ex)
             {
+                this.logger.LogError(ex, $"HTTP GET - ProjectVersion: ");
                 return this.BadRequest(ex.Message);
             }
         }
@@ -70,42 +74,48 @@ namespace MtChangeLog.WebAPI.Controllers
 
         // POST api/<ProjectsVersionsController>
         [HttpPost]
-        public IActionResult Post([FromBody] ProjectVersionEditable projectVersion)
+        public IActionResult Post([FromBody] ProjectVersionEditable entity)
         {
             try
             {
-                this.repository.AddEntity(projectVersion);
-                return this.Ok($"The project version {projectVersion.DIVG}, {projectVersion.Title} addig to the database");
+                this.repository.AddEntity(entity);
+                this.logger.LogInformation($"HTTP POST - new ProjectVersion {entity}");
+                return this.Ok($"The project version {entity} addig to the database");
             }
             catch(ArgumentException ex) 
             {
-                return this.BadRequest(ex.Message);
+                this.logger.LogWarning(ex, $"HTTP POST - new ProjectVersion: ");
+                return this.Conflict(ex.Message);
             }
             catch (Exception ex)
             {
+                this.logger.LogError(ex, $"HTTP POST - new ProjectVersion: ");
                 return this.BadRequest(ex.Message);
             }
         }
 
         // PUT api/<ProjectsVersionsController>/00000000-0000-0000-0000-000000000000
         [HttpPut("{id}")]
-        public IActionResult Put(Guid id, [FromBody] ProjectVersionEditable projectVersion)
+        public IActionResult Put(Guid id, [FromBody] ProjectVersionEditable entity)
         {
             try
             {
-                if (id != projectVersion.Id)
+                if (id != entity.Id)
                 {
-                    throw new ArgumentException($"url id = {id} is not equal to project version id = {projectVersion.Id}");
+                    throw new ArgumentException($"url id = {id} is not equal to entity id = {entity.Id}");
                 }
-                this.repository.UpdateEntity(projectVersion);
-                return this.Ok($"Project version {projectVersion.DIVG}, {projectVersion.Title} update in the database");
+                this.repository.UpdateEntity(entity);
+                this.logger.LogInformation($"HTTP PUT - ProjectVersion by id = {id}");
+                return this.Ok($"Project version {entity} update in the database");
             }
             catch (ArgumentException ex)
             {
-                return this.BadRequest(ex.Message);
+                this.logger.LogWarning(ex, $"HTTP PUT - ProjectVersion: ");
+                return this.Conflict(ex.Message);
             }
             catch (Exception ex)
             {
+                this.logger.LogError(ex, $"HTTP PUT - ProjectVersion: ");
                 return this.BadRequest(ex.Message);
             }
         }
@@ -117,10 +127,12 @@ namespace MtChangeLog.WebAPI.Controllers
             try
             {
                 this.repository.DeleteEntity(id);
-                return this.Ok();
+                this.logger.LogInformation($"HTTP DELETE - ProjectVersion by id = {id}");
+                return this.Ok($"The ProjectVersion id = {id} has been successfully removed");
             }
             catch (Exception ex)
             {
+                this.logger.LogError(ex, $"HTTP DELETE - ProjectVersion: ");
                 return this.BadRequest(ex.Message);
             }
         }
