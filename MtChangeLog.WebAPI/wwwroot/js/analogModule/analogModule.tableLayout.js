@@ -1,6 +1,15 @@
 class AnalogModuleTableLayout {
   constructor(parentLayout) {
     this.parentLayout = parentLayout;
+
+    let refresh = async function(){
+      let url = entitiesRepository.getAnalogModulesUrl();
+      let tableData = await entitiesRepository.getEntitiesInfo(url);
+      let table = $$("analogModuleTable_id");
+      table.parse(tableData);
+      table.refresh();
+    }
+
     this.tableLayout = {
       view: "datatable",
       id: "analogModuleTable_id", 
@@ -8,11 +17,11 @@ class AnalogModuleTableLayout {
       adjust: true,
       resizeColumn: true,
       columns: [
-          { id: "id",             adjust: true, header: ["GUID:", ""] },
-          { id: "title",          adjust: true, header: ["Наименование:", { content: "multiSelectFilter" }] },
-          { id: "divg",           adjust: true, header: ["ДИВГ:", ""] },
-          { id: "nominalCurrent", adjust: true, header: ["Номинальный ток:", { content: "multiSelectFilter" }] },
-          { id: "description",    fillspace: true, header: ["Описание:", ""] }
+          { id: "id",             adjust: true,     header: ["GUID:", ""] },
+          { id: "title",          adjust: true,     header: ["Наименование:", { content: "multiSelectFilter" }] },
+          { id: "divg",           adjust: true,     header: ["ДИВГ:", ""] },
+          { id: "current", adjust: true,     header: ["Номинальный ток:", { content: "multiSelectFilter" }] },
+          { id: "description",    fillspace: true,  header: ["Описание:", ""] }
       ],
       data: []
     };
@@ -28,27 +37,17 @@ class AnalogModuleTableLayout {
           width: btnWidth,
           click: async function () {
             try {
-              let urlModule = entitiesRepository.getAnalogModulesUrl();
-              let moduleDitales = await entitiesRepository.getDefaultEntity(urlModule);
+              let module = new AnalogModule();
+              await module.defaultInitialize();
+              module.beforeEnding = async function(url, answer){
+                messageBox.information(answer);
+                await refresh();
+              };
 
-              let urlPlatform = entitiesRepository.getPlatformsUrl();
-              let platforms = await entitiesRepository.getEntitiesInfo(urlPlatform);
-
-              let win = new AnalogModuleEditWindow(moduleDitales, platforms, async function(data) {
-                let urlModule = entitiesRepository.getAnalogModulesUrl();
-                let answer = await entitiesRepository.createEntity(urlModule, data);
-                
-                let tableData = await entitiesRepository.getEntitiesInfo(urlModule);
-                $$("analogModuleTable_id").parse(tableData);
-                $$("analogModuleTable_id").refresh();
-              });
+              let win = new AnalogModuleEditWindow(module);
               win.show();
             } catch (error) {
-              webix.message( {
-                  text: "[ERROR] - " + error.message,
-                  type: "error", 
-                  expire: 10000,
-              });
+              messageBox.error(error.message);
             }
           }
         },
@@ -59,38 +58,22 @@ class AnalogModuleTableLayout {
           width: btnWidth,
           click: async function () {
             try {
-              let module = $$("analogModuleTable_id").getSelectedItem();
-              if(module != undefined) {
-                let urlModule = entitiesRepository.getAnalogModulesUrl();
-                let moduleDitales = await entitiesRepository.getEntityDetails(urlModule, module);
+              let selected = $$("analogModuleTable_id").getSelectedItem();
+              if(selected != undefined) {
+                let module = new AnalogModule();
+                await module.initialize(selected);
+                module.beforeEnding = async function(url, answer){
+                  messageBox.information(answer);
+                  await refresh();
+                };
 
-                let urlPlatform = entitiesRepository.getPlatformsUrl();
-                let platforms = await entitiesRepository.getEntitiesInfo(urlPlatform);
-
-                let win = new AnalogModuleEditWindow(moduleDitales, platforms, async function(data) {
-                  let urlModule = entitiesRepository.getAnalogModulesUrl();
-                  let answer = await entitiesRepository.updateEntity(urlModule, data);
-                
-                  let tableData = await entitiesRepository.getEntitiesInfo(urlModule);
-                  $$("analogModuleTable_id").parse(tableData);
-                  $$("analogModuleTable_id").refresh();
-                });
+                let win = new AnalogModuleEditWindow(module);
                 win.show();
-              }
-              else {
-                messageBox.warning("Не выбран модуль для редактирования");
-                
-                webix.message({
-                    text: "[INFO] - не выбран модуль для редактирования",
-                    expire: 10000,
-                });
+              } else {
+                messageBox.information("выберете аналоговый модуль для редактирования");
               }
             } catch (error) {
-              webix.message({
-                  text: "[ERROR] - " + error.message,
-                  type: "error", 
-                  expire: 10000,
-              });
+              messageBox.error(error.message);
             }
           }
         },
@@ -104,22 +87,15 @@ class AnalogModuleTableLayout {
             try {
               let module = $$("analogModuleTable_id").getSelectedItem();
               if(module != undefined) {
-                let urlModule = entitiesRepository.getAnalogModulesUrl();
-                let answer = await entitiesRepository.deleteEntity(urlModule, module);  
+                let url = entitiesRepository.getAnalogModulesUrl();
+                let answer = await entitiesRepository.deleteEntity(url, module);
+                messageBox.information(answer);
+                await refresh();
+              } else {
+                messageBox.information("выберете аналоговый модуль для удаления");
               }
-              else {
-                webix.message({
-                    text: "[INFO] - не выбран модуль для удаления", 
-                    expire: 10000,
-                });
-              }
-            } 
-            catch (error) {
-              webix.message({
-                  text: "[ERROR] - " + error.message,
-                  type: "error", 
-                  expire: 10000,
-              });  
+            } catch (error) {
+              messageBox.error(error.message); 
             }
           } 
         }
@@ -134,17 +110,15 @@ class AnalogModuleTableLayout {
       }, 
       this.parentLayout.getChildViews()[0]);
 
-      let urlModule = entitiesRepository.getAnalogModulesUrl();
-      entitiesRepository.getEntitiesInfo(urlModule).then(tableData => {
-        $$("analogModuleTable_id").parse(tableData);
-        $$("analogModuleTable_id").refresh();
+      let url = entitiesRepository.getAnalogModulesUrl();
+      entitiesRepository.getEntitiesInfo(url)
+      .then(tableData => {
+        let table = $$("analogModuleTable_id");
+        table.parse(tableData);
+        table.refresh();
       })            
       .catch(error => {
-        webix.message({
-          text: "[ERROR] - " + error.message,
-          type: "error", 
-          expire: 10000,
-        });
+        messageBox.error(error.message);
       });
   }
 }

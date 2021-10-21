@@ -8,11 +8,11 @@ class ArmEditTableLayout{
             adjust:true,
             resizeColumn:true,
             columns:[
-                { id:"id",             adjust:true, header:["GUID:", ""] },
-                { id:"divg",           adjust:true, header:["ДИВГ:", { content:"multiSelectFilter" }] },
-                { id:"version",        adjust:true, header:["Версия:", { content:"multiSelectFilter" }] },
-                { id:"date",           adjust:true, header:["Дата релиза:", { content:"multiSelectFilter" }] },
-                { id:"description",    fillspace:true, header:["Описание:", ""] }
+                { id:"id",             adjust:true,     header:["GUID:", ""] },
+                { id:"divg",           adjust:true,     header:["ДИВГ:", { content:"multiSelectFilter" }] },
+                { id:"version",        adjust:true,     header:["Версия:", { content:"multiSelectFilter" }] },
+                { id:"date",           adjust:true,     header:["Дата релиза:", { content:"multiSelectFilter" }] },
+                { id:"description",    fillspace:true,  header:["Описание:", ""] }
             ],
             data:[]
         }

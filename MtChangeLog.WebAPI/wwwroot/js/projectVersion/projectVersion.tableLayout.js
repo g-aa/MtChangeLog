@@ -102,13 +102,16 @@ class ProjectTableLayout{
                     click: async function (){
                         try{
                             let selected = $$("projectTable_id").getSelectedItem();
-                            if(selected != undefined) {
-
-                                let win = new ProjectRevisionEditWindow();
+                            //if(selected != undefined) {
+                                let revision = new ProjectRevision();
+                                revision.beforeEnding = async function(url, answer){
+                                    messageBox.information(answer);
+                                };
+                                let win = new ProjectRevisionEditWindow(revision);
                                 win.show();
-                            } else{
+                            //} else{
                                 messageBox.information("выберете проект для добавления редакции");
-                            }
+                            //}
                         } catch (error){
                             messageBox.error(error.message);
                         }

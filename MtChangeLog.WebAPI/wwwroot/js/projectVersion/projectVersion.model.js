@@ -1,5 +1,5 @@
 class ProjectVersion {
-    constructor() {
+    constructor(){
         this.url = entitiesRepository.getProjectsVersionsUrl();
         this.editable = null;
         this.statuses = [];
@@ -20,7 +20,9 @@ class ProjectVersion {
         // отправить данные:
         this.submit = async function() {
             let answer = await entitiesRepository.createEntity(this.url, this.editable);
-            await beforeEnding(this.url, answer);
+            if(typeof(this.beforeEnding) === "function"){
+                await this.beforeEnding(this.url, answer);
+            }
         };
     }
 
@@ -39,7 +41,9 @@ class ProjectVersion {
         // отправить данные:
         this.submit = async function() {
             let answer = await entitiesRepository.updateEntity(this.url, this.editable);
-            await beforeEnding(this.url, answer);
+            if(typeof(this.beforeEnding) === "function"){
+                await this.beforeEnding(this.url, answer);
+            }
         };
     }
 

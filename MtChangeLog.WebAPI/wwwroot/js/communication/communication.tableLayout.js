@@ -8,9 +8,9 @@ class CommunicationTableLayout{
             adjust:true,
             resizeColumn:true,
             columns:[
-                { id:"id",             adjust:true, header:["GUID:", ""] },
-                { id:"protocols",           adjust:true, header:["Протоколы:", { content:"multiSelectFilter" }] },
-                { id:"description",        adjust:true, header:["Описание:", { content:"multiSelectFilter" }] }
+                { id:"id",          adjust:true,    header:["GUID:", ""] },
+                { id:"protocols",   adjust:true,    header:["Протоколы:", { content:"multiSelectFilter" }] },
+                { id:"description", fillspace:true, header:["Описание:", ""] }
             ],
             data:[]
         }

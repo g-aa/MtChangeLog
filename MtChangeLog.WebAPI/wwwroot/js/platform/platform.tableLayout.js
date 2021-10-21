@@ -26,28 +26,21 @@ class PlatformTableLayout {
                     width: btnWidth,
                     click: async function () {
                         try {
-                            let urlPlatform = entitiesRepository.getPlatformsUrl();
-                            let platformDitales = await entitiesRepository.getDefaultEntity(urlPlatform);
-                            
-                            let urlModule = entitiesRepository.getAnalogModulesUrl();
-                            let modules = await entitiesRepository.getEntitiesInfo(urlModule);
-
-                            let win = new PlatformEditWindow(platformDitales, modules, async function(data) {
-                                let urlPlatform = entitiesRepository.getPlatformsUrl();    
-                                let answer = await entitiesRepository.createEntity(urlPlatform, data);
+                            let platform = new Platform();
+                            await platform.defaultInitialize();
+                            platform.beforeEnding = async function(url, answer){
+                                messageBox.information(answer);
                                 
-                                let tableData = await entitiesRepository.getEntitiesInfo(urlPlatform);
-                                $$("platformTable_id").parse(tableData);
-                                $$("platformTable_id").refresh();
-                            });
+                                let tableData = await entitiesRepository.getEntitiesInfo(url);
+                                let table = $$("platformTable_id");
+                                table.parse(tableData);
+                                table.refresh();
+                            };
+
+                            let win = new PlatformEditWindow(platform);
                             win.show();
-                        }
-                        catch (error) {
-                            webix.message({
-                                text: "[ERROR] - " + error.message,
-                                type: "error", 
-                                expire: 10000,
-                            });
+                        } catch (error) {
+                            messageBox.error(error.message);
                         }
                     }
                 },
@@ -58,37 +51,26 @@ class PlatformTableLayout {
                     width: btnWidth,
                     click: async function () {
                         try {
-                            let platform = $$("platformTable_id").getSelectedItem();
-                            if(platform != undefined) {
-                                let urlPlatform = entitiesRepository.getPlatformsUrl();
-                                let platformDitales = await entitiesRepository.getEntityDetails(urlPlatform, platform);
-                            
-                                let urlModule = entitiesRepository.getAnalogModulesUrl();
-                                let modules = await entitiesRepository.getEntitiesInfo(urlModule);
+                            let selected = $$("platformTable_id").getSelectedItem();
+                            if(selected != undefined) {
+                                let platform = new Platform();
+                                await platform.initialize(selected);
+                                platform.beforeEnding = async function(url, answer){
+                                    messageBox.information(answer);
+                                    
+                                    let tableData = await entitiesRepository.getEntitiesInfo(url);
+                                    let table = $$("platformTable_id");
+                                    table.parse(tableData);
+                                    table.refresh();
+                                };
 
-                                let win = new PlatformEditWindow(platformDitales, modules, async function(data) {
-                                    let urlPlatform = entitiesRepository.getPlatformsUrl();    
-                                    let answer = await entitiesRepository.createEntity(urlPlatform, data);
-                                
-                                    let tableData = await entitiesRepository.getEntitiesInfo(urlPlatform);
-                                    $$("platformTable_id").parse(tableData);
-                                    $$("platformTable_id").refresh();
-                                });
+                                let win = new PlatformEditWindow(platform);
                                 win.show();
+                            } else {
+                                messageBox.information("выберете платформу для редактирования");
                             }
-                            else {
-                                webix.message({
-                                    text: "[INFO] - платформа не выбрана для редактирования",
-                                    expire: 10000,
-                                });
-                            }
-                        } 
-                        catch (error) {
-                            webix.message({
-                                text: "[ERROR] - " + error.message,
-                                type: "error", 
-                                expire: 10000,
-                            });
+                        } catch (error) {
+                            messageBox.error(error.message);
                         }
                     }
                 },
@@ -103,21 +85,13 @@ class PlatformTableLayout {
                             let platform = $$("platformTable_id").getSelectedItem();
                             if(platform != undefined) {
                                 let urlPlatform = entitiesRepository.getPlatformsUrl();
-                                let answer = await entitiesRepository.deleteEntity(urlPlatform, platform);  
+                                let answer = await entitiesRepository.deleteEntity(urlPlatform, platform);
+                                messageBox.information(answer); 
+                            } else {
+                                messageBox.information("выберете платформу для удаления");
                             }
-                            else {
-                                webix.message({
-                                    text: "[INFO] - не выбрана платформа для удаления", 
-                                    expire: 10000,
-                                });
-                            }
-                        } 
-                        catch (error) {
-                            webix.message({
-                                text: "[ERROR] - " + error.message,
-                                type: "error", 
-                                expire: 10000,
-                            });  
+                        } catch (error) {
+                            messageBox.error(error.message);  
                         }
                     } 
                 }
@@ -132,17 +106,15 @@ class PlatformTableLayout {
             }, 
             this.parentLayout.getChildViews()[0]);
 
-        let urlPlatform = entitiesRepository.getPlatformsUrl();
-        entitiesRepository.getEntitiesInfo(urlPlatform).then(tableData => {
-            $$("platformTable_id").parse(tableData);
-            $$("platformTable_id").refresh();
+        let url = entitiesRepository.getPlatformsUrl();
+        entitiesRepository.getEntitiesInfo(url)
+        .then(tableData => {
+            let table = $$("platformTable_id");
+            table.parse(tableData);
+            table.refresh();
         })
         .catch(error => {
-            webix.message({
-                text: "[ERROR] - " + error.message,
-                type: "error", 
-                expire: 10000,
-            });
+            messageBox.error(error.message);
         });
     }
 }

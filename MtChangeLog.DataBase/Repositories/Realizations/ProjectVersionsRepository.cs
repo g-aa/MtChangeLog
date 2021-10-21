@@ -48,7 +48,7 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
         public void UpdateEntity(ProjectVersionEditable entity)
         {
             DbProjectVersion dbProjectVersion = this.GetDbProjectVersion(entity.Id);
-            dbProjectVersion.Update(entity, this.GetDbAnalogModule(entity.Id), this.GetDbPlatform(entity.Id));
+            dbProjectVersion.Update(entity, this.GetDbAnalogModule(entity.AnalogModule.Id), this.GetDbPlatform(entity.Platform.Id));
             this.context.SaveChanges();
         }
 
