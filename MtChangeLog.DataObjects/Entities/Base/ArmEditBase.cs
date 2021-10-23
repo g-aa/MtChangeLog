@@ -25,6 +25,7 @@ namespace MtChangeLog.DataObjects.Entities.Base
             this.Id = other.Id;
             this.DIVG = other.DIVG;
             this.Version = other.Version;
+            this.Date = other.Date;
             this.Description = other.Description;
         }
 
