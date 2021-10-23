@@ -24,17 +24,13 @@ let getMainLayout = function () {
                 cols: [
                     {
                         view: "sidebar",
+                        width:280,
                         id: "mainSidebar_id",
                         data: getMainSidebarMenu(),
                         on: {
                             onItemClick: function (id) {
                                 try {
-                                    webix.message({
-                                        text: "Был выбран: \'" + this.getItem(id).value + "\'",
-                                        type: "info", 
-                                        expire: 10000,
-                                    });
-
+                                    messageBox.information("Был выбран: \'" + this.getItem(id).value + "\'");
                                     let dLayout = $$("dataLayout_id");
                                     switch (id) {
                                         case "analogModuleTableLayout_id":
@@ -83,22 +79,10 @@ let getMainLayout = function () {
                                             algorithmLayout.show();
                                             break;
                                         default:
-                                            webix.message({
-                                                text: "Увы, функционал пока не поддерживается!",
-                                                type: "debug",
-                                                expire: 10000,
-                                            });
+                                            messageBox.warning("Увы, функционал пока не поддерживается!");
                                     }
-                                }
-                                catch(ex) {
-                                    webix.message({
-                                        text: ex.message,
-                                        type: "error", 
-                                        expire: 10000,
-                                    });
-                                }
-                                finally {
-
+                                } catch(error){
+                                    messageBox.error(error.message);
                                 }
                             }
                         }
@@ -126,7 +110,7 @@ let getMainSidebarMenu = function() {
         {
             id:"analogModuleTableLayout_id",
             icon:"mdi mdi-table",
-            value:"аналоговые модули",
+            value:"таблица аналоговых модулей",
         },
         {
             id:"platformTableLayout_id",
@@ -151,17 +135,17 @@ let getMainSidebarMenu = function() {
         {
             id:"authorTableLayout_id",
             icon:"mdi mdi-table",
-            value:"авторы проектов"
+            value:"таблица авторов БФПО"
         },
         {
             id:"communicationTableLayout_id",
             icon:"mdi mdi-table",
-            value:"протоколы инф. обмена"
+            value:"таблица протоколов инф. обмена"
         },
         {
             id:"relayAlgorithmTableLayout_id",
             icon:"mdi mdi-table",
-            value:"алгоритмы РЗиА"
+            value:"таблица алгоритмов РЗиА"
         }
     ];
     return result;
