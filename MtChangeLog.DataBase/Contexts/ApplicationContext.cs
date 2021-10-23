@@ -35,7 +35,6 @@ namespace MtChangeLog.DataBase.Contexts
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            //  modelBuilder.Entity<DbAnalogModule>().HasData();
             base.OnModelCreating(modelBuilder);
         }
     }

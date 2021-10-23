@@ -7,32 +7,41 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MtChangeLog.DataObjects", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MtChangeLog.DataBase", "MtChangeLog.DataBase\MtChangeLog.DataBase.csproj", "{6AFA4475-F96E-468B-98B0-7A6B9C0298EC}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MtChangeLog.Cmd", "MtChangeLog.Cmd\MtChangeLog.Cmd.csproj", "{5F493F93-9008-4C64-A64E-28DB642F3F1A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MtChangeLog.WebAPI", "MtChangeLog.WebAPI\MtChangeLog.WebAPI.csproj", "{2FD45418-3CD0-49A3-A60D-8092F7847A13}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MtChangeLog.WebAPI", "MtChangeLog.WebAPI\MtChangeLog.WebAPI.csproj", "{2FD45418-3CD0-49A3-A60D-8092F7847A13}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MtChangeLog.Tests", "MtChangeLog.Tests\MtChangeLog.Tests.csproj", "{EE699279-6DE9-41A4-80EC-F9F1CACB7E7E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug PostgreSQL|Any CPU = Debug PostgreSQL|Any CPU
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{166C2713-2E11-4342-B2DD-7E47B083666F}.Debug PostgreSQL|Any CPU.ActiveCfg = Debug PostgreSQL|Any CPU
+		{166C2713-2E11-4342-B2DD-7E47B083666F}.Debug PostgreSQL|Any CPU.Build.0 = Debug PostgreSQL|Any CPU
 		{166C2713-2E11-4342-B2DD-7E47B083666F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{166C2713-2E11-4342-B2DD-7E47B083666F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{166C2713-2E11-4342-B2DD-7E47B083666F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{166C2713-2E11-4342-B2DD-7E47B083666F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6AFA4475-F96E-468B-98B0-7A6B9C0298EC}.Debug PostgreSQL|Any CPU.ActiveCfg = Debug PostgreSQL|Any CPU
+		{6AFA4475-F96E-468B-98B0-7A6B9C0298EC}.Debug PostgreSQL|Any CPU.Build.0 = Debug PostgreSQL|Any CPU
 		{6AFA4475-F96E-468B-98B0-7A6B9C0298EC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{6AFA4475-F96E-468B-98B0-7A6B9C0298EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6AFA4475-F96E-468B-98B0-7A6B9C0298EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6AFA4475-F96E-468B-98B0-7A6B9C0298EC}.Release|Any CPU.Build.0 = Release|Any CPU
-		{5F493F93-9008-4C64-A64E-28DB642F3F1A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5F493F93-9008-4C64-A64E-28DB642F3F1A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5F493F93-9008-4C64-A64E-28DB642F3F1A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5F493F93-9008-4C64-A64E-28DB642F3F1A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2FD45418-3CD0-49A3-A60D-8092F7847A13}.Debug PostgreSQL|Any CPU.ActiveCfg = Debug PostgreSQL|Any CPU
+		{2FD45418-3CD0-49A3-A60D-8092F7847A13}.Debug PostgreSQL|Any CPU.Build.0 = Debug PostgreSQL|Any CPU
 		{2FD45418-3CD0-49A3-A60D-8092F7847A13}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{2FD45418-3CD0-49A3-A60D-8092F7847A13}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2FD45418-3CD0-49A3-A60D-8092F7847A13}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2FD45418-3CD0-49A3-A60D-8092F7847A13}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EE699279-6DE9-41A4-80EC-F9F1CACB7E7E}.Debug PostgreSQL|Any CPU.ActiveCfg = Debug PostgreSQL|Any CPU
+		{EE699279-6DE9-41A4-80EC-F9F1CACB7E7E}.Debug PostgreSQL|Any CPU.Build.0 = Debug PostgreSQL|Any CPU
+		{EE699279-6DE9-41A4-80EC-F9F1CACB7E7E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EE699279-6DE9-41A4-80EC-F9F1CACB7E7E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EE699279-6DE9-41A4-80EC-F9F1CACB7E7E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EE699279-6DE9-41A4-80EC-F9F1CACB7E7E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
