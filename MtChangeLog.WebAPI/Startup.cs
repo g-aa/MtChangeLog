@@ -10,6 +10,7 @@ using Microsoft.Extensions.Logging;
 using MtChangeLog.DataBase.Contexts;
 using MtChangeLog.DataBase.Repositories.Interfaces;
 using MtChangeLog.DataBase.Repositories.Realizations;
+using MtChangeLog.WebAPI.Converters;
 using MtChangeLog.WebAPI.Loggers;
 using System;
 using System.Collections.Generic;
@@ -51,7 +52,10 @@ namespace MtChangeLog.WebAPI
             services.AddTransient<IProjectVersionsRepository, ProjectVersionsRepository>();
             services.AddTransient<IRelayAlgorithmsRepository, RelayAlgorithmsRepository>();
 
-            services.AddControllers();
+            services.AddControllers().AddJsonOptions(configure => 
+            {
+                configure.JsonSerializerOptions.Converters.Add(new DateTimeConverter());
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
