@@ -3,7 +3,7 @@ using MtChangeLog.DataBase.Entities;
 using MtChangeLog.DataBase.Repositories.Interfaces;
 using MtChangeLog.DataObjects.Entities.Base;
 using MtChangeLog.DataObjects.Entities.Editable;
-
+using MtChangeLog.DataObjects.Entities.Views;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,9 +19,14 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
             
         }
 
-        public IEnumerable<ProjectVersionBase> GetEntities()
+        //public IEnumerable<ProjectVersionBase> GetEntities()
+        //{
+        //    return this.context.ProjectVersions.OrderBy(p => p.Title).ThenBy(p => p.Version).Select(p => p.GetBase());
+        //}
+
+        public IEnumerable<ProjectVersionView> GetEntities() 
         {
-            return this.context.ProjectVersions.OrderBy(p => p.Title).ThenBy(p => p.Version).Select(p => p.GetBase());
+            return this.context.ProjectVersionViews;
         }
 
         public ProjectVersionEditable GetEntity(Guid guid)

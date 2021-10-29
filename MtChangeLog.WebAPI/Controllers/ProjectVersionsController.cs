@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 using MtChangeLog.DataBase.Repositories.Interfaces;
 using MtChangeLog.DataObjects.Entities.Base;
 using MtChangeLog.DataObjects.Entities.Editable;
+using MtChangeLog.DataObjects.Entities.Views;
 using MtChangeLog.DataObjects.Enumerations;
 
 using System;
@@ -29,7 +30,7 @@ namespace MtChangeLog.WebAPI.Controllers
 
         // GET: api/<ProjectsVersionsController>
         [HttpGet]
-        public IEnumerable<ProjectVersionBase> Get()
+        public IEnumerable<ProjectVersionView> Get()
         {
             var result = this.repository.GetEntities();
             this.logger.LogInformation($"HTTP GET - all ProjectVersions");

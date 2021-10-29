@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MtChangeLog.DataBase.Entities;
-
+using MtChangeLog.DataObjects.Entities.Views;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,6 +22,19 @@ namespace MtChangeLog.DataBase.Contexts
         internal DbSet<DbAuthor> Authors { get; set; }
         internal DbSet<DbCommunication> Communications { get; set; }
         internal DbSet<DbRelayAlgorithm> RelayAlgorithms { get; set; }
+        #endregion
+
+        #region Views
+        internal IQueryable<ProjectVersionView> ProjectVersionViews 
+        {
+            get => this.ProjectVersions.Include(pv => pv.AnalogModule)
+                .ThenInclude(pv => pv.Platforms)
+                .Select(pv => new ProjectVersionView(pv)
+                {
+                    Module = pv.AnalogModule.Title,
+                    Platform = pv.Platform.Title
+                });
+        }
         #endregion
 
         public ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options)
