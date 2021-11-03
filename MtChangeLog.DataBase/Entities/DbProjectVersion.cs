@@ -1,5 +1,6 @@
 ﻿using MtChangeLog.DataObjects.Entities.Base;
 using MtChangeLog.DataObjects.Entities.Editable;
+using MtChangeLog.DataObjects.Entities.Views;
 
 using System;
 using System.Collections.Generic;
@@ -14,7 +15,7 @@ namespace MtChangeLog.DataBase.Entities
         public Guid PlatformId { get; set; }
         public DbPlatform Platform { get; set; }
         
-        public Guid ModuleId { get; set; }
+        public Guid AnalogModuleId { get; set; }
         public DbAnalogModule AnalogModule { get; set; }
 
         public ICollection<DbProjectRevision> ProjectRevisions { get; set; }
@@ -52,6 +53,15 @@ namespace MtChangeLog.DataBase.Entities
             {
                 AnalogModule = this.AnalogModule.GetBase(),
                 Platform = this.Platform.GetBase()
+            };
+        }
+
+        public ProjectVersionView GetView() 
+        {
+            return new ProjectVersionView(this)
+            {
+                Module = this.AnalogModule.Title,
+                Platform = this.Platform.Title
             };
         }
     }

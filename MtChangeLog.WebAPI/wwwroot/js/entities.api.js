@@ -1,13 +1,15 @@
 class EntitiesRepository {
     constructor() {
-        this.urlAnalogModules = "/api/AnalogModules";
-        this.urlArmEdits = "/api/ArmEdits";
-        this.urlAuthors = "/api/Authors";
-        this.urlCommunications = "/api/Communications";
-        this.urlPlatforms = "/api/Platforms";
-        this.urlProjectsVersions = "/api/ProjectVersions";
-        this.urlProjectsRevisions = "/api/ProjectRevisions";
-        this.urlRelayAlgorithms = "/api/RelayAlgorithms";
+        this.urlAnalogModules =             "/api/AnalogModules";
+        this.urlArmEdits =                  "/api/ArmEdits";
+        this.urlAuthors =                   "/api/Authors";
+        this.urlCommunications =            "/api/Communications";
+        this.urlPlatforms =                 "/api/Platforms";
+        this.urlProjectsVersions =          "/api/ProjectVersions";
+        this.urlProjectsRevisions =         "/api/ProjectRevisions";
+        this.urlParentProjectsRevisions =   "/api/ProjectRevisions/ShortViews",
+        this.urlProjectsRevisionsTemplate = "/api/ProjectRevisions/ByProjectVersionId",
+        this.urlRelayAlgorithms =           "/api/RelayAlgorithms";
     }
 
     getAnalogModulesUrl() {
@@ -36,6 +38,14 @@ class EntitiesRepository {
 
     getProjectsRevisionsUrl() {
         return this.urlProjectsRevisions;
+    }
+
+    getParentProjectsRevisionsUrl() {
+        return this.urlParentProjectsRevisions;
+    }
+
+    getProjectsRevisionsTemplateUrl() {
+        return this.urlProjectsRevisionsTemplate;
     }
 
     getRelayAlgorithmsUrl() {
@@ -133,6 +143,7 @@ class EntitiesRepository {
     async getProjectStatuses() {
         return await this.getEntitiesInfo(this.urlProjectsVersions + "/statuses");
     }
+
 }
 
 if(entitiesRepository == undefined || entitiesRepository == null) {

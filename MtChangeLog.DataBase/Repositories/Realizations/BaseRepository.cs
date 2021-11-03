@@ -72,7 +72,14 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
 
         internal DbProjectVersion GetDbProjectVersion(Guid guid)
         {
-            var dbProjectVersion = this.context.ProjectVersions.Include(pv => pv.AnalogModule).Include(pv => pv.Platform).FirstOrDefault(pv => pv.Id == guid);
+            var dbProjectVersion = this.context.ProjectVersions
+                .Include(pv => pv.AnalogModule)
+                .Include(pv => pv.Platform)
+                .Include(pv => pv.ProjectRevisions).ThenInclude(pr => pr.ArmEdit)
+                .Include(pv => pv.ProjectRevisions).ThenInclude(pr => pr.Communication)
+                .Include(pv => pv.ProjectRevisions).ThenInclude(pr => pr.Authors)
+                .Include(pv => pv.ProjectRevisions).ThenInclude(pr => pr.RelayAlgorithms)
+                .FirstOrDefault(pv => pv.Id == guid);
             if (dbProjectVersion is null)
             {
                 throw new ArgumentException($"The project version under id = {guid} was not found in the database");
@@ -158,6 +165,16 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
                 throw new ArgumentException($"Not found project revisions by transmitted ids");
             }
             return dbProjectRevisions.ToHashSet();
+        }
+
+        internal ICollection<DbRelayAlgorithm> GetDbRelayAlgorithms(IEnumerable<Guid> guids) 
+        {
+            var dbAlgorithms = this.context.RelayAlgorithms.Where(alg => guids.Contains(alg.Id));
+            if (dbAlgorithms is null)
+            {
+                throw new ArgumentException($"Not found algorithms by transmitted ids");
+            }
+            return dbAlgorithms.ToHashSet();
         }
     }
 }

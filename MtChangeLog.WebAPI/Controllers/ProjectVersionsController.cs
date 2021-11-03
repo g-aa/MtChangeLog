@@ -30,7 +30,7 @@ namespace MtChangeLog.WebAPI.Controllers
 
         // GET: api/<ProjectsVersionsController>
         [HttpGet]
-        public IEnumerable<ProjectVersionView> Get()
+        public IEnumerable<DataObjects.Entities.Views.ProjectVersionView> Get()
         {
             var result = this.repository.GetEntities();
             this.logger.LogInformation($"HTTP GET - all ProjectVersions");

@@ -24,7 +24,7 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
         //    return this.context.ProjectVersions.OrderBy(p => p.Title).ThenBy(p => p.Version).Select(p => p.GetBase());
         //}
 
-        public IEnumerable<ProjectVersionView> GetEntities() 
+        public IEnumerable<DataObjects.Entities.Views.ProjectVersionView> GetEntities() 
         {
             return this.context.ProjectVersionViews;
         }
@@ -39,7 +39,7 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
         {
             if (this.context.ProjectVersions.AsEnumerable().FirstOrDefault(p => p.Equals(entity)) != null)
             {
-                throw new ArgumentException($"The platform version {entity.DIVG} {entity.Title} is contained in the database");
+                throw new ArgumentException($"The project version {entity.DIVG} {entity.Title} is contained in the database");
             }
             var dbProjectVersion = new DbProjectVersion(entity) 
             {

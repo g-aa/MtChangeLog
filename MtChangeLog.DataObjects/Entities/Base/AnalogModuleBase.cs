@@ -44,7 +44,7 @@ namespace MtChangeLog.DataObjects.Entities.Base
 
         public override string ToString()
         {
-            return $"id: {this.Id}, DIVG: {this.DIVG}, title: {this.Title}, current: {this.Current}";
+            return $"DIVG: {this.DIVG}, title: {this.Title}, current: {this.Current}";
         }
 
         public static AnalogModuleBase Default => new AnalogModuleBase() 

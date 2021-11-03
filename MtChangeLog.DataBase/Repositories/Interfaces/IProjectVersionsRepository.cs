@@ -12,6 +12,6 @@ namespace MtChangeLog.DataBase.Repositories.Interfaces
 {
     public interface IProjectVersionsRepository : ICRUD<ProjectVersionEditable>
     {
-        IEnumerable<ProjectVersionView> GetEntities();
+        IEnumerable<DataObjects.Entities.Views.ProjectVersionView> GetEntities();
     }
 }

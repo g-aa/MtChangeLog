@@ -1,6 +1,6 @@
 ﻿using MtChangeLog.DataObjects.Entities.Base;
 using MtChangeLog.DataObjects.Entities.Editable;
-
+using MtChangeLog.DataObjects.Entities.Views;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +11,9 @@ namespace MtChangeLog.DataBase.Repositories.Interfaces
 {
     public interface IProjectRevisionsRepository : ICRUD<ProjectRevisionEditable>
     {
-        IEnumerable<ProjectRevisionBase> GetEntities();
+        IEnumerable<ProjectRevisionShortView> GetShortEntities();
+        IEnumerable<ProjectRevisionTableView> GetTableEntities();
+        
+        ProjectRevisionEditable GetByProjectVersionId(Guid guid);
     }
 }

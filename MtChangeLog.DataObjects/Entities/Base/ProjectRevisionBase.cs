@@ -46,7 +46,7 @@ namespace MtChangeLog.DataObjects.Entities.Base
 
         public override string ToString()
         {
-            return $"id: {this.Id}, date: {this.Date}, revision: {this.Revision}, reason {this.Reason}";
+            return $"revision: {this.Revision}, date: {this.Date}, reason: {this.Reason}";
         }
 
         public static ProjectRevisionBase Default => new ProjectRevisionBase()

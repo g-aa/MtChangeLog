@@ -8,13 +8,13 @@ class ProjectTableLayout{
             adjust:true,
             resizeColumn:true,
             columns:[
-                { id: "id",             adjust: true, header: ["GUID:", ""] },
-                { id: "divg",           adjust: true, header: ["ДИВГ:", ""] },
-                { id: "title",          adjust: true, header: ["Наименование:", { content: "multiSelectFilter" }] },
-                { id: "version",        adjust: true, header: ["Версия:", ""] },
-                { id: "status",         adjust: true, header: ["Статус:", { content: "multiSelectFilter" }] },
-                // { id: "platform",       adjust: true, header: ["Платформа:", { content: "multiSelectFilter" }] },
-                // { id: "module",         adjust: true, header: ["Аналоговый модуль:", { content: "multiSelectFilter" }] },
+                // { id: "id",             adjust: true, header: ["GUID:", ""] },
+                { id: "divg",           width:150, header: ["ДИВГ:", ""] },
+                { id: "module",         width:150, header: ["Аналоговый модуль:", { content: "multiSelectFilter" }] },
+                { id: "title",          width:150, header: ["Наименование:", { content: "multiSelectFilter" }] },
+                { id: "version",        width:150, header: ["Версия:", { content: "multiSelectFilter" }] },
+                { id: "status",         width:150, header: ["Статус:", { content: "multiSelectFilter" }] },
+                { id: "platform",       width:150, header: ["Платформа:", { content: "multiSelectFilter" }] },
                 { id: "description",    fillspace: true, header: ["Описание:", ""] }
             ],
             data:[]
@@ -102,16 +102,17 @@ class ProjectTableLayout{
                     click: async function (){
                         try{
                             let selected = $$("projectTable_id").getSelectedItem();
-                            //if(selected != undefined) {
+                            if(selected != undefined) {
                                 let revision = new ProjectRevision();
+                                await revision.byVersionInitialize(selected);
                                 revision.beforeEnding = async function(url, answer){
                                     messageBox.information(answer);
                                 };
                                 let win = new ProjectRevisionEditWindow(revision);
                                 win.show();
-                            //} else{
+                            } else{
                                 messageBox.information("выберете проект для добавления редакции");
-                            //}
+                            }
                         } catch (error){
                             messageBox.error(error.message);
                         }

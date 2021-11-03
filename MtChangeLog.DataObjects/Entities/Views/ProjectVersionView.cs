@@ -13,6 +13,11 @@ namespace MtChangeLog.DataObjects.Entities.Views
         public string Platform { get; set; }
         public string Module { get; set; }
 
+        public ProjectVersionView() 
+        {
+            
+        }
+
         public ProjectVersionView(ProjectVersionBase other) : base(other) 
         {
             

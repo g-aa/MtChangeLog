@@ -46,7 +46,7 @@ namespace MtChangeLog.DataObjects.Entities.Base
 
         public override string ToString()
         {
-            return $"id: {this.Id}, title: {this.Title}, ANSI: {this.ANSI}, LN: {this.LogicalNode}";
+            return $"title: {this.Title}, ANSI: {this.ANSI}, LN: {this.LogicalNode}";
         }
 
         public static RelayAlgorithmBase Default => new RelayAlgorithmBase()
