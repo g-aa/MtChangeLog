@@ -39,6 +39,21 @@ namespace MtChangeLog.DataBase.Entities
 
         }
 
+        public void Update(ProjectRevisionBase other, DbArmEdit armEdit, DbCommunication communication, ICollection<DbAuthor> authors, ICollection<DbRelayAlgorithm> algorithms) 
+        {
+            // this.Id - не обновляется !!!
+            // this.Revision - не обновляется !!!
+            this.Date = other.Date;
+            this.Reason = other.Reason;
+            this.Description = other.Description;
+            this.ArmEdit = armEdit;
+            this.Communication = communication;
+            this.Authors = authors;
+            this.RelayAlgorithms = algorithms;
+            // this.ProjectVersion - не обновляется !!!
+            // this.ParentRevision - не обновляется !!!
+        }
+
         public ProjectRevisionBase GetBase() 
         {
             return new ProjectRevisionBase(this);
@@ -81,6 +96,22 @@ namespace MtChangeLog.DataBase.Entities
                 Date = this.Date,
                 ArmEdit = this.ArmEdit.Version,
                 Reason = this.Reason
+            };
+        }
+
+        public ProjectRevisionTreeView GetTreeView() 
+        {
+            return new ProjectRevisionTreeView()
+            {
+                Id = this.Id,
+                ParentId = this.ParentRevisionId,
+                Module = this.ProjectVersion.AnalogModule.Title,
+                Title = this.ProjectVersion.Title,
+                Version = this.ProjectVersion.Version,
+                Revision = this.Revision,
+                Date = this.Date,
+                ArmEdit = this.ArmEdit.Version,
+                Platform = this.ProjectVersion.Platform.Title
             };
         }
     }

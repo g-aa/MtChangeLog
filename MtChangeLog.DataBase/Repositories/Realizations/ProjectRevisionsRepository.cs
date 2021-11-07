@@ -14,11 +14,11 @@ using System.Threading.Tasks;
 
 namespace MtChangeLog.DataBase.Repositories.Realizations
 {
-    public class ProjectRevisionsRepository: BaseRepository, IProjectRevisionsRepository
+    public class ProjectRevisionsRepository : BaseRepository, IProjectRevisionsRepository
     {
-        public ProjectRevisionsRepository(ApplicationContext context) : base(context) 
+        public ProjectRevisionsRepository(ApplicationContext context) : base(context)
         {
-            
+
         }
 
         public IEnumerable<ProjectRevisionTableView> GetTableEntities()
@@ -30,7 +30,7 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
                 .Select(pr => pr.GetTableView());
         }
 
-        public IEnumerable<ProjectRevisionShortView> GetShortEntities() 
+        public IEnumerable<ProjectRevisionShortView> GetShortEntities()
         {
             return this.context.ProjectRevisions
                 .Include(pr => pr.ProjectVersion)
@@ -38,9 +38,33 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
                 .Select(pr => pr.GetShortView());
         }
 
+        //public IEnumerable<ProjectRevisionShortView> GetRootEntities() 
+        //{
+        //    var result = this.context.ProjectRevisions
+        //        .Include(pr => pr.ProjectVersion).ThenInclude(pv => pv.AnalogModule)
+        //        .Where(pr => pr.ParentRevisionId == Guid.Empty)
+        //        .Select(pr => pr.GetShortView());
+        //    return result;
+        //}
+
+        public IEnumerable<string> GetProjectTypes() 
+        {
+            return this.context.ProjectVersions.Select(pv => pv.Title).Distinct();
+        }
+        public IEnumerable<ProjectRevisionTreeView> GetTreeEntities(string projectsType) 
+        {
+           return this.context.ProjectRevisions
+                .Include(pr => pr.ArmEdit)
+                .Include(pr => pr.ProjectVersion).ThenInclude(pv => pv.AnalogModule)
+                .Include(pr => pr.ProjectVersion).ThenInclude(pv => pv.Platform)
+                .Where(pr => pr.ProjectVersion.Title == projectsType)
+                .Select(pr => pr.GetTreeView());
+        }
+
         public ProjectRevisionEditable GetEntity(Guid guid)
         {
-            throw new NotImplementedException();
+            var dbProjectRevision = this.GetDbProjectRevision(guid);
+            return dbProjectRevision.GetEditable();
         }
 
         public ProjectRevisionEditable GetByProjectVersionId(Guid guid) 
@@ -89,12 +113,18 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
             this.context.SaveChanges();
         }
 
-        public void DeleteEntity(Guid guid)
+        public void UpdateEntity(ProjectRevisionEditable entity)
         {
-            throw new NotImplementedException();
+            var dbProjectRevision = this.GetDbProjectRevision(entity.Id);
+            dbProjectRevision.Update(entity, 
+                this.GetDbArmEdit(entity.ArmEdit.Id), 
+                this.GetDbCommunication(entity.Communication.Id), 
+                this.GetDbAuthors(entity.Authors.Select(a => a.Id)), 
+                this.GetDbRelayAlgorithms(entity.RelayAlgorithms.Select(ra => ra.Id)));
+            this.context.SaveChanges();
         }
 
-        public void UpdateEntity(ProjectRevisionEditable entity)
+        public void DeleteEntity(Guid guid)
         {
             throw new NotImplementedException();
         }

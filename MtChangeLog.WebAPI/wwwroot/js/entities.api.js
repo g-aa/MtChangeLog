@@ -10,6 +10,8 @@ class EntitiesRepository {
         this.urlParentProjectsRevisions =   "/api/ProjectRevisions/ShortViews",
         this.urlProjectsRevisionsTemplate = "/api/ProjectRevisions/ByProjectVersionId",
         this.urlRelayAlgorithms =           "/api/RelayAlgorithms";
+
+        this.urlProjectTrees =              "/api/ProjectTrees";
     }
 
     getAnalogModulesUrl() {
@@ -144,6 +146,13 @@ class EntitiesRepository {
         return await this.getEntitiesInfo(this.urlProjectsVersions + "/statuses");
     }
 
+    async getProjectTypes(){
+        return await this.getEntitiesInfo(this.urlProjectTrees);
+    }
+
+    async getProjectTree(projectType = ""){
+        return await this.getEntityDetails(this.urlProjectTrees, { id:projectType });
+    }
 }
 
 if(entitiesRepository == undefined || entitiesRepository == null) {

@@ -13,6 +13,9 @@ namespace MtChangeLog.DataBase.Repositories.Interfaces
     {
         IEnumerable<ProjectRevisionShortView> GetShortEntities();
         IEnumerable<ProjectRevisionTableView> GetTableEntities();
+        // IEnumerable<ProjectRevisionShortView> GetRootEntities();
+        IEnumerable<string> GetProjectTypes();
+        IEnumerable<ProjectRevisionTreeView> GetTreeEntities(string projectsType);
         
         ProjectRevisionEditable GetByProjectVersionId(Guid guid);
     }

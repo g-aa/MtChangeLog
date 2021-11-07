@@ -89,7 +89,15 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
 
         internal DbProjectRevision GetDbProjectRevision(Guid guid)
         {
-            var dbProjectRevision = this.context.ProjectRevisions.Include(pr => pr.ProjectVersion).FirstOrDefault(pr => pr.Id == guid);
+            var dbProjectRevision = this.context.ProjectRevisions
+                .Include(pr => pr.ParentRevision).ThenInclude(p => p.ProjectVersion).ThenInclude(pv => pv.AnalogModule)
+                .Include(pr => pr.ProjectVersion).ThenInclude(pv => pv.AnalogModule)
+                .Include(pr => pr.ProjectVersion).ThenInclude(pv => pv.Platform)
+                .Include(pr => pr.ArmEdit)
+                .Include(pr => pr.Communication)
+                .Include(pr => pr.Authors)
+                .Include(pr => pr.RelayAlgorithms)
+                .FirstOrDefault(pr => pr.Id == guid);
             if (dbProjectRevision is null)
             {
                 throw new ArgumentException($"The project revision under id = {guid} was not found in the database");

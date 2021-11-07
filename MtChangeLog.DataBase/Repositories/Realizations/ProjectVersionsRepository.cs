@@ -24,7 +24,7 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
         //    return this.context.ProjectVersions.OrderBy(p => p.Title).ThenBy(p => p.Version).Select(p => p.GetBase());
         //}
 
-        public IEnumerable<DataObjects.Entities.Views.ProjectVersionView> GetEntities() 
+        public IEnumerable<ProjectVersionView> GetEntities() 
         {
             return this.context.ProjectVersionViews;
         }
@@ -52,7 +52,7 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
 
         public void UpdateEntity(ProjectVersionEditable entity)
         {
-            DbProjectVersion dbProjectVersion = this.GetDbProjectVersion(entity.Id);
+            var dbProjectVersion = this.GetDbProjectVersion(entity.Id);
             dbProjectVersion.Update(entity, this.GetDbAnalogModule(entity.AnalogModule.Id), this.GetDbPlatform(entity.Platform.Id));
             this.context.SaveChanges();
         }

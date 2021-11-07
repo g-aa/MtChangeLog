@@ -7,12 +7,18 @@ let getMainLayout = function () {
                 padding: 3,
                 elements: [
                     { 
+                        // view:"button", 
+                        // type:"image",
+                        // image:"../icons/icons_table_x48.png",
+                        // autowidth:true,
+                        // css:"webix_transparent",
+                        // tooltip:"Таблицы компонентов",
                         view: "icon", 
                         icon: "mdi mdi-menu", 
                         click: function() {  
                             $$("mainSidebar_id").toggle();
                         }
-                    }, 
+                    },
                     {
                         view: "label",
                         align: "center",
@@ -52,7 +58,10 @@ let getMainLayout = function () {
                                             projectLayout.show();
                                             break;
                                         case "prjRevTableLayout_id":
-                                            
+                                            if(projectLayout == undefined || projectLayout == null) {
+                                                var projectLayout = new ProjectRevisionLayout(dLayout);
+                                            }
+                                            projectLayout.show();
                                             break;
                                         case "armEditTableLayout_id":
                                             if(armEditLayout == undefined || armEditLayout == null) {
@@ -77,6 +86,12 @@ let getMainLayout = function () {
                                                 var algorithmLayout = new RelayAlgorithmTableLayout(dLayout);
                                             }
                                             algorithmLayout.show();
+                                            break;
+                                        case "projectTrees_id":
+                                            if(treeLayout == undefined || treeLayout == null) {
+                                                var treeLayout = new ProjectTreeLayout(dLayout);
+                                            }
+                                            treeLayout.show();
                                             break;
                                         default:
                                             messageBox.warning("Увы, функционал пока не поддерживается!");
@@ -146,6 +161,11 @@ let getMainSidebarMenu = function() {
             id:"relayAlgorithmTableLayout_id",
             icon:"mdi mdi-table",
             value:"таблица алгоритмов РЗиА"
+        },
+        {
+            id:"projectTrees_id",
+            icon:"mdiFamilyTree",
+            value:"деревья изменений БФПО"
         }
     ];
     return result;
