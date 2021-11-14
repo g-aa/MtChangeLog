@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using MtChangeLog.DataBase.Repositories.Interfaces;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,40 +15,49 @@ namespace MtChangeLog.WebAPI.Controllers
     [ApiController]
     public class ProjectTreesController : ControllerBase
     {
-        private readonly IProjectRevisionsRepository repository;
+        private readonly IProjectVersionsRepository versionsRepository;
+        private readonly IProjectRevisionsRepository revisionsRepository;
         private readonly ILogger logger;
 
-        public ProjectTreesController(IProjectRevisionsRepository repository, ILogger<ProjectRevisionsController> logger) 
+        public ProjectTreesController(IProjectVersionsRepository versionsRepository, IProjectRevisionsRepository revisionsRepository, ILogger<ProjectRevisionsController> logger) 
         {
-            this.repository = repository;
+            this.versionsRepository = versionsRepository;
+            this.revisionsRepository = revisionsRepository;
             this.logger = logger;
-            this.logger.LogInformation("HTTP - creating ProjectTreesController");
+            this.logger.LogInformation("HTTP - ProjectTreesController - creating");
         }
 
         // GET: api/<ProjectsTreesController>
         [HttpGet]
-        public IEnumerable<string> Get()
-        {
-            this.logger.LogInformation($"HTTP GET - all projects types");
-            var result = this.repository.GetProjectTypes();
-            return result;
-        }
-
-        // GET api/<ProjectsTreesController>/КСЗ
-        [HttpGet("{type}")]
-        public IActionResult Get(string type)
+        public IActionResult Get()
         {
             try
             {
-                this.logger.LogInformation($"HTTP GET - projects trees {type}");
-                var result = this.repository.GetTreeEntities(type);
+                this.logger.LogInformation($"HTTP GET - ProjectTreesController - projects titles");
+                var result = this.versionsRepository.GetProjectTitles();
                 return this.Ok(result);
             }
             catch (Exception ex)
             {
-                this.logger.LogError(ex, $"HTTP GET - ProjectTrees: ");
+                this.logger.LogError(ex, $"HTTP GET - ProjectTreesController - ");
                 return this.BadRequest(ex.Message);
+            }
+        }
 
+        // GET api/<ProjectsTreesController>/КСЗ
+        [HttpGet("{title}")]
+        public IActionResult Get(string title)
+        {
+            try
+            {
+                this.logger.LogInformation($"HTTP GET - ProjectTreesController - {title} projects trees");
+                var result = this.revisionsRepository.GetTreeEntities(title);
+                return this.Ok(result);
+            }
+            catch (Exception ex)
+            {
+                this.logger.LogError(ex, $"HTTP GET - ProjectTreesController - ");
+                return this.BadRequest(ex.Message);
             }
         }
     }

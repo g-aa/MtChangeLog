@@ -79,8 +79,8 @@ function getDataAndLinksForTree(projectData){
                 target:item.id,
                 arrow:"triangle",
                 lineWidth:2, 
-                lineColor:"#0000FF",
-                backgroundColor:"#0000FF"
+                lineColor:"#dc143c",
+                backgroundColor:"#dc143c"
             });
         //}
     });

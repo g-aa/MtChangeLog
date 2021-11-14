@@ -71,10 +71,6 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
             return result;
         }
 
-        public IEnumerable<string> GetProjectTypes() 
-        {
-            return this.context.ProjectVersions.Select(pv => pv.Title).Distinct();
-        }
         public IEnumerable<ProjectRevisionTreeView> GetTreeEntities(string projectsType) 
         {
            return this.context.ProjectRevisions

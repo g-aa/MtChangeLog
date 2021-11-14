@@ -41,7 +41,6 @@ namespace MtChangeLog.WebAPI.Controllers
             {
                 this.logger.LogError(ex, $"HTTP GET - ProjectHistoryController - ");
                 return this.BadRequest(ex.Message);
-                throw;
             }
         }
 
