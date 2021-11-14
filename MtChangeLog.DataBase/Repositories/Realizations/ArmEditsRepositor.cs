@@ -49,9 +49,10 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
 
         public void DeleteEntity(Guid guid)
         {
-            DbArmEdit dbArmEdit = this.GetDbArmEdit(guid);
-            this.context.ArmEdits.Remove(dbArmEdit);
-            this.context.SaveChanges();
+            throw new NotImplementedException("функционал не поддерживается");
+            //DbArmEdit dbArmEdit = this.GetDbArmEdit(guid);
+            //this.context.ArmEdits.Remove(dbArmEdit);
+            //this.context.SaveChanges();
         }
     }
 }

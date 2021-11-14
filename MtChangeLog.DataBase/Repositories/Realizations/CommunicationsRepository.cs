@@ -51,9 +51,10 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
 
         public void DeleteEntity(Guid guid) 
         {
-            DbCommunication dbCommunication = this.GetDbCommunication(guid);
-            this.context.Communications.Remove(dbCommunication);
-            this.context.SaveChanges();
+            throw new NotImplementedException("функционал не поддерживается");
+            //DbCommunication dbCommunication = this.GetDbCommunication(guid);
+            //this.context.Communications.Remove(dbCommunication);
+            //this.context.SaveChanges();
         }
     }
 }

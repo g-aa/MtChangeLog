@@ -149,7 +149,7 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
 
         public void DeleteEntity(Guid guid)
         {
-            throw new NotImplementedException();
+            throw new NotImplementedException("функционал не поддерживается");
         }
     }
 }

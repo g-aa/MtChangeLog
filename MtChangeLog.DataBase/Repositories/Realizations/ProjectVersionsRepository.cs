@@ -70,9 +70,10 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
 
         public void DeleteEntity(Guid guid)
         {
-            DbProjectVersion dbProjectVersion = this.GetDbProjectVersion(guid);
-            this.context.ProjectVersions.Remove(dbProjectVersion);
-            this.context.SaveChanges();
+            throw new NotImplementedException("функционал не поддерживается");
+            //DbProjectVersion dbProjectVersion = this.GetDbProjectVersion(guid);
+            //this.context.ProjectVersions.Remove(dbProjectVersion);
+            //this.context.SaveChanges();
         }
     }
 }
