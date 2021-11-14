@@ -36,20 +36,27 @@ class ProjectTreeLayout{
             view:"toolbar", 
             cols:[
                 {
-                    view:"combo",
+                    view:"richselect",
                     id:projectTypeId,
                     label:"Тип проекта БМРЗ (тип БФПО):",
                     labelAlign:"right",
                     labelWidth:220,
+                    icon:"mdi mdi-arrow-down",
                     value:"",
                     options:[],
                     on:{
                         onChange: async function(newValue, oldValue, config){
                             try {
+                                let treeDiagram = $$(treeId);
                                 let data = await entitiesRepository.getProjectTree(newValue);
+
+                                if(data == undefined || data == null){
+                                    return;
+                                }
+
                                 let treeData = getDataAndLinksForTree(data);
 
-                                let treeDiagram = $$(treeId);
+                                
 
                                 // очистка данных:
                                 //treeDiagram.clearAll();

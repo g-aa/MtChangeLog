@@ -14,18 +14,19 @@ class ProjectHistoryLayout{
             view:"toolbar", 
             cols:[
                 {
-                    view:"combo",
+                    view:"richselect",
                     id:cbxId,
                     label:"Проект (БФПО):",
                     labelAlign:"right",
                     labelWidth:220,
-                    value:"выберете проект...",
+                    icon:"mdi mdi-arrow-down",
+                    value:"",
                     options:[],
                     on:{
                         onChange: async function(newValue, oldValue, config){
                             try {
                                 let layout = $$(viewId);
-                                let timelineData = await entitiesRepository.getProjectHistory(newValue);
+                                let dataList = await entitiesRepository.getProjectHistory(newValue);
                                 let newLayout = {
                                     view:"unitlist",
                                     id:viewId,
@@ -37,7 +38,7 @@ class ProjectHistoryLayout{
                                             + "<b>ArmEdit:</b><span style='white-space: pre-wrap'>\t\t" + o.armEdit + "</span><br>"
                                             + "<b>Платформа:</b><span style='white-space: pre-wrap'>\t" + o.platform + "</span><br>"
                                             + "<b>Протоколы:</b><span style='white-space: pre-wrap'>\t\t" + o.communication + "</span><br>"
-                                            + "<b>Авторы:</b><span style='white-space: pre-wrap'>\t\t" + o.authors.join(", ") + "</span><br>"
+                                            + "<b>Авторы:</b><span style='white-space: pre-wrap'>\t\t" + (o.authors != undefined ? o.authors.join(", ") : "") + "</span><br>"
                                             + "<b>Причины:</b><span style='white-space: pre-wrap'>\t\t" + o.reason + "</span><br>"
                                             + "<b>Описание:</b><br><span style='white-space: pre-wrap'>" + o.description + "</span>";
                                         return res; 
@@ -46,7 +47,7 @@ class ProjectHistoryLayout{
                                         height:"auto"
                                     },
                                     select:true,
-                                    data:timelineData
+                                    data:dataList
                                 }
                                 webix.ui(newLayout, layout);
                             } catch (error){
