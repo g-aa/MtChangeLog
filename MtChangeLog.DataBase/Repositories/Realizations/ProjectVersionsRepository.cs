@@ -1,4 +1,5 @@
-﻿using MtChangeLog.DataBase.Contexts;
+﻿using Microsoft.EntityFrameworkCore;
+using MtChangeLog.DataBase.Contexts;
 using MtChangeLog.DataBase.Entities;
 using MtChangeLog.DataBase.Repositories.Interfaces;
 using MtChangeLog.DataObjects.Entities.Base;
@@ -19,10 +20,15 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
             
         }
 
-        //public IEnumerable<ProjectVersionBase> GetEntities()
-        //{
-        //    return this.context.ProjectVersions.OrderBy(p => p.Title).ThenBy(p => p.Version).Select(p => p.GetBase());
-        //}
+        public IEnumerable<ProjectVersionShortView> GetShortEntities() 
+        {
+            var result = this.context.ProjectVersions
+                .Include(pv => pv.AnalogModule)
+                .Distinct()
+                .OrderBy(pv => pv.AnalogModule.Title).ThenBy(pv => pv.Title).ThenBy(pv =>pv.Version)
+                .Select(pv => pv.GetShortView());
+            return result;
+        }
 
         public IEnumerable<ProjectVersionView> GetEntities() 
         {

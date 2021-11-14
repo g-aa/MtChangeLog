@@ -13,6 +13,13 @@ namespace MtChangeLog.DataBase.Repositories.Interfaces
     {
         IEnumerable<ProjectRevisionShortView> GetShortEntities();
         IEnumerable<ProjectRevisionTableView> GetTableEntities();
+        /// <summary>
+        /// получить полную историю конкретного проекта (БФПО)
+        /// </summary>
+        /// <param name="guid">project version id</param>
+        /// <returns></returns>
+        IEnumerable<ProjectHistoryView> GetProjectHistories(Guid guid);
+
         // IEnumerable<ProjectRevisionShortView> GetRootEntities();
         IEnumerable<string> GetProjectTypes();
         IEnumerable<ProjectRevisionTreeView> GetTreeEntities(string projectsType);

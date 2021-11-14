@@ -93,6 +93,12 @@ let getMainLayout = function () {
                                             }
                                             treeLayout.show();
                                             break;
+                                        case "prohectHistory_id":
+                                            if(historyLayout == undefined || historyLayout == null){
+                                                var historyLayout = new ProjectHistoryLayout(dLayout);
+                                            }
+                                            historyLayout.show();
+                                            break;
                                         default:
                                             messageBox.warning("Увы, функционал пока не поддерживается!");
                                     }
@@ -164,8 +170,13 @@ let getMainSidebarMenu = function() {
         },
         {
             id:"projectTrees_id",
-            icon:"mdiFamilyTree",
+            icon:"mdi mdi-family-tree",
             value:"деревья изменений БФПО"
+        },
+        {
+            id:"prohectHistory_id",
+            icon:"mdi mdi-book-clock",
+            value:"история изменений БФПО"
         }
     ];
     return result;

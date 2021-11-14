@@ -63,7 +63,7 @@ namespace MtChangeLog.DataBase.Entities
         {
             return new ProjectRevisionEditable(this)
             {
-                ParentRevision = this.ParentRevision.GetShortView(),
+                ParentRevision = this.ParentRevision?.GetShortView(),
                 ProjectVersion = this.ProjectVersion.GetView(),
                 Communication = this.Communication.GetBase(),
                 Authors = this.Authors.Select(author => author.GetBase()),
@@ -112,6 +112,22 @@ namespace MtChangeLog.DataBase.Entities
                 Date = this.Date,
                 ArmEdit = this.ArmEdit.Version,
                 Platform = this.ProjectVersion.Platform.Title
+            };
+        }
+
+        public ProjectHistoryView GetHistoryView()
+        {
+            return new ProjectHistoryView()
+            {
+                ArmEdit = this.ArmEdit?.Version,
+                Authors = this.Authors?.Select(a => $"{a.FirstName} {a.LastName}"),
+                RelayAlgorithms = this.RelayAlgorithms?.Select(ra => ra.Title),
+                Communication = this.Communication?.Protocols,
+                Date = this.Date,
+                Description = this.Description,
+                Platform = this.ProjectVersion?.Platform.Title,
+                Reason = this.Reason,
+                Title = $"{this.ProjectVersion?.AnalogModule.Title}-{this.ProjectVersion?.Title}-{this.ProjectVersion?.Version}_{this.Revision}"
             };
         }
     }

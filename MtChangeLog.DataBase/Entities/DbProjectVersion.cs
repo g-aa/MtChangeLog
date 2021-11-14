@@ -64,5 +64,16 @@ namespace MtChangeLog.DataBase.Entities
                 Platform = this.Platform.Title
             };
         }
+
+        public ProjectVersionShortView GetShortView() 
+        {
+            return new ProjectVersionShortView()
+            {
+                Id = this.Id,
+                Module = this.AnalogModule?.Title ?? "БМРЗ-000",
+                Title = this.Title,
+                Version = this.Version
+            };
+        }
     }
 }

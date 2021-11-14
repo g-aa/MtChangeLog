@@ -12,6 +12,7 @@ class EntitiesRepository {
         this.urlRelayAlgorithms =           "/api/RelayAlgorithms";
 
         this.urlProjectTrees =              "/api/ProjectTrees";
+        this.urlProjectHistory =            "/api/ProjectHistory";
     }
 
     getAnalogModulesUrl() {
@@ -152,6 +153,14 @@ class EntitiesRepository {
 
     async getProjectTree(projectType = ""){
         return await this.getEntityDetails(this.urlProjectTrees, { id:projectType });
+    }
+
+    async getProjectsForHistorys(){
+        return await this.getEntitiesInfo(this.urlProjectHistory);
+    }
+
+    async getProjectHistory(projectId = ""){
+        return await this.getEntityDetails(this.urlProjectHistory, { id:projectId });
     }
 }
 

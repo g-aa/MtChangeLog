@@ -6,7 +6,7 @@ class ProjectTreeLayout{
         this.treeLayout = {
             view: "template",
             id:treeId,
-            template: "Зона отображения деревьев изменения (редакций) БФПО"
+            template: "<center>Зона отображения деревьев изменения (редакций) БФПО...</center>"
         }
 
         /*
