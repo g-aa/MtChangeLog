@@ -2,20 +2,20 @@ class ProjectHistoryLayout{
     constructor(parentLayout){
         this.parentLayout = parentLayout;
 
-        let viewId = "viewLayout_id";
+        let viewLayoutId = "viewLayout_id";
         this.viewLayout = {
             view:"template",
-            id:viewId,
+            id:viewLayoutId,
             template: "<center>Зона отображения истории изменения БФПО...</center>"
         }
 
-        let cbxId = "projectsCbx_id";
+        let cbxLayoutId = "projectsCbx_id";
         this.cbxLayout = {
             view:"toolbar", 
             cols:[
                 {
                     view:"richselect",
-                    id:cbxId,
+                    id:cbxLayoutId,
                     label:"Проект (БФПО):",
                     labelAlign:"right",
                     labelWidth:220,
@@ -25,11 +25,11 @@ class ProjectHistoryLayout{
                     on:{
                         onChange: async function(newValue, oldValue, config){
                             try {
-                                let layout = $$(viewId);
-                                let dataList = await entitiesRepository.getProjectHistory(newValue);
+                                let layout = $$(viewLayoutId);
+                                let dataList = await repository.getProjectHistory(newValue);
                                 let newLayout = {
                                     view:"unitlist",
-                                    id:viewId,
+                                    id:viewLayoutId,
                                     uniteBy: function(o){
                                         return o.title;
                                     },
@@ -61,7 +61,7 @@ class ProjectHistoryLayout{
                 }
             ]
         }
-        this.cbxId = cbxId;
+        this.cbxLayoutId = cbxLayoutId;
     }
 
     show(){
@@ -71,10 +71,10 @@ class ProjectHistoryLayout{
         }, 
         this.parentLayout.getChildViews()[0]);
         
-        let comboBox = $$(this.cbxId);
-        entitiesRepository.getProjectsForHistorys()
+        let cbxLayout = $$(this.cbxLayoutId);
+        repository.getProjectHistoryTitles()
         .then(projectsData => {
-            comboBox.define("options", {
+            cbxLayout.define("options", {
                 body:{
                     template:"#module#-#title#-#version#"
                 },   

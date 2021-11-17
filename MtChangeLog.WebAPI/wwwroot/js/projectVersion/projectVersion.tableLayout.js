@@ -1,26 +1,38 @@
 class ProjectTableLayout{
     constructor(parentLayout){
         this.parentLayout = parentLayout;
+
+        let tableLayputId = "projectTable_id";
         this.tableLayout = {
             view:"datatable",
-            id:"projectTable_id", 
+            id:tableLayputId, 
             select:"row",
             adjust:true,
             resizeColumn:true,
+            scroll:"xy",
             columns:[
-                // { id: "id",             adjust: true, header: ["GUID:", ""] },
-                { id: "divg",           width:150, header: ["ДИВГ:", ""] },
-                { id: "module",         width:150, header: ["Аналоговый модуль:", { content: "multiSelectFilter" }] },
-                { id: "title",          width:150, header: ["Наименование:", { content: "multiSelectFilter" }] },
-                { id: "version",        width:150, header: ["Версия:", { content: "multiSelectFilter" }] },
-                { id: "status",         width:150, header: ["Статус:", { content: "multiSelectFilter" }] },
-                { id: "platform",       width:150, header: ["Платформа:", { content: "multiSelectFilter" }] },
-                { id: "description",    fillspace: true, header: ["Описание:", ""] }
+                //{ id:"id",          adjust:true, header:["GUID:", ""] },
+                { id:"divg",        adjust:true, header:["ДИВГ:", ""] },
+                { id:"module",      width:150, header:["Аналоговый модуль:", { content:"multiSelectFilter" }] },
+                { id:"title",       width:150, header:["Наименование:", { content:"multiSelectFilter" }] },
+                { id:"version",     width:150, header:["Версия:", { content:"multiSelectFilter" }] },
+                { id:"status",      width:150, header:["Статус:", { content:"multiSelectFilter" }] },
+                { id:"platform",    width:150, header:["Платформа:", { content:"multiSelectFilter" }] },
+                { id:"description", adjust:true,    header:["Описание:", ""] },
+                { fillspace:true }
             ],
             data:[]
         }
 
-        let btnWidth = 200;
+        // обновление таблицы:
+        let refresh = async function(){
+            let tableData = await repository.getTableProjectVersions();
+            let tableLaypu = $$(tableLayputId);
+            tableLaypu.parse(tableData);
+            tableLaypu.refresh();
+        }
+        this.refresh = refresh;
+
         this.buttonsLayout = {
             view:"toolbar", 
             cols:[
@@ -28,20 +40,15 @@ class ProjectTableLayout{
                     view:"button", 
                     css:"webix_primary",
                     value:"Добавить", 
-                    width:btnWidth,
+                    width:200,
                     click: async function (){
                         try{
                             let prjVers = new ProjectVersion();
                             await prjVers.defaultInitialize();
-                            prjVers.beforeEnding = async function(url, answer){
+                            prjVers.beforeEnding = async function(answer){
+                                await refresh();
                                 messageBox.information(answer);
-                                
-                                let tableData = await entitiesRepository.getEntitiesInfo(url);
-                                let table = $$("projectTable_id");
-                                table.parse(tableData);
-                                table.refresh();
                             }
-
                             let win = new ProjectEditWindow(prjVers);
                             win.show();
                         } catch (error) {
@@ -53,22 +60,17 @@ class ProjectTableLayout{
                     view:"button", 
                     css:"webix_secondary",
                     value:"Редактировать", 
-                    width:btnWidth,
+                    width:200,
                     click: async function (){
                         try{
-                            let selected = $$("projectTable_id").getSelectedItem();
+                            let selected = $$(tableLayputId).getSelectedItem();
                             if(selected != undefined) {
                                 let prjVers = new ProjectVersion();
                                 await prjVers.initialize(selected);
-                                prjVers.beforeEnding = async function(url, answer){
+                                prjVers.beforeEnding = async function(answer){
+                                    await refresh();
                                     messageBox.information(answer);
-                                
-                                    let tableData = await entitiesRepository.getEntitiesInfo(url);
-                                    let table = $$("projectTable_id");
-                                    table.parse(tableData);
-                                    table.refresh();
                                 }
-
                                 let win = new ProjectEditWindow(prjVers);
                                 win.show();
                             } else{
@@ -83,11 +85,21 @@ class ProjectTableLayout{
                     view:"button",
                     css:"webix_danger",
                     value:"Удалить",
-                    width:btnWidth,
+                    width:200,
                     align:"right",
                     click: async function (){
                         try{
-                            
+                            let selected = $$(tableLayputId).getSelectedItem();
+                            if(selected != undefined){
+                                // удалить обьект на сервере:
+                                let answer = await repository.deleteProjectVersion(selected);
+                    
+                                // удалить обьект в UI части:
+                                $$(tableLayputId).remove(selected.id);
+                                messageBox.information(answer);
+                            } else{
+                                messageBox.information("выберете проект для удаления");
+                            }
                         } catch (error){
                             messageBox.error(error.message); 
                         }
@@ -101,11 +113,11 @@ class ProjectTableLayout{
                     align:"right",
                     click: async function (){
                         try{
-                            let selected = $$("projectTable_id").getSelectedItem();
+                            let selected = $$(tableLayputId).getSelectedItem();
                             if(selected != undefined) {
                                 let revision = new ProjectRevision();
-                                await revision.byVersionInitialize(selected);
-                                revision.beforeEnding = async function(url, answer){
+                                await revision.defaultInitialize(selected);
+                                revision.beforeEnding = async function(answer){
                                     messageBox.information(answer);
                                 };
                                 let win = new ProjectRevisionEditWindow(revision);
@@ -128,14 +140,7 @@ class ProjectTableLayout{
             rows: [ this.buttonsLayout, this.tableLayout ]
         }, 
         this.parentLayout.getChildViews()[0]);
-
-        let urlProject = entitiesRepository.getProjectsVersionsUrl();
-        entitiesRepository.getEntitiesInfo(urlProject).then(tableData => {
-            let table = $$("projectTable_id");
-            table.parse(tableData);
-            table.refresh();
-        })
-        .catch(error => {
+        this.refresh().catch(error => {
             messageBox.error(error.message);
         });
     }

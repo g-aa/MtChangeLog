@@ -1,37 +1,36 @@
 class AnalogModule{
     constructor(){
-        this.url = entitiesRepository.getAnalogModulesUrl();
-        this.editable = { };
-        this.platforms = [ ];
-        this.editFunc = null;
+        this.editable = {};
+        this.platforms = [];
+        this.configure = async function(){
+            this.platforms = await repository.getSortPlatforms();
+        }
     }
 
     // получить analog module по умолчанию:
     async defaultInitialize(){
-        this.editable = await entitiesRepository.getDefaultEntity(this.url);
-
-        let urlPlatform = entitiesRepository.getPlatformsUrl();
-        this.platforms = await entitiesRepository.getEntitiesInfo(urlPlatform);
+        // получить шаблон:
+        this.editable = await repository.getAnalogModuleTemplate();
+        await this.configure();
 
         // отправить данные:
         this.submit = async function(){
-            let answer = await entitiesRepository.createEntity(this.url, this.editable);
+            let answer = await repository.createAnalogModule(this.editable);
             if(typeof(this.beforeEnding) === "function"){
-                await this.beforeEnding(this.url, answer);
+                await this.beforeEnding(answer);
             }
         };
     } 
 
     // получить конкретный analog module из bd:
     async initialize(entityInfo){
-        this.editable = await entitiesRepository.getEntityDetails(this.url, entityInfo);
-
-        let urlPlatform = entitiesRepository.getPlatformsUrl();
-        this.platforms = await entitiesRepository.getEntitiesInfo(urlPlatform);
-
+        // получить из БД:
+        this.editable = await repository.getAnalogModuleDetails(entityInfo);
+        await this.configure();
+        
         // отправить данные:
         this.submit = async function(){
-            let answer = await entitiesRepository.updateEntity(this.url, this.editable);
+            let answer = await repository.updateAnalogModule(this.editable);
             if(typeof(this.beforeEnding) === "function"){
                 await this.beforeEnding(this.url, answer);
             }
@@ -39,7 +38,7 @@ class AnalogModule{
     }
 
     //
-    async beforeEnding(url, answer){
+    async beforeEnding(answer){
 
     }
 
@@ -83,7 +82,13 @@ class AnalogModule{
         return this.editable.platforms;
     }
 
-    setPlatforms(values = []){
-        this.editable.platforms = values;
+    setPlatforms(ids = [""]){
+        if (ids == undefined || ids == null){
+            throw new Error("не указан перечень platforms id!");
+        }
+        this.editable.platforms = this.platforms.filter(function(item){
+            return ids.indexOf(item.id) != -1;
+        });
+        //this.editable.platforms = values;
     }
 }

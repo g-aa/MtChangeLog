@@ -2,36 +2,37 @@ class ProjectRevisionLayout{
     constructor(parentLayout){
         this.parentLayout = parentLayout;
 
-        let tableId = "projectRevisionTable_id";
-        let refresh = async function(){
-            let url = entitiesRepository.getProjectsRevisionsUrl();
-            let tableData = await entitiesRepository.getEntitiesInfo(url);
-            let table = $$(tableId);
-            table.parse(tableData);
-            table.refresh();
-        }
-        this.refresh = refresh;
-
+        let tableLayoutId = "projectRevisionTable_id";
         this.tableLayout = {
             view:"datatable",
-            id:tableId,
+            id:tableLayoutId,
             select:"row",
             adjust:true,
             resizeColumn:true,
+            scroll:"xy",
             columns:[
-                // { id: "id",         adjust: true,       header: ["GUID:", ""] },
-                { id: "module",     adjust: true,       header: ["Аналоговый модуль:", { content: "multiSelectFilter" }] },
-                { id: "title",      adjust: true,       header: ["Наименование:", { content: "multiSelectFilter" }] },
-                { id: "version",    adjust: true,       header: ["Версия:", { content: "multiSelectFilter" }] },
-                { id: "revision",   adjust: true,       header: ["Ревизия:", ""] },
-                { id: "date",       adjust: true,       header: ["Дата:", ""] },
-                { id: "armEdit",    adjust: true,       header: ["ArmEdit:", { content: "multiSelectFilter" }] },
-                { id: "reason",     fillspace: true,    header: ["Причина:", ""] },
+                //{ id:"id",         adjust:true,       header:["GUID:", ""] },
+                { id:"module",     width:150,   minWidth:150,   header:["Аналоговый модуль:", { content:"multiSelectFilter" }] },
+                { id:"title",      adjust:true, header:["Наименование:", { content:"multiSelectFilter" }] },
+                { id:"version",    width:100,   header:["Версия:", { content:"multiSelectFilter" }] },
+                { id:"revision",   width:100,   header:["Ревизия:", { content:"multiSelectFilter" }] },
+                { id:"date",       adjust:true, header:["Дата:", ""] },
+                { id:"armEdit",    width:170,   header:["ArmEdit:", { content:"multiSelectFilter" }] },
+                { id:"reason",     adjust:true, header:["Причина:", ""] },
+                { fillspace:true }
             ],
             data:[]
         }
 
-        let btnWidth = 200;
+        // обновление таблицы:
+        let refresh = async function(){
+            let tableData = await repository.getTableProjectRevisions();
+            let tableLayout = $$(tableLayoutId);
+            tableLayout.parse(tableData);
+            tableLayout.refresh();
+        }
+        this.refresh = refresh;
+
         this.buttonsLayout = {
             view:"toolbar", 
             cols:[
@@ -39,14 +40,14 @@ class ProjectRevisionLayout{
                     view:"button", 
                     css:"webix_secondary",
                     value:"Редактировать", 
-                    width:btnWidth,
+                    width:200,
                     click: async function (){
                         try{
-                            let selected = $$(tableId).getSelectedItem();
-                            if(selected != undefined) {
+                            let selected = $$(tableLayoutId).getSelectedItem();
+                            if(selected != undefined){
                                 let revision = new ProjectRevision();
                                 await revision.initialize(selected);
-                                revision.beforeEnding = async function(url, answer){
+                                revision.beforeEnding = async function(answer){
                                     await refresh();
                                     messageBox.information(answer);
                                 };
@@ -64,11 +65,21 @@ class ProjectRevisionLayout{
                     view:"button",
                     css:"webix_danger",
                     value:"Удалить",
-                    width:btnWidth,
+                    width:200,
                     align:"right",
                     click: async function (){
                         try{
-                            
+                            let selected = $$(tableLayoutId).getSelectedItem();
+                            if(selected != undefined){
+                                // удалить обьект на сервере:
+                                let answer = await repository.deleteProjectRevison(selected);
+                              
+                                // удалить обьект в UI части:
+                                $$(tableLayoutId).remove(selected.id);
+                                messageBox.information(answer);
+                            } else {
+                                messageBox.information("выберете ревизию проекта для удаления");
+                            }
                         } catch (error){
                             messageBox.error(error.message); 
                         }

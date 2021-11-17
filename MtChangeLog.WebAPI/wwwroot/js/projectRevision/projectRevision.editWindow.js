@@ -64,11 +64,12 @@ class ProjectRevisionEditWindow {
                 id:"winLayout",
                 rows:[
                     {
-                        view:"combo",
+                        view:"richselect",
                         id:"parentRevision_id",
                         label:"Предыдущая редакция БФПО:",
                         labelAlign:"right",
                         labelWidth:lWidth,
+                        icon:"mdi mdi-arrow-down",
                         value:_editableObj.getParentRevision(),
                         options:{
                             body:{
@@ -87,11 +88,12 @@ class ProjectRevisionEditWindow {
                         }
                     },
                     {
-                        view:"combo",
+                        view:"richselect",
                         id:"projectVersion_id",
                         label:"Версия БФПО:",
                         labelAlign:"right",
                         labelWidth:lWidth,
+                        icon:"mdi mdi-arrow-down",
                         value:_editableObj.getProjectVersion(),
                         options:{
                             body:{
@@ -149,11 +151,12 @@ class ProjectRevisionEditWindow {
                         }
                     },
                     {
-                        view:"combo",
+                        view:"richselect",
                         id:"revisionArmEdit_id",
                         label:"Версия ArmEdit:",
                         labelAlign:"right",
                         labelWidth:lWidth,
+                        icon:"mdi mdi-arrow-down",
                         value:_editableObj.getArmEdit(),
                         options:{
                             body:{
@@ -212,11 +215,12 @@ class ProjectRevisionEditWindow {
                         }
                     },
                     {
-                        view:"combo",
+                        view:"richselect",
                         id:"revisionCommunications_id",
                         label:"Протоколы:",
                         labelAlign:"right",
                         labelWidth:lWidth,
+                        icon:"mdi mdi-ethernet",
                         value:_editableObj.getCommunication(),
                         options:{
                             body:{

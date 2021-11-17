@@ -1,53 +1,51 @@
-class ProjectVersion {
+class ProjectVersion{
     constructor(){
-        this.url = entitiesRepository.getProjectsVersionsUrl();
-        this.editable = null;
+        this.editable = {};
         this.statuses = [];
         this.platforms = [];
         this.analogModules = [];
-        this.editFunc = null;
+        this.configure = async function(){
+            this.statuses = await repository.getProjectVersionStatuses();
+            this.platforms = await repository.getSortPlatforms();
+            //let platform = await repository.getPlatformDetails(this.editable.platform);
+            //this.analogModules = platform.analogModules;
+        }
     }
 
     // получить версию проекта по умолчанию:
-    async defaultInitialize() {
-        this.editable = await entitiesRepository.getDefaultEntity(this.url);
-
-        this.statuses = await entitiesRepository.getProjectStatuses();
+    async defaultInitialize(){
+        // получить шаблон:
+        this.editable = await repository.getProjectVersionTemplate();
+        await this.configure();
         
-        let urlPlatform = entitiesRepository.getPlatformsUrl();
-        this.platforms = await entitiesRepository.getEntitiesInfo(urlPlatform);
-
         // отправить данные:
-        this.submit = async function() {
-            let answer = await entitiesRepository.createEntity(this.url, this.editable);
+        this.submit = async function(){
+            let answer = await repository.createProjectVersion(this.editable);
             if(typeof(this.beforeEnding) === "function"){
-                await this.beforeEnding(this.url, answer);
+                await this.beforeEnding(answer);
             }
         };
     }
 
     // получить конкретную версию проекта из db:
-    async initialize(entityInfo) {
-        this.editable = await entitiesRepository.getEntityDetails(this.url, entityInfo);
+    async initialize(entityInfo){
+        // получить из БД:
+        this.editable = await repository.getProjectVersionDetails(entityInfo);
+        await this.configure();
 
-        this.statuses = await entitiesRepository.getProjectStatuses();
-
-        let urlPlatform = entitiesRepository.getPlatformsUrl();
-        this.platforms = await entitiesRepository.getEntitiesInfo(urlPlatform);
-
-        let platform = await entitiesRepository.getEntityDetails(urlPlatform, this.editable.platform);
+        let platform = await repository.getPlatformDetails(this.editable.platform);
         this.analogModules = platform.analogModules;
 
         // отправить данные:
-        this.submit = async function() {
-            let answer = await entitiesRepository.updateEntity(this.url, this.editable);
+        this.submit = async function(){
+            let answer = await entitiesRepository.updateEntity(this.editable);
             if(typeof(this.beforeEnding) === "function"){
-                await this.beforeEnding(this.url, answer);
+                await this.beforeEnding(answer);
             }
         };
     }
 
-    async beforeEnding(url, answer) {
+    async beforeEnding(answer) {
 
     }
 
@@ -103,15 +101,11 @@ class ProjectVersion {
         if (id == undefined || id == null || id == ""){
             throw new Error("что-то пошло не так !!!");
         }
-        
-        let urlPlatform = entitiesRepository.getPlatformsUrl();
-        let platform = await entitiesRepository.getEntityDetails(urlPlatform, { id:id });
-            
-        this.editable.platform = this.platforms.find(
-            function(item, index, array){
-                return item.id == id;
-            });
+        let platform = await repository.getPlatformDetails({ id:id });
         this.analogModules = platform.analogModules;
+        this.editable.platform = this.platforms.find(function(item, index, array){
+            return item.id == id;
+        });
     }
 
     getAnalogModule(){

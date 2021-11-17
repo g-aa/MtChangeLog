@@ -121,9 +121,10 @@ class ProjectEditWindow {
                         }
                     },
                     {
-                        view:"combo",
+                        view:"richselect",
                         id:"status_id",
                         label:"Статус:",
+                        icon:"mdi mdi-arrow-down",
                         labelAlign:"right",
                         labelWidth:lWidth,
                         value:_editablePrjVers.getStatus(),
@@ -139,9 +140,10 @@ class ProjectEditWindow {
                         }
                     },
                     {
-                        view:"combo",
+                        view:"richselect",
                         id:"platform_id",
                         label:"Платформа:",
+                        icon:"mdi mdi-arrow-down",
                         labelAlign:"right",
                         labelWidth:lWidth,
                         value:_editablePrjVers.getPlatform(),
@@ -173,9 +175,10 @@ class ProjectEditWindow {
                         }
                     },
                     {
-                        view:"combo",
+                        view:"richselect",
                         id:"analogModule_id",
                         label:"Аналоговый модуль:",
+                        icon:"mdi mdi-arrow-down",
                         labelAlign:"right",
                         labelWidth:lWidth, 
                         value:_editablePrjVers.getAnalogModule(),

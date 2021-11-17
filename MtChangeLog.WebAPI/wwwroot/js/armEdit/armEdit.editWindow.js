@@ -1,6 +1,5 @@
 class ArmEditWindow {
     constructor(editableObj){
-        
         let _editableObj = editableObj;
         if(_editableObj == undefined || _editableObj == null){
             throw new Error("не выбран ArmEdit для работы");
@@ -103,11 +102,11 @@ class ArmEditWindow {
                     },
                     {
                         view:"datepicker",
-                        // inputWidth:300,
                         label:'Дата релиза:',
                         labelAlign:"right",
                         labelWidth:lWidth,
                         timepicker:false,
+                        format:"%Y-%m-%d",
                         value:_editableObj.getDate(),
                         on:{
                             onChange: async function(newValue, oldValue, config){

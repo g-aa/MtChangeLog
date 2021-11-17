@@ -1,38 +1,38 @@
 class ArmEdit{
     constructor(){
-        this.url = entitiesRepository.getArmEditsUrl();
-        this.editable = null;
-        this.editFunc = null;
+        this.editable = {};
     }
 
     // получить armEdit по умолчанию:
     async defaultInitialize(){
-        this.editable = await entitiesRepository.getDefaultEntity(this.url);
+        // получить шаблон:
+        this.editable = await repository.getArmEditTemplate();
 
         // отправить данные:
         this.submit = async function(){
-            let answer = await entitiesRepository.createEntity(this.url, this.editable);
+            let answer = await repository.createArmEdit(this.editable);
             if(typeof(this.beforeEnding) === "function"){
-                await this.beforeEnding(this.url, answer);
+                await this.beforeEnding(answer);
             }
         };
     }
 
     // получить конкретный armEdit из bd:
     async initialize(entityInfo){
-        this.editable = await entitiesRepository.getEntityDetails(this.url, entityInfo);
+        // получить из БД:
+        this.editable = await repository.getArmEditDetails(entityInfo);
 
         // отправить данные:
         this.submit = async function(){
-            let answer = await entitiesRepository.updateEntity(this.url, this.editable);
+            let answer = await repository.updateArmEdit(this.editable);
             if(typeof(this.beforeEnding) === "function"){
-                await this.beforeEnding(this.url, answer);
+                await this.beforeEnding(answer);
             }
         };
     }
 
     //
-    async beforeEnding(url, answer){
+    async beforeEnding(answer){
 
     }
 

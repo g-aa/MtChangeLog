@@ -1,22 +1,34 @@
 class AuthorTableLayout{
     constructor(parentLayout){
         this.parentLayout = parentLayout;
+        
+        let tableLayputId = "authorTable_id";
         this.tableLayout = {
             view:"datatable",
-            id:"authorTable_id", 
+            id:tableLayputId, 
             select:"row",
             adjust:true,
             resizeColumn:true,
+            scroll:"xy",
             columns:[
                 //{ id:"id",          adjust:true,    header:["GUID:", ""] },
-                { id:"lastName",    width:250, header:["Фамилия:", { content:"multiSelectFilter" }] },
-                { id:"firstName",   width:250, header:["Имя:", { content:"multiSelectFilter" }] },
-                { id:"position",    fillspace:true, header:["Должность:", { content:"multiSelectFilter" }] }
+                { id:"lastName",    width:250,      header:["Фамилия:", { content:"multiSelectFilter" }] },
+                { id:"firstName",   width:250,      header:["Имя:", { content:"multiSelectFilter" }] },
+                { id:"position",    adjust:true,    header:["Должность:", { content:"multiSelectFilter" }] },
+                { fillspace:true }
             ],
             data:[]
         }
 
-        let btnWidth = 200;
+        // обновление таблицы:
+        let refresh = async function(){
+            let tableData = await repository.getTableAuthors();
+            let tableLaypu = $$(tableLayputId);
+            tableLaypu.parse(tableData);
+            tableLaypu.refresh();
+        }
+        this.refresh = refresh;
+
         this.buttonsLayout = {
             view:"toolbar", 
             cols:[
@@ -24,20 +36,15 @@ class AuthorTableLayout{
                     view:"button", 
                     css:"webix_primary",
                     value:"Добавить", 
-                    width:btnWidth,
+                    width:200,
                     click: async function (){
                         try{
                             let author = new Author();
                             await author.defaultInitialize();
-                            author.beforeEnding = async function(url, answer){
+                            author.beforeEnding = async function(answer){
+                                await refresh();
                                 messageBox.information(answer);
-                                
-                                let tableData = await entitiesRepository.getEntitiesInfo(url);
-                                let table = $$("authorTable_id");
-                                table.parse(tableData);
-                                table.refresh();
                             };
-
                             let win = new AuthorEditWindow(author);
                             win.show();
                         } catch (error){
@@ -49,22 +56,17 @@ class AuthorTableLayout{
                     view:"button", 
                     css:"webix_secondary",
                     value:"Редактировать", 
-                    width:btnWidth,
+                    width:200,
                     click: async function (){
                         try{
-                            let selected = $$("authorTable_id").getSelectedItem();
+                            let selected = $$(tableLayputId).getSelectedItem();
                             if(selected != undefined){
                                 let author = new Author();
                                 await author.initialize(selected);
-                                author.beforeEnding = async function(url, answer){
+                                author.beforeEnding = async function(answer){
+                                    await refresh();
                                     messageBox.information(answer);
-                                
-                                    let tableData = await entitiesRepository.getEntitiesInfo(url);
-                                    let table = $$("authorTable_id");
-                                    table.parse(tableData);
-                                    table.refresh();
                                 };
-
                                 let win = new AuthorEditWindow(author);
                                 win.show();
                             } else{
@@ -79,11 +81,21 @@ class AuthorTableLayout{
                     view:"button",
                     css:"webix_danger",
                     value:"Удалить",
-                    width:btnWidth,
+                    width:200,
                     align:"right",
                     click: async function (){
                         try{
-                            
+                            let selected = $$(tableLayputId).getSelectedItem();
+                            if(selected != undefined){
+                                // удалить обьект на сервере:
+                                let answer = await repository.deleteAuthor(selected);
+                    
+                                // удалить обьект в UI части:
+                                $$(tableLayputId).remove(selected.id);
+                                messageBox.information(answer);
+                            } else{
+                                messageBox.information("выберете аналоговый модуль для удаления");
+                            }
                         } catch (error){
                             messageBox.error(error.message); 
                         }
@@ -99,15 +111,7 @@ class AuthorTableLayout{
             rows:[ this.buttonsLayout, this.tableLayout ]
         }, 
         this.parentLayout.getChildViews()[0]);
-
-        let url = entitiesRepository.getAuthorsUrl();
-        entitiesRepository.getEntitiesInfo(url)
-        .then(tableData => {
-            let table = $$("authorTable_id");
-            table.parse(tableData);
-            table.refresh();
-        })
-        .catch(error => {
+        this.refresh().catch(error => {
             messageBox.error(error.message);
         });
     }

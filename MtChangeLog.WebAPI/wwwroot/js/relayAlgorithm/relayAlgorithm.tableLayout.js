@@ -1,23 +1,35 @@
 class RelayAlgorithmTableLayout{
     constructor(parentLayout){
         this.parentLayout = parentLayout;
+        
+        let tableLayputId = "relayAlgorithmTable_id";
         this.tableLayout = {
             view:"datatable",
-            id:"relayAlgorithmTable_id", 
+            id:tableLayputId, 
             select:"row",
             adjust:true,
             resizeColumn:true,
+            scroll:"xy",
             columns:[
-                { id:"id",          adjust:true, header:["GUID:", ""] },
-                { id:"title",       adjust:true, header:["Наименование:", { content:"multiSelectFilter" }] },
-                { id:"ansi",        adjust:true, header:["ANSI код:", { content:"multiSelectFilter" }] },
-                { id:"logicalNode", adjust:true, header:["LN:", { content:"multiSelectFilter" }] },
-                { id:"description", fillspace:true, header:["Описание:", ""] }
+                //{ id:"id",          adjust:true, header:["GUID:", ""] },
+                { id:"title",       width:200, header:["Наименование:", { content:"multiSelectFilter" }] },
+                { id:"ansi",        width:150, header:["ANSI код:", { content:"multiSelectFilter" }] },
+                { id:"logicalNode", width:150, header:["LN:", { content:"multiSelectFilter" }] },
+                { id:"description", adjust:true, header:["Описание:", ""] },
+                { fillspace:true }
             ],
             data:[]
         }
 
-        let btnWidth = 200;
+        // обновление таблицы:
+        let refresh = async function(){
+            let tableData = await repository.getTableRelayAlgorithms();
+            let tableLaypu = $$(tableLayputId);
+            tableLaypu.parse(tableData);
+            tableLaypu.refresh();
+        }
+        this.refresh = refresh;
+
         this.buttonsLayout = {
             view:"toolbar", 
             cols:[
@@ -25,20 +37,15 @@ class RelayAlgorithmTableLayout{
                     view:"button", 
                     css:"webix_primary",
                     value:"Добавить", 
-                    width:btnWidth,
+                    width:200,
                     click: async function (){
                         try{
                             let algorithm = new RelayAlgorithm();
                             await algorithm.defaultInitialize();
-                            algorithm.beforeEnding = async function(url, answer){
+                            algorithm.beforeEnding = async function(answer){
+                                await refresh();
                                 messageBox.information(answer);
-                                
-                                let tableData = await entitiesRepository.getEntitiesInfo(url);
-                                let table = $$("relayAlgorithmTable_id");
-                                table.parse(tableData);
-                                table.refresh();
                             };
-
                             let win = new RelayAlgorithmEditWindow(algorithm);
                             win.show();
                         } catch (error){
@@ -50,22 +57,17 @@ class RelayAlgorithmTableLayout{
                     view:"button", 
                     css:"webix_secondary",
                     value:"Редактировать", 
-                    width:btnWidth,
+                    width:200,
                     click: async function (){
                         try{
-                            let selected = $$("relayAlgorithmTable_id").getSelectedItem();
+                            let selected = $$(tableLayputId).getSelectedItem();
                             if(selected != undefined){
                                 let algorithm = new RelayAlgorithm();
                                 await algorithm.initialize(selected);
-                                algorithm.beforeEnding = async function(url, answer){
+                                algorithm.beforeEnding = async function(answer){
+                                    await refresh();
                                     messageBox.information(answer);
-                                
-                                    let tableData = await entitiesRepository.getEntitiesInfo(url);
-                                    let table = $$("relayAlgorithmTable_id");
-                                    table.parse(tableData);
-                                    table.refresh();
                                 };
-
                                 let win = new RelayAlgorithmEditWindow(algorithm);
                                 win.show();
                             } else{
@@ -80,11 +82,21 @@ class RelayAlgorithmTableLayout{
                     view:"button",
                     css:"webix_danger",
                     value:"Удалить",
-                    width:btnWidth,
+                    width:200,
                     align:"right",
                     click: async function (){
                         try{
-                            
+                            let selected = $$(tableLayputId).getSelectedItem();
+                            if(selected != undefined){
+                                // удалить обьект на сервере:
+                                let answer = await repository.deleteRelayAlgorithm(selected);
+                    
+                                // удалить обьект в UI части:
+                                $$(tableLayputId).remove(selected.id);
+                                messageBox.information(answer);
+                            } else{
+                                messageBox.information("выберете алгоритм для удаления");
+                            }
                         } catch (error){
                             messageBox.error(error.message); 
                         }
@@ -100,16 +112,8 @@ class RelayAlgorithmTableLayout{
             rows:[ this.buttonsLayout, this.tableLayout ]
         }, 
         this.parentLayout.getChildViews()[0]);
-
-        let url = entitiesRepository.getRelayAlgorithmsUrl();
-        entitiesRepository.getEntitiesInfo(url)
-        .then(tableData => {
-            let table = $$("relayAlgorithmTable_id");
-            table.parse(tableData);
-            table.refresh();
-        })
-        .catch(error => {
+        this.refresh().catch(error => {
             messageBox.error(error.message);
-        });
+        }); 
     }
 }

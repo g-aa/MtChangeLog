@@ -1,6 +1,5 @@
 class ProjectRevision{
     constructor(){
-        this.url = entitiesRepository.getProjectsRevisionsUrl();
         this.editable = {};
         this.authors = [];
         this.armEdits = [];
@@ -8,65 +7,48 @@ class ProjectRevision{
         this.algorithms = [];
         this.parentRevisions = [];
         this.communications = [];
-
         this.configure = async function(){
-            let urlAuthors = entitiesRepository.getAuthorsUrl();
-            this.authors = await entitiesRepository.getEntitiesInfo(urlAuthors);
-        
-            let urlArms = entitiesRepository.getArmEditsUrl();
-            this.armEdits = await entitiesRepository.getEntitiesInfo(urlArms);
-        
-            let urlVersions = entitiesRepository.getProjectsVersionsUrl();
-            this.projectVersions = await entitiesRepository.getEntitiesInfo(urlVersions);
-
-            let urlParent = entitiesRepository.getParentProjectsRevisionsUrl();
-            this.parentRevisions = await entitiesRepository.getEntitiesInfo(urlParent);
-
-            let urlAlgorithms = entitiesRepository.getRelayAlgorithmsUrl();
-            this.algorithms = await entitiesRepository.getEntitiesInfo(urlAlgorithms);
-
-            let urlCommunications = entitiesRepository.getCommunicationsUrl();
-            this.communications = await entitiesRepository.getEntitiesInfo(urlCommunications);
+            this.authors = await repository.getSortAuthors();
+            this.armEdits = await repository.getSortArmEdits();
+            this.algorithms = await repository.getSortRelayAlgorithms();
+            this.communications = await repository.getSortCommunications();
+            this.projectVersions = await repository.getSortProjectVersions();
+            this.parentRevisions = await repository.getSortProjectRevisions();
         }
     }
 
-    // получить armEdit по умолчанию:
-    async defaultInitialize(){
-    } 
-
-    // получить конкретную ревизию БФПО из bd:
-    async initialize(entityInfo){
-        this.editable = await entitiesRepository.getEntityDetails(this.url, entityInfo);
-        
+    // получение шаблона для конкретной редакции:
+    async defaultInitialize(versionInfo){
+        // получить шаблон:
+        this.editable = await repository.getTemplateProjectRevison(versionInfo);
         await this.configure();
 
         // отправить данные:
         this.submit = async function(){
-            let answer = await entitiesRepository.updateEntity(this.url, this.editable);
+            let answer = await repository.createProjectRevison(this.editable);
             if(typeof(this.beforeEnding) === "function"){
-                await this.beforeEnding(this.url, answer);
+                await this.beforeEnding(answer);
             }
         };
     }
 
-    // получение шаблона для конкретной редакции:
-    async byVersionInitialize(versionInfo){
-        let urlTemplate = entitiesRepository.getProjectsRevisionsTemplateUrl();
-        this.editable = await entitiesRepository.getEntityDetails(urlTemplate, versionInfo);
-
+    // получить конкретную ревизию БФПО из bd:
+    async initialize(entityInfo){
+        // получить из БД:
+        this.editable = await repository.getProjectRevisonDetails(entityInfo);
         await this.configure();
 
         // отправить данные:
         this.submit = async function(){
-            let answer = await entitiesRepository.createEntity(this.url, this.editable);
+            let answer = await repository.updateProjectRevison(this.editable);
             if(typeof(this.beforeEnding) === "function"){
-                await this.beforeEnding(this.url, answer);
+                await this.beforeEnding(answer);
             }
         };
     }
 
     //
-    async beforeEnding(url, answer){
+    async beforeEnding(answer){
 
     }
 

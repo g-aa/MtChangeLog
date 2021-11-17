@@ -126,6 +126,10 @@ class PlatformEditWindow{
                         click: async function(){
                             try { 
                                 // обновить перечень модулей у платформы:
+                                let selectedAMsId = $$("platformAnalogModules_id").getValue().split(",");
+                                _editableObj.setAnalogModules(selectedAMsId);
+                                
+                                /*
                                 let selected = $$("platformAnalogModules_id").getValue({options:true});
                                 _editableObj.setAnalogModules(selected.map(function(item){
                                     return {
@@ -136,6 +140,7 @@ class PlatformEditWindow{
                                         description:item.description
                                     };
                                 }));
+                                */
 
                                 // отправить:
                                 await _editableObj.submit();

@@ -7,12 +7,7 @@ let getMainLayout = function () {
                 padding: 3,
                 elements: [
                     { 
-                        // view:"button", 
-                        // type:"image",
-                        // image:"../icons/icons_table_x48.png",
-                        // autowidth:true,
-                        // css:"webix_transparent",
-                        // tooltip:"Таблицы компонентов",
+                        tooltip:"свернуть / развернуть основное меню",
                         view: "icon", 
                         icon: "mdi mdi-menu", 
                         click: function() {  
@@ -129,53 +124,53 @@ let getMainLayout = function () {
 let getMainSidebarMenu = function() {
     let result = [
         {
+            id:"authorTableLayout_id",
+            icon:"mdi mdi-card-account-details",
+            value:"таблица авторов БФПО"
+        },
+        {
+            id:"relayAlgorithmTableLayout_id",
+            icon:"mdi mdi-function-variant",
+            value:"таблица алгоритмов РЗиА"
+        },
+        {
+            id:"armEditTableLayout_id",
+            icon:"mdi mdi-application-brackets",
+            value:"таблица версий ArmEdit"
+        },
+        {
             id:"analogModuleTableLayout_id",
-            icon:"mdi mdi-table",
+            icon:"mdi mdi-puzzle",
             value:"таблица аналоговых модулей",
         },
         {
             id:"platformTableLayout_id",
-            icon:"mdi mdi-table",
+            icon:"mdi mdi-application-cog-outline",
             value:"таблица платформ БМРЗ",
         },
         {
+            id:"communicationTableLayout_id",
+            icon:"mdi mdi-ethernet",
+            value:"таблица коммуникаций"
+        },
+        {
             id:"prjVersTableLayout_id",
-            icon:"mdi mdi-table",
+            icon:"mdi mdi-alpha-v-box",
             value:"таблица версий БФПО",
         },
         {
             id:"prjRevTableLayout_id",
-            icon:"mdi mdi-table",
+            icon:"mdi mdi-alpha-r-box",
             value:"таблица редакций БФПО"
         },
         {
-            id:"armEditTableLayout_id",
-            icon:"mdi mdi-table",
-            value:"таблица версий ArmEdit"
-        },
-        {
-            id:"authorTableLayout_id",
-            icon:"mdi mdi-table",
-            value:"таблица авторов БФПО"
-        },
-        {
-            id:"communicationTableLayout_id",
-            icon:"mdi mdi-table",
-            value:"таблица протоколов инф. обмена"
-        },
-        {
-            id:"relayAlgorithmTableLayout_id",
-            icon:"mdi mdi-table",
-            value:"таблица алгоритмов РЗиА"
-        },
-        {
             id:"projectTrees_id",
-            icon:"mdi mdi-family-tree",
+            icon:"mdi mdi-graph",
             value:"деревья изменений БФПО"
         },
         {
             id:"prohectHistory_id",
-            icon:"mdi mdi-book-clock",
+            icon:"mdi mdi-format-list-text",
             value:"история изменений БФПО"
         }
     ];

@@ -1,45 +1,44 @@
 class Platform{
     constructor(){
-        this.url = entitiesRepository.getPlatformsUrl();
-        this.editable = { };
-        this.modules = [ ];
-        this.editFunc = null;
+        this.editable = {};
+        this.modules = [];
+        this.configure = async function(){
+            this.modules = await repository.getSortAnalogModules();
+        }
     }
 
     // получить platform по умолчанию:
     async defaultInitialize(){
-        this.editable = await entitiesRepository.getDefaultEntity(this.url);
-
-        let urlModule = entitiesRepository.getAnalogModulesUrl();
-        this.modules = await entitiesRepository.getEntitiesInfo(urlModule);
+        // получить шаблон:
+        this.editable = await repository.getPlatformTemplate();
+        await this.configure();
 
         // отправить данные:
         this.submit = async function(){
-            let answer = await entitiesRepository.createEntity(this.url, this.editable);
+            let answer = await repository.createPlatform(this.editable);
             if(typeof(this.beforeEnding) === "function"){
-                await this.beforeEnding(this.url, answer);
+                await this.beforeEnding(answer);
             }
         };
-    } 
+    }
 
     // получить конкретный platform из bd:
     async initialize(entityInfo){
-        this.editable = await entitiesRepository.getEntityDetails(this.url, entityInfo);
-
-        let urlModule = entitiesRepository.getAnalogModulesUrl();
-        this.modules = await entitiesRepository.getEntitiesInfo(urlModule);
+        // получить из БД:
+        this.editable = await repository.getPlatformDetails(entityInfo);
+        await this.configure();
 
         // отправить данные:
         this.submit = async function(){
-            let answer = await entitiesRepository.updateEntity(this.url, this.editable);
+            let answer = await repository.updatePlatform(this.editable);
             if(typeof(this.beforeEnding) === "function"){
-                await this.beforeEnding(this.url, answer);
+                await this.beforeEnding(answer);
             }
         };
     }
 
     //
-    async beforeEnding(url, answer){
+    async beforeEnding(answer){
 
     }
 
