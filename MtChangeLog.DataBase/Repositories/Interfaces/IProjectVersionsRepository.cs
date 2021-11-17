@@ -1,5 +1,6 @@
 ﻿using MtChangeLog.DataObjects.Entities.Base;
 using MtChangeLog.DataObjects.Entities.Editable;
+using MtChangeLog.DataObjects.Entities.Views;
 
 using System;
 using System.Collections.Generic;
@@ -11,6 +12,13 @@ namespace MtChangeLog.DataBase.Repositories.Interfaces
 {
     public interface IProjectVersionsRepository : ICRUD<ProjectVersionEditable>
     {
-        IEnumerable<ProjectVersionBase> GetEntities();
+        IEnumerable<ProjectVersionView> GetEntities();
+        IEnumerable<ProjectVersionShortView> GetShortEntities();
+
+        /// <summary>
+        /// получить перечень наименований проектов
+        /// </summary>
+        /// <returns></returns>
+        IEnumerable<string> GetProjectTitles();
     }
 }

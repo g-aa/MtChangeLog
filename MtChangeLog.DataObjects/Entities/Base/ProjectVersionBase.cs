@@ -50,7 +50,7 @@ namespace MtChangeLog.DataObjects.Entities.Base
         }
         public override string ToString()
         {
-            return $"id: {this.Id}, DIVG: {this.DIVG}, title: {this.Title}, version: {this.Version}";
+            return $"DIVG: {this.DIVG}, title: {this.Title}, version: {this.Version}";
         }
 
         public static ProjectVersionBase Default => new ProjectVersionBase()

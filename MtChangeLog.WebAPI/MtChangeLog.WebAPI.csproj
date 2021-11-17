@@ -2,7 +2,20 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
+    <Configurations>Debug;Release;Debug PostgreSQL</Configurations>
+    <ApplicationIcon>wwwroot\favicon.ico</ApplicationIcon>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="wwwroot\js\layouts\**" />
+    <Compile Remove="wwwroot\js\windows\**" />
+    <Content Remove="wwwroot\js\layouts\**" />
+    <Content Remove="wwwroot\js\windows\**" />
+    <EmbeddedResource Remove="wwwroot\js\layouts\**" />
+    <EmbeddedResource Remove="wwwroot\js\windows\**" />
+    <None Remove="wwwroot\js\layouts\**" />
+    <None Remove="wwwroot\js\windows\**" />
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\MtChangeLog.DataBase\MtChangeLog.DataBase.csproj" />
@@ -16,8 +29,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\js\layouts\" />
-    <Folder Include="wwwroot\js\windows\" />
+    <Folder Include="LogFiles\" />
   </ItemGroup>
 
   <ProjectExtensions><VisualStudio><UserProperties appsettings_1json__JsonSchema="https://jenkins-x.io/schemas/jx-schema.json" properties_4launchsettings_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>

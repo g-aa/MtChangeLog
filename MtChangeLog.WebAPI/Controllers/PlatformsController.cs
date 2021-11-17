@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-
+using Microsoft.Extensions.Logging;
 using MtChangeLog.DataBase.Entities;
 using MtChangeLog.DataBase.Repositories.Interfaces;
 using MtChangeLog.DataObjects.Entities.Base;
@@ -18,18 +18,21 @@ namespace MtChangeLog.WebAPI.Controllers
     [ApiController]
     public class PlatformsController : ControllerBase
     {
-        private readonly IPlatformsRepository platformsRepository;
+        private readonly IPlatformsRepository platforms;
+        private readonly ILogger logger;
 
-        public PlatformsController(IPlatformsRepository platformsRepository) 
+        public PlatformsController(IPlatformsRepository platformsRepository, ILogger<PlatformsController> logger) 
         { 
-            this.platformsRepository = platformsRepository;
+            this.platforms = platformsRepository;
+            this.logger = logger;
         }
         
         // GET: api/<PlatformsController>
         [HttpGet]
         public IEnumerable<PlatformBase> Get()
         {
-            var result = this.platformsRepository.GetEntities();
+            var result = this.platforms.GetEntities();
+            this.logger.LogInformation($"HTTP GET - all Platforms");
             return result;
         }
 
@@ -39,15 +42,18 @@ namespace MtChangeLog.WebAPI.Controllers
         {
             try
             {
-                var result = this.platformsRepository.GetEntity(id);
+                var result = this.platforms.GetEntity(id);
+                this.logger.LogInformation($"HTTP GET - Platform by id = {id}");
                 return this.Ok(result);
             }
             catch (ArgumentException ex)
             {
+                this.logger.LogWarning(ex, $"HTTP GET - Platform: ");
                 return this.NotFound(ex.Message);
             }
             catch (Exception ex) 
             {
+                this.logger.LogError(ex, $"HTTP GET - Platform: ");
                 return this.BadRequest(ex.Message);
             }
         }
@@ -61,42 +67,48 @@ namespace MtChangeLog.WebAPI.Controllers
 
         // POST api/<PlatformsController>
         [HttpPost]
-        public IActionResult Post([FromBody] PlatformEditable platform)
+        public IActionResult Post([FromBody] PlatformEditable entity)
         {
             try
             {
-                this.platformsRepository.AddEntity(platform);
-                return this.Ok($"The platform {platform.Title} addig to the database");
+                this.platforms.AddEntity(entity);
+                this.logger.LogInformation($"HTTP POST - new Platform {entity}");
+                return this.Ok($"Platform {entity} addig to the database");
             }
             catch (ArgumentException ex) 
             {
-                return this.BadRequest(ex.Message);   
+                this.logger.LogWarning(ex, $"HTTP POST - new Platform: ");
+                return this.Conflict(ex.Message);   
             }
             catch (Exception ex)
             {
+                this.logger.LogError(ex, $"HTTP POST - new Platform: ");
                 return this.BadRequest(ex.Message);
             }
         }
 
         // PUT api/<PlatformsController>/00000000-0000-0000-0000-000000000000
         [HttpPut("{id}")]
-        public IActionResult Put(Guid id, [FromBody] PlatformEditable platform)
+        public IActionResult Put(Guid id, [FromBody] PlatformEditable entity)
         {
             try
             {
-                if (id != platform.Id)
+                if (id != entity.Id)
                 {
-                    throw new ArgumentException($"url id = {id} is not equal to platform id = {platform.Id}");
+                    throw new ArgumentException($"url id = {id} is not equal to entity id = {entity.Id}");
                 }
-                this.platformsRepository.UpdateEntity(platform);
-                return this.Ok($"Platform {platform.Title} update in the database");
+                this.platforms.UpdateEntity(entity);
+                this.logger.LogInformation($"HTTP PUT - Platform by id = {id}");
+                return this.Ok($"Platform {entity} update in the database");
             }
             catch (ArgumentException ex) 
             {
-                return this.BadRequest(ex.Message);
+                this.logger.LogWarning(ex, $"HTTP PUT - Platform: ");
+                return this.Conflict(ex.Message);
             }
             catch (Exception ex)
             {
+                this.logger.LogError(ex, $"HTTP PUT - Platform: ");
                 return this.BadRequest(ex.Message);
             }
         }
@@ -107,11 +119,13 @@ namespace MtChangeLog.WebAPI.Controllers
         {
             try
             {
-                this.platformsRepository.DeleteEntity(id);
-                return this.Ok();
+                this.platforms.DeleteEntity(id);
+                this.logger.LogInformation($"HTTP DELETE - Platform by id = {id}");
+                return this.Ok($"The Platform id = {id} has been successfully removed");
             }
             catch (Exception ex)
             {
+                this.logger.LogError(ex, $"HTTP DELETE - Platform: ");
                 return this.BadRequest(ex.Message);
             }
         }

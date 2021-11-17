@@ -42,7 +42,14 @@ namespace MtChangeLog.DataObjects.Entities.Base
 
         public override string ToString()
         {
-            return $"id: {this.Id}, protocols: {this.Protocols}";
+            return $"protocols: {this.Protocols}";
         }
+
+        public static CommunicationBase Default => new CommunicationBase() 
+        {
+            Id = Guid.Empty,
+            Protocols = "modbus-mt",
+            Description = "шаблон"
+        };
     }
 }

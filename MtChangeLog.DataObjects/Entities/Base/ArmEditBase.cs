@@ -25,6 +25,7 @@ namespace MtChangeLog.DataObjects.Entities.Base
             this.Id = other.Id;
             this.DIVG = other.DIVG;
             this.Version = other.Version;
+            this.Date = other.Date;
             this.Description = other.Description;
         }
 
@@ -45,12 +46,13 @@ namespace MtChangeLog.DataObjects.Entities.Base
 
         public override string ToString()
         {
-            return $"id: {this.Id}, DIVG: {this.DIVG}, version: {this.Version}";
+            return $"DIVG: {this.DIVG}, version: {this.Version}";
         }
 
         public static ArmEditBase Default => new ArmEditBase()
         {
             Id = Guid.Empty,
+            Date = DateTime.Now,
             DIVG = "ДИВГ.00000-00",
             Version = "v0.00.0.00",
             Description = "шаблон для ArmEdit"

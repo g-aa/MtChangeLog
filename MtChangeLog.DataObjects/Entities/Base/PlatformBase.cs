@@ -40,7 +40,7 @@ namespace MtChangeLog.DataObjects.Entities.Base
 
         public override string ToString()
         {
-            return $"id: {this.Id}, title: {this.Title}";
+            return $"title: {this.Title}";
         }
 
         public static PlatformBase Default => new PlatformBase() 

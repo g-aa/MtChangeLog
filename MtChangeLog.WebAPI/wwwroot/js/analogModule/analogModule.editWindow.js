@@ -1,26 +1,15 @@
-class AnalogModuleEditWindow {
-    constructor(moduleDitales, platforms, submitFunс) {
-        
-        let _editableModule = moduleDitales;
-        if(_editableModule == undefined || _editableModule == null) {
-            throw new Error("не выбран аналоговый модуль для изменений");
-        }
-
-        let _platforms = platforms;
-        if (_platforms == undefined || _platforms == null) {
-            throw new Error("отсутствует перечень рлатформ модулей");
+class AnalogModuleEditWindow{
+    constructor(editableObj){
+        let _editableObj = editableObj;
+        if(_editableObj == undefined || _editableObj == null){
+            throw new Error("не выбран аналоговый модуль для работы");
         }
         
-        let _submitFunс = submitFunс;
-        if(_submitFunс == undefined || _submitFunс == null) {
-            throw new Error ("не определена функция отправки");
-        }
-
-        let _window;
-        this.show = function () {
-            webix.ready(function () {
-                _window = webix.ui(window());
-                _window.show();
+        let _uiWindow;
+        this.show = function(){
+            webix.ready(function(){
+                _uiWindow = webix.ui(window());
+                _uiWindow.show();
             });
         };
 
@@ -58,8 +47,8 @@ class AnalogModuleEditWindow {
                         id:"btn_oscWinClose",
                         align:"right",
                         tooltip:"закрыть окно",
-                        click: function () {
-                            _window.close();
+                        click: function(){
+                            _uiWindow.close();
                         }
                     }
                 ]
@@ -67,7 +56,7 @@ class AnalogModuleEditWindow {
             return result;
         };
 
-        let windowLayout = function () {
+        let windowLayout = function(){
             let lWidth = 180;
             let result = {
                 view:"layout",
@@ -78,14 +67,17 @@ class AnalogModuleEditWindow {
                         label:"Децимальный номер:", 
                         labelAlign:"right", 
                         labelWidth:lWidth,
-                        value:_editableModule.divg,
+                        value:_editableObj.getDivg(),
                         attributes:{
                             maxlength:13,
                         }, 
                         on:{
-                            onChange: function(newValue, oldValue, config){
-                                _editableModule.divg = newValue;
-                                webix.message("!!!");
+                            onChange: async function(newValue, oldValue, config){
+                                try{
+                                    _editableObj.setDivg(newValue);    
+                                } catch (error){
+                                    messageBox.warning(error.message);
+                                }
                             }
                         }
                     },
@@ -94,14 +86,17 @@ class AnalogModuleEditWindow {
                         label:"Наименование модуля:", 
                         labelAlign:"right",
                         labelWidth:lWidth,
-                        value:_editableModule.title,
+                        value:_editableObj.getTitle(),
                         attributes:{
                             maxlength:8,
                         }, 
                         on:{
-                            onChange: function(newValue, oldValue, config){
-                                _editableModule.title = newValue;
-                                webix.message("!!!");
+                            onChange: async function(newValue, oldValue, config){
+                                try{
+                                    _editableObj.setTitle(newValue);    
+                                } catch (error){
+                                    messageBox.warning(error.message);
+                                }
                             }
                         }
                     },
@@ -110,14 +105,17 @@ class AnalogModuleEditWindow {
                         label:"Номинальный ток:", 
                         labelAlign:"right",
                         labelWidth:lWidth,
-                        value:_editableModule.nominalCurrent,
+                        value:_editableObj.getNominalCurrent(),
                         attributes:{
                             maxlength:2,
                         }, 
                         on:{
-                            onChange: function(newValue, oldValue, config){
-                                _editableModule.nominalCurrent = newValue;
-                                webix.message("!!!");
+                            onChange: async function(newValue, oldValue, config){
+                                try{
+                                    _editableObj.setNominalCurrent(newValue);    
+                                } catch (error){
+                                    messageBox.warning(error.message);
+                                }
                             }
                         }
                     },
@@ -127,14 +125,17 @@ class AnalogModuleEditWindow {
                         labelAlign:"right",
                         labelWidth:lWidth, 
                         height:150, 
-                        value:_editableModule.description,
+                        value:_editableObj.getDescription(),
                         attributes:{
                             maxlength:200,
                         }, 
                         on:{
-                            onChange: function(newValue, oldValue, config){
-                                _editableModule.description = newValue;
-                                webix.message("!!!");
+                            onChange: async function(newValue, oldValue, config){
+                                try{
+                                    _editableObj.setDescription(newValue);
+                                } catch (error){
+                                    messageBox.warning(error.message);
+                                }
                             }
                         }
                     },
@@ -144,11 +145,11 @@ class AnalogModuleEditWindow {
                         label:"Модули:",
                         labelAlign:"right",
                         labelWidth:lWidth,  
-                        value:_editableModule.platforms,
+                        value:_editableObj.getPlatforms(),
                         button:true,
                         suggest:{
                             body:{
-                                data:_platforms,
+                                data:_editableObj.getAllPlatforms(),
                                 template:webix.template("#title#")
                             }
                         }
@@ -160,26 +161,24 @@ class AnalogModuleEditWindow {
                         css:"webix_primary",
                         inputWidth:200,
                         align:"right",
-                        click: async function () {
+                        click: async function(){
                             try {
+                                // обновить перечень платформ у модуля:
                                 let selected = $$("modulePlatforms_id").getValue({options:true});
-                                _editableModule.platforms = selected.map(function(item) {
+                                _editableObj.setPlatforms(selected.map(function(item){
                                     return {
                                         id:item.id,
                                         title:item.title,
                                         description:item.description
                                     };
-                                });
-                                await _submitFunс(_editableModule);
-                            } catch (error) {
-                                webix.message({
-                                    text: "[ERROR] - " + error.message,
-                                    type: "error", 
-                                    expire: 10000,
-                                });
-                            }
-                            finally {
-                                _window.close();
+                                }));
+
+                                // отправить:
+                                await _editableObj.submit();
+                            } catch (error){
+                                messageBox.alertWarning(error.message);
+                            } finally{
+                                _uiWindow.close();
                             }
                         }
                     }

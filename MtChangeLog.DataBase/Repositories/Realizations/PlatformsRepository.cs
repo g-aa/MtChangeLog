@@ -53,9 +53,10 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
 
         public void DeleteEntity(Guid guid)
         {
-            DbPlatform dbPlatform = this.GetDbPlatform(guid);
-            this.context.Platforms.Remove(dbPlatform);
-            this.context.SaveChanges();
+            throw new NotImplementedException("функционал не поддерживается");
+            //DbPlatform dbPlatform = this.GetDbPlatform(guid);
+            //this.context.Platforms.Remove(dbPlatform);
+            //this.context.SaveChanges();
         }
     }
 }

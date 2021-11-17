@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MtChangeLog.DataBase.Entities;
-
+using MtChangeLog.DataObjects.Entities.Views;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,9 +12,7 @@ namespace MtChangeLog.DataBase.Contexts
     {
         #region ProjectVersionEntities
         internal DbSet<DbPlatform> Platforms { get; set; }
-        
         internal DbSet<DbAnalogModule> AnalogModules { get; set; }
-        
         internal DbSet<DbProjectVersion> ProjectVersions { get; set; }
         #endregion
 
@@ -26,18 +24,30 @@ namespace MtChangeLog.DataBase.Contexts
         internal DbSet<DbRelayAlgorithm> RelayAlgorithms { get; set; }
         #endregion
 
+        #region Views
+        internal IQueryable<ProjectVersionView> ProjectVersionViews 
+        {
+            get => this.ProjectVersions.Include(pv => pv.AnalogModule)
+                .ThenInclude(pv => pv.Platforms)
+                .Select(pv => new ProjectVersionView(pv)
+                {
+                    Module = pv.AnalogModule.Title,
+                    Platform = pv.Platform.Title
+                });
+        }
+        #endregion
+
         public ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options)
         {
             //if (this.Platforms.Any()) 
             //{
-                this.Database.EnsureDeleted();    
+            //    this.Database.EnsureDeleted();    
             //}
             this.Database.EnsureCreated();
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            //  modelBuilder.Entity<DbAnalogModule>().HasData();
             base.OnModelCreating(modelBuilder);
         }
     }

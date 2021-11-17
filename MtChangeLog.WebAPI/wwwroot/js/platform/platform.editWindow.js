@@ -1,30 +1,19 @@
-class PlatformEditWindow {
-    constructor(platformDitales, analogModules, submitFunс) {
-
-        let _editablePlatform = platformDitales;
-        if(_editablePlatform == undefined || _editablePlatform == null) {
-            throw new Error("не выбрана платформа для изменений");
-        }
-
-        let _analogModules = analogModules;
-        if (_analogModules == undefined || _analogModules == null) {
-            throw new Error("отсутствует перечень аналоговых модулей");
+class PlatformEditWindow{
+    constructor(editableObj){
+        let _editableObj = editableObj;
+        if(_editableObj == undefined || _editableObj == null){
+            throw new Error("не выбрана платформа для работы");
         }
         
-        let _submitFunс = submitFunс;
-        if(_submitFunс == undefined || _submitFunс == null) {
-            throw new Error ("не определена функция отправки");
-        }
-
         let _uiWindow;
-        this.show = function() {
-            webix.ready(function () {
+        this.show = function(){
+            webix.ready(function(){
                 _uiWindow = webix.ui(window());
                 _uiWindow.show();
             });
         }
 
-        let window = function () {
+        let window = function(){
             let result = {
                 view:"window",
                 id:"win_id",
@@ -39,7 +28,7 @@ class PlatformEditWindow {
             return result;
         };
         
-        let headLayout = function () {
+        let headLayout = function(){
             let result = {
                 view:"toolbar",
                 id:"headToolbar",
@@ -58,7 +47,7 @@ class PlatformEditWindow {
                         id:"btn_oscWinClose",
                         align:"right",
                         tooltip:"закрыть окно",
-                        click: function () {
+                        click: function(){
                             _uiWindow.close();
                         }
                     }
@@ -67,7 +56,7 @@ class PlatformEditWindow {
             return result;
         };
 
-        let windowLayout = function () {
+        let windowLayout = function(){
             let lWidth = 100;
             let result = {
                 view:"layout",
@@ -78,14 +67,17 @@ class PlatformEditWindow {
                         label:"Платформа:", 
                         labelAlign:"right",
                         labelWidth:lWidth,
-                        value:_editablePlatform.title,
+                        value:_editableObj.getTitle(),
                         attributes:{
                             maxlength:10
                         }, 
                         on:{
-                            onChange: function(newValue, oldValue, config){
-                                _editablePlatform.title = newValue;
-                                webix.message("!!!");
+                            onChange: async function(newValue, oldValue, config){
+                                try{
+                                    _editableObj.setTitle(newValue);    
+                                } catch (error){
+                                    messageBox.warning(error.message);
+                                }
                             }
                         }
                     },
@@ -95,14 +87,17 @@ class PlatformEditWindow {
                         labelAlign:"right",
                         labelWidth:lWidth, 
                         height:150, 
-                        value:_editablePlatform.description,
+                        value:_editableObj.getDescription(),
                         attributes:{
                             maxlength:255
                         }, 
                         on:{
-                            onChange: function(newValue, oldValue, config){
-                                _editablePlatform.description = newValue;
-                                webix.message("!!!");
+                            onChange: async function(newValue, oldValue, config){
+                                try{
+                                    _editableObj.setDescription(newValue);
+                                } catch (error){
+                                    messageBox.warning(error.message);
+                                }
                             }
                         }
                     },
@@ -112,11 +107,11 @@ class PlatformEditWindow {
                         label:"Модули:",
                         labelAlign:"right",
                         labelWidth:lWidth,  
-                        value:_editablePlatform.analogModules,
+                        value:_editableObj.getAnalogModules(),
                         button:true,
                         suggest:{
                             body:{
-                                data:_analogModules,
+                                data:_editableObj.getAllAnalogModules(),
                                 template:webix.template("#title#")
                             }
                         }
@@ -128,10 +123,15 @@ class PlatformEditWindow {
                         css:"webix_primary",
                         inputWidth:200,
                         align:"right",
-                        click: async function () {
+                        click: async function(){
                             try { 
+                                // обновить перечень модулей у платформы:
+                                let selectedAMsId = $$("platformAnalogModules_id").getValue().split(",");
+                                _editableObj.setAnalogModules(selectedAMsId);
+                                
+                                /*
                                 let selected = $$("platformAnalogModules_id").getValue({options:true});
-                                _editablePlatform.analogModules = selected.map(function(item) {
+                                _editableObj.setAnalogModules(selected.map(function(item){
                                     return {
                                         id:item.id,
                                         title:item.title,
@@ -139,17 +139,14 @@ class PlatformEditWindow {
                                         nominalCurrent:item.nominalCurrent,
                                         description:item.description
                                     };
-                                });
-                                await _submitFunс(_editablePlatform);
-                            } 
-                            catch (error) {
-                                webix.message({
-                                    text: "[ERROR] - " + error.message,
-                                    type: "error", 
-                                    expire: 10000,
-                                });
-                            }
-                            finally {
+                                }));
+                                */
+
+                                // отправить:
+                                await _editableObj.submit();
+                            } catch (error){
+                                messageBox.alertWarning(error.message);
+                            } finally{
                                 _uiWindow.close();
                             }
                         }

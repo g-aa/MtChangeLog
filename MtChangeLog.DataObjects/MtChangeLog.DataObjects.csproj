@@ -2,10 +2,13 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
+    <Configurations>Debug;Release;Debug PostgreSQL</Configurations>
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Entities\Information\" />
+    <Compile Remove="Entities\Information\**" />
+    <EmbeddedResource Remove="Entities\Information\**" />
+    <None Remove="Entities\Information\**" />
   </ItemGroup>
 
 </Project>
