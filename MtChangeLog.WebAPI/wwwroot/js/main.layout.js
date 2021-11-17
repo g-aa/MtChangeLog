@@ -7,12 +7,13 @@ let getMainLayout = function () {
                 padding: 3,
                 elements: [
                     { 
+                        tooltip:"свернуть / развернуть основное меню",
                         view: "icon", 
                         icon: "mdi mdi-menu", 
                         click: function() {  
                             $$("mainSidebar_id").toggle();
                         }
-                    }, 
+                    },
                     {
                         view: "label",
                         align: "center",
@@ -24,17 +25,13 @@ let getMainLayout = function () {
                 cols: [
                     {
                         view: "sidebar",
+                        width:280,
                         id: "mainSidebar_id",
                         data: getMainSidebarMenu(),
                         on: {
                             onItemClick: function (id) {
                                 try {
-                                    webix.message({
-                                        text: "Был выбран: \'" + this.getItem(id).value + "\'",
-                                        type: "info", 
-                                        expire: 10000,
-                                    });
-
+                                    messageBox.information("Был выбран: \'" + this.getItem(id).value + "\'");
                                     let dLayout = $$("dataLayout_id");
                                     switch (id) {
                                         case "analogModuleTableLayout_id":
@@ -56,7 +53,10 @@ let getMainLayout = function () {
                                             projectLayout.show();
                                             break;
                                         case "prjRevTableLayout_id":
-                                            
+                                            if(projectLayout == undefined || projectLayout == null) {
+                                                var projectLayout = new ProjectRevisionLayout(dLayout);
+                                            }
+                                            projectLayout.show();
                                             break;
                                         case "armEditTableLayout_id":
                                             if(armEditLayout == undefined || armEditLayout == null) {
@@ -82,23 +82,23 @@ let getMainLayout = function () {
                                             }
                                             algorithmLayout.show();
                                             break;
+                                        case "projectTrees_id":
+                                            if(treeLayout == undefined || treeLayout == null) {
+                                                var treeLayout = new ProjectTreeLayout(dLayout);
+                                            }
+                                            treeLayout.show();
+                                            break;
+                                        case "prohectHistory_id":
+                                            if(historyLayout == undefined || historyLayout == null){
+                                                var historyLayout = new ProjectHistoryLayout(dLayout);
+                                            }
+                                            historyLayout.show();
+                                            break;
                                         default:
-                                            webix.message({
-                                                text: "Увы, функционал пока не поддерживается!",
-                                                type: "debug",
-                                                expire: 10000,
-                                            });
+                                            messageBox.warning("Увы, функционал пока не поддерживается!");
                                     }
-                                }
-                                catch(ex) {
-                                    webix.message({
-                                        text: ex.message,
-                                        type: "error", 
-                                        expire: 10000,
-                                    });
-                                }
-                                finally {
-
+                                } catch(error){
+                                    messageBox.error(error.message);
                                 }
                             }
                         }
@@ -124,44 +124,54 @@ let getMainLayout = function () {
 let getMainSidebarMenu = function() {
     let result = [
         {
+            id:"authorTableLayout_id",
+            icon:"mdi mdi-card-account-details",
+            value:"таблица авторов БФПО"
+        },
+        {
+            id:"relayAlgorithmTableLayout_id",
+            icon:"mdi mdi-function-variant",
+            value:"таблица алгоритмов РЗиА"
+        },
+        {
+            id:"armEditTableLayout_id",
+            icon:"mdi mdi-application-brackets",
+            value:"таблица версий ArmEdit"
+        },
+        {
             id:"analogModuleTableLayout_id",
-            icon:"mdi mdi-table",
-            value:"аналоговые модули",
+            icon:"mdi mdi-puzzle",
+            value:"таблица аналоговых модулей",
         },
         {
             id:"platformTableLayout_id",
-            icon:"mdi mdi-table",
+            icon:"mdi mdi-application-cog-outline",
             value:"таблица платформ БМРЗ",
         },
         {
+            id:"communicationTableLayout_id",
+            icon:"mdi mdi-ethernet",
+            value:"таблица коммуникаций"
+        },
+        {
             id:"prjVersTableLayout_id",
-            icon:"mdi mdi-table",
+            icon:"mdi mdi-alpha-v-box",
             value:"таблица версий БФПО",
         },
         {
             id:"prjRevTableLayout_id",
-            icon:"mdi mdi-table",
+            icon:"mdi mdi-alpha-r-box",
             value:"таблица редакций БФПО"
         },
         {
-            id:"armEditTableLayout_id",
-            icon:"mdi mdi-table",
-            value:"таблица версий ArmEdit"
+            id:"projectTrees_id",
+            icon:"mdi mdi-graph",
+            value:"деревья изменений БФПО"
         },
         {
-            id:"authorTableLayout_id",
-            icon:"mdi mdi-table",
-            value:"авторы проектов"
-        },
-        {
-            id:"communicationTableLayout_id",
-            icon:"mdi mdi-table",
-            value:"протоколы инф. обмена"
-        },
-        {
-            id:"relayAlgorithmTableLayout_id",
-            icon:"mdi mdi-table",
-            value:"алгоритмы РЗиА"
+            id:"prohectHistory_id",
+            icon:"mdi mdi-format-list-text",
+            value:"история изменений БФПО"
         }
     ];
     return result;

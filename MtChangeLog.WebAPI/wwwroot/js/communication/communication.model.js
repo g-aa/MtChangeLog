@@ -1,38 +1,37 @@
 class Communication{
     constructor(){
-        this.url = entitiesRepository.getCommunicationsUrl();
-        this.editable = null;
-        this.editFunc = null;
+        this.editable = {};
     }
 
     // получить автора по умолчанию:
     async defaultInitialize(){
-        this.editable = await entitiesRepository.getDefaultEntity(this.url);
+        // получить шаблон:
+        this.editable = await repository.getCommunicationTemplate();
 
         // отправить данные:
         this.submit = async function(){
-            let answer = await entitiesRepository.createEntity(this.url, this.editable);
-            if(typeof(beforeEnding) === "function"){
-                await beforeEnding(this.url, answer);
+            let answer = await repository.createCommunication(this.editable);
+            if(typeof(this.beforeEnding) === "function"){
+                await this.beforeEnding(answer);
             }
         };
     }
 
     // получить конкретного автора из bd:
     async initialize(entityInfo){
-        this.editable = await entitiesRepository.getEntityDetails(this.url, entityInfo);
+        this.editable = await repository.getCommunicationDetails(entityInfo);
 
         // отправить данные:
         this.submit = async function(){
-            let answer = await entitiesRepository.updateEntity(this.url, this.editable);
-            if(typeof(beforeEnding) === "function"){
-                await beforeEnding(this.url, answer);
+            let answer = await repository.updateCommunication(this.editable);
+            if(typeof(this.beforeEnding) === "function"){
+                await this.beforeEnding(answer);
             }
         };
     }
 
     //
-    async beforeEnding(url, answer){
+    async beforeEnding(answer){
 
     }
 

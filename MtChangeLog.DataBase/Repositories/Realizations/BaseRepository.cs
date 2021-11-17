@@ -72,7 +72,14 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
 
         internal DbProjectVersion GetDbProjectVersion(Guid guid)
         {
-            var dbProjectVersion = this.context.ProjectVersions.Include(pv => pv.AnalogModule).Include(pv => pv.Platform).FirstOrDefault(pv => pv.Id == guid);
+            var dbProjectVersion = this.context.ProjectVersions
+                .Include(pv => pv.AnalogModule)
+                .Include(pv => pv.Platform)
+                .Include(pv => pv.ProjectRevisions).ThenInclude(pr => pr.ArmEdit)
+                .Include(pv => pv.ProjectRevisions).ThenInclude(pr => pr.Communication)
+                .Include(pv => pv.ProjectRevisions).ThenInclude(pr => pr.Authors)
+                .Include(pv => pv.ProjectRevisions).ThenInclude(pr => pr.RelayAlgorithms)
+                .FirstOrDefault(pv => pv.Id == guid);
             if (dbProjectVersion is null)
             {
                 throw new ArgumentException($"The project version under id = {guid} was not found in the database");
@@ -82,10 +89,26 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
 
         internal DbProjectRevision GetDbProjectRevision(Guid guid)
         {
-            var dbProjectRevision = this.context.ProjectRevisions.Include(pr => pr.ProjectVersion).FirstOrDefault(pr => pr.Id == guid);
+            // требует оптимизации в дальнейшем
+            var dbProjectRevision = this.context.ProjectRevisions
+                .Include(pr => pr.Communication)
+                .Include(pr => pr.ArmEdit)
+                .Include(pr => pr.Authors)
+                .Include(pr => pr.RelayAlgorithms)
+                .Include(pr => pr.ProjectVersion.AnalogModule)
+                .Include(pr => pr.ProjectVersion.Platform)
+                .FirstOrDefault(pr => pr.Id == guid);
+
             if (dbProjectRevision is null)
             {
                 throw new ArgumentException($"The project revision under id = {guid} was not found in the database");
+            }
+
+            if (dbProjectRevision.Id != Guid.Empty) 
+            {
+                this.context.ProjectRevisions
+                    .Include(pr => pr.ProjectVersion).ThenInclude(pv=> pv.AnalogModule)
+                    .FirstOrDefault(pr => pr.Id == dbProjectRevision.ParentRevisionId);
             }
             return dbProjectRevision;
         }
@@ -158,6 +181,16 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
                 throw new ArgumentException($"Not found project revisions by transmitted ids");
             }
             return dbProjectRevisions.ToHashSet();
+        }
+
+        internal ICollection<DbRelayAlgorithm> GetDbRelayAlgorithms(IEnumerable<Guid> guids) 
+        {
+            var dbAlgorithms = this.context.RelayAlgorithms.Where(alg => guids.Contains(alg.Id));
+            if (dbAlgorithms is null)
+            {
+                throw new ArgumentException($"Not found algorithms by transmitted ids");
+            }
+            return dbAlgorithms.ToHashSet();
         }
     }
 }

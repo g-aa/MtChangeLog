@@ -1,5 +1,5 @@
 ﻿using MtChangeLog.DataObjects.Entities.Base;
-
+using MtChangeLog.DataObjects.Entities.Views;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,8 +10,8 @@ namespace MtChangeLog.DataObjects.Entities.Editable
 {
     public class ProjectRevisionEditable : ProjectRevisionBase
     {
-        public ProjectVersionBase ProjectVersion { get; set; }
-        public ProjectRevisionBase ParentRevision { get; set; }
+        public ProjectVersionView ProjectVersion { get; set; }
+        public ProjectRevisionShortView ParentRevision { get; set; }
         public CommunicationBase Communication { get; set; }
         public IEnumerable<AuthorBase> Authors { get; set; }
         public ArmEditBase ArmEdit { get; set; }
@@ -26,6 +26,11 @@ namespace MtChangeLog.DataObjects.Entities.Editable
         public ProjectRevisionEditable(ProjectRevisionBase other) : base(other) 
         {
             
+        }
+
+        public override string ToString()
+        {
+            return $"Project: {this.ProjectVersion.Module}-{this.ProjectVersion.Version}_{this.Revision}, date: {this.Date}, reason: {this.Reason}";
         }
 
         public static new ProjectRevisionEditable Default => new ProjectRevisionEditable(ProjectRevisionBase.Default)

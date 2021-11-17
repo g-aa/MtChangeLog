@@ -44,7 +44,7 @@ namespace MtChangeLog.DataObjects.Entities.Base
 
         public override string ToString()
         {
-            return $"id: {this.Id}, {this.FirstName} {this.LastName}, position: {this.Position}";
+            return $"{this.FirstName} {this.LastName}, position: {this.Position}";
         }
 
         public static AuthorBase Default => new AuthorBase()

@@ -58,7 +58,7 @@ class AuthorEditWindow {
         };
 
         let windowLayout = function () {
-            let lWidth = 160;
+            let lWidth = 120;
             let result = {
                 view:"layout",
                 id:"winLayout",

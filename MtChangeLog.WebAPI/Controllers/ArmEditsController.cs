@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-
+using Microsoft.Extensions.Logging;
 using MtChangeLog.DataBase.Repositories.Interfaces;
 using MtChangeLog.DataObjects.Entities.Base;
 using MtChangeLog.DataObjects.Entities.Editable;
@@ -18,10 +18,12 @@ namespace MtChangeLog.WebAPI.Controllers
     public class ArmEditsController : ControllerBase
     {
         private readonly IArmEditsRepository repository;
+        private readonly ILogger logger;
 
-        public ArmEditsController(IArmEditsRepository repository) 
+        public ArmEditsController(IArmEditsRepository repository, ILogger<ArmEditsController> logger) 
         {
             this.repository = repository;
+            this.logger = logger;
         }
 
         // GET: api/<ArmEditsController>
@@ -29,6 +31,7 @@ namespace MtChangeLog.WebAPI.Controllers
         public IEnumerable<ArmEditBase> Get()
         {
             var result = this.repository.GetEntities();
+            this.logger.LogInformation($"HTTP GET - all ArmEdits");
             return result;
         }
 
@@ -39,14 +42,17 @@ namespace MtChangeLog.WebAPI.Controllers
             try
             {
                 var result = this.repository.GetEntity(id);
+                this.logger.LogInformation($"HTTP GET - ArmEdit by id = {id}");
                 return this.Ok(result);
             }
             catch (ArgumentException ex)
             {
+                this.logger.LogWarning(ex, $"HTTP GET - ArmEdit: ");
                 return this.NotFound(ex.Message);
             }
             catch (Exception ex)
             {
+                this.logger.LogError(ex, $"HTTP GET - ArmEdit: ");
                 return this.BadRequest(ex.Message);
             }
         }
@@ -65,14 +71,17 @@ namespace MtChangeLog.WebAPI.Controllers
             try
             {
                 this.repository.AddEntity(entity);
-                return this.Ok($"ArmEdit {entity.DIVG} {entity.Version} adding to the database");
+                this.logger.LogInformation($"HTTP POST - new ArmEdit {entity}");
+                return this.Ok($"ArmEdit {entity} adding to the database");
             }
             catch (ArgumentException ex)
             {
-                return this.BadRequest(ex.Message);
+                this.logger.LogWarning(ex, $"HTTP POST - new ArmEdit: ");
+                return this.Conflict(ex.Message);
             }
             catch (Exception ex)
             {
+                this.logger.LogError(ex, $"HTTP POST - new ArmEdit: ");
                 return this.BadRequest(ex.Message);
             }
         }
@@ -88,14 +97,17 @@ namespace MtChangeLog.WebAPI.Controllers
                     throw new ArgumentException($"url id = {id} is not equal to entity id = {entity.Id}");
                 }
                 this.repository.UpdateEntity(entity);
-                return this.Ok($"ArmEdit {entity.DIVG} {entity.Version} update in the database");
+                this.logger.LogInformation($"HTTP PUT - ArmEdit by id = {id}");
+                return this.Ok($"ArmEdit {entity} update in the database");
             }
             catch (ArgumentException ex)
             {
-                return this.BadRequest(ex.Message);
+                this.logger.LogWarning(ex, $"HTTP PUT - ArmEdit: ");
+                return this.Conflict(ex.Message);
             }
             catch (Exception ex)
             {
+                this.logger.LogError(ex, $"HTTP PUT - ArmEdit: ");
                 return this.BadRequest(ex.Message);
             }
         }
@@ -107,10 +119,12 @@ namespace MtChangeLog.WebAPI.Controllers
             try
             {
                 this.repository.DeleteEntity(id);
-                return this.Ok();
+                this.logger.LogInformation($"HTTP DELETE - ArmEdit by id = {id}");
+                return this.Ok($"The ArmEdit id = {id} has been successfully removed");
             }
             catch (Exception ex)
             {
+                this.logger.LogError(ex, $"HTTP DELETE - ArmEdit: ");
                 return this.BadRequest(ex.Message);
             }
         }

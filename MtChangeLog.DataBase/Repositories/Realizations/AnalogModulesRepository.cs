@@ -55,9 +55,10 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
 
         public void DeleteEntity(Guid guid) 
         {
-            DbAnalogModule dbAnalogModule = this.GetDbAnalogModule(guid);
-            this.context.AnalogModules.Remove(dbAnalogModule);
-            this.context.SaveChanges();
+            throw new NotImplementedException("функционал не поддерживается");
+            //DbAnalogModule dbAnalogModule = this.GetDbAnalogModule(guid);
+            //this.context.AnalogModules.Remove(dbAnalogModule);
+            //this.context.SaveChanges();
         }
     }
 }

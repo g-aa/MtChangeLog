@@ -31,7 +31,7 @@ namespace MtChangeLog.DataBase.Entities
             this.ANSI = other.ANSI;
             this.Title = other.Title;
             this.LogicalNode = other.LogicalNode;
-            this.Descriprion = other.Descriprion;
+            this.Description = other.Description;
             // this.ProjectRevisions - не обновляется !!!
         }
 

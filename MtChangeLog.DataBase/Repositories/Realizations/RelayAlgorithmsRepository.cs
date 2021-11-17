@@ -49,9 +49,10 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
 
         public void DeleteEntity(Guid guid) 
         {
-            var dbAlgorithm = this.GetDbRelayAlgorithm(guid);
-            this.context.RelayAlgorithms.Remove(dbAlgorithm);
-            this.context.SaveChanges();
+            throw new NotImplementedException("функционал не поддерживается");
+            //var dbAlgorithm = this.GetDbRelayAlgorithm(guid);
+            //this.context.RelayAlgorithms.Remove(dbAlgorithm);
+            //this.context.SaveChanges();
         }
     }
 }

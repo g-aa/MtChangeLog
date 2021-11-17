@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-
+using Microsoft.Extensions.Logging;
 using MtChangeLog.DataBase.Repositories.Interfaces;
 using MtChangeLog.DataObjects.Entities.Base;
 using MtChangeLog.DataObjects.Entities.Editable;
@@ -18,10 +18,12 @@ namespace MtChangeLog.WebAPI.Controllers
     public class AuthorsController : ControllerBase
     {
         private readonly IAuthorsRepository repository;
+        private readonly ILogger logger;
 
-        public AuthorsController(IAuthorsRepository repository) 
+        public AuthorsController(IAuthorsRepository repository, ILogger<AuthorsController> logger) 
         {
             this.repository = repository;
+            this.logger = logger;
         }
 
         // GET: api/<AuthorsController>
@@ -29,6 +31,7 @@ namespace MtChangeLog.WebAPI.Controllers
         public IEnumerable<AuthorBase> Get()
         {
             var result = this.repository.GetEntities();
+            this.logger.LogInformation($"HTTP GET - all Authors");
             return result;
         }
 
@@ -39,14 +42,17 @@ namespace MtChangeLog.WebAPI.Controllers
             try
             {
                 var result = this.repository.GetEntity(id);
+                this.logger.LogInformation($"HTTP GET - Author by id = {id}");
                 return this.Ok(result);
             }
             catch (ArgumentException ex)
             {
+                this.logger.LogWarning(ex, $"HTTP GET - Author: ");
                 return this.NotFound(ex.Message);
             }
             catch (Exception ex)
             {
+                this.logger.LogError(ex, $"HTTP GET - Author: ");
                 return this.BadRequest(ex.Message);
             }
         }
@@ -65,14 +71,17 @@ namespace MtChangeLog.WebAPI.Controllers
             try
             {
                 this.repository.AddEntity(entity);
-                return this.Ok($"Author {entity.FirstName} {entity.LastName} adding to the database");
+                this.logger.LogInformation($"HTTP POST - new Author {entity}");
+                return this.Ok($"Author {entity} adding to the database");
             }
             catch (ArgumentException ex)
             {
-                return this.BadRequest(ex.Message);
+                this.logger.LogWarning(ex, $"HTTP POST - new Author: ");
+                return this.Conflict(ex.Message);
             }
             catch (Exception ex)
             {
+                this.logger.LogError(ex, $"HTTP POST - new Author: ");
                 return this.BadRequest(ex.Message);
             }
         }
@@ -88,14 +97,17 @@ namespace MtChangeLog.WebAPI.Controllers
                     throw new ArgumentException($"url id = {id} is not equal to entity id = {entity.Id}");
                 }
                 this.repository.UpdateEntity(entity);
-                return this.Ok($"Author {entity.FirstName} {entity.LastName} update in the database");
+                this.logger.LogInformation($"HTTP PUT - Author by id = {id}");
+                return this.Ok($"Author {entity} update in the database");
             }
             catch (ArgumentException ex)
             {
-                return this.BadRequest(ex.Message);
+                this.logger.LogWarning(ex, $"HTTP PUT - Author: ");
+                return this.Conflict(ex.Message);
             }
             catch (Exception ex)
             {
+                this.logger.LogError(ex, $"HTTP PUT - Author: ");
                 return this.BadRequest(ex.Message);
             }
         }
@@ -107,10 +119,12 @@ namespace MtChangeLog.WebAPI.Controllers
             try
             {
                 this.repository.DeleteEntity(id);
-                return this.Ok();
+                this.logger.LogInformation($"HTTP DELETE - Author by id = {id}");
+                return this.Ok($"The Author id = {id} has been successfully removed");
             }
             catch (Exception ex)
             {
+                this.logger.LogError(ex, $"HTTP DELETE - Author: ");
                 return this.BadRequest(ex.Message);
             }
         }

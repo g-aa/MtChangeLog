@@ -51,9 +51,10 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
 
         public void DeleteEntity(Guid guid)
         {
-            DbAuthor dbAuthor = this.GetDbAuthor(guid);
-            this.context.Authors.Remove(dbAuthor);
-            this.context.SaveChanges();
+            throw new NotImplementedException("функционал не поддерживается");
+            //DbAuthor dbAuthor = this.GetDbAuthor(guid);
+            //this.context.Authors.Remove(dbAuthor);
+            //this.context.SaveChanges();
         }
     }
 }

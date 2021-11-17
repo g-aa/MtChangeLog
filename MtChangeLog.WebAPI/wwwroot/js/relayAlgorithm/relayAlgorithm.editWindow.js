@@ -70,7 +70,7 @@ class RelayAlgorithmEditWindow {
                         labelWidth:lWidth,
                         value:_editableObj.getTitle(),
                         attributes:{
-                            maxlength:4
+                            maxlength:10
                         }, 
                         on:{
                             onChange: async function(newValue, oldValue, config){

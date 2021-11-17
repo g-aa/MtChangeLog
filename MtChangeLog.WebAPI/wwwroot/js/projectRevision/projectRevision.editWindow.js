@@ -1,13 +1,10 @@
 class ProjectRevisionEditWindow {
-    constructor(editablePrjRev) {
-
-        /*
-        let _editablePrjRev = editablePrjRev;
-        if(_editablePrjRev == undefined || _editablePrjRev == null){
-            throw new Error("не выбрана ревизия проекта для работы");
+    constructor(editableObj) {
+        let _editableObj = editableObj;
+        if(_editableObj == undefined || _editableObj == null){
+            throw new Error("не выбрана ревизия БФПО для работы");
         }
-        */
-
+        
         let _uiWindow;
         this.show = function() {
             webix.ready(function () {
@@ -23,7 +20,7 @@ class ProjectRevisionEditWindow {
                 modal:true,
                 move:true,
                 width:800,
-                height:800,
+                //height:800,
 		        position:"center",
                 head:headLayout(),
                 body:windowLayout()
@@ -67,83 +64,177 @@ class ProjectRevisionEditWindow {
                 id:"winLayout",
                 rows:[
                     {
-                        view:"combo",
-                        id:"projectVersion_id",
-                        label:"Версия БФПО:",
-                        labelAlign:"right",
-                        labelWidth:lWidth,
-                        value:"",
-                        options:[],
-                        on:{
-                            onChange: async function(newValue, oldValue, config){
-                            }
-                        }
-                    },
-                    {
-                        view:"combo",
+                        view:"richselect",
                         id:"parentRevision_id",
                         label:"Предыдущая редакция БФПО:",
                         labelAlign:"right",
                         labelWidth:lWidth,
-                        value:"",
-                        options:[],
+                        icon:"mdi mdi-arrow-down",
+                        value:_editableObj.getParentRevision(),
+                        options:{
+                            body:{
+                                template:"#module#-#title#-#version#_#revision#"
+                            },   
+                            data:_editableObj.getAllParentRevisions()
+                        },
                         on:{
                             onChange: async function(newValue, oldValue, config){
+                                try {
+                                    _editableObj.setParentRevision(newValue);
+                                } catch (error) {
+                                    messageBox.alertWarning(error.message);
+                                }
                             }
                         }
                     },
                     {
-                        view:"combo",
-                        id:"revisionArmEdit_id",
-                        label:"Версия ArmEdit:",
+                        view:"richselect",
+                        id:"projectVersion_id",
+                        label:"Версия БФПО:",
                         labelAlign:"right",
                         labelWidth:lWidth,
-                        value:"",
-                        options:[],
+                        icon:"mdi mdi-arrow-down",
+                        value:_editableObj.getProjectVersion(),
+                        options:{
+                            body:{
+                                template:"#module#-#title#-#version#"
+                            },   
+                            data:_editableObj.getAllProjectVersions()
+                        },
                         on:{
                             onChange: async function(newValue, oldValue, config){
+                                try {
+                                    _editableObj.setProjectVersion(newValue);
+                                } catch (error) {
+                                    messageBox.alertWarning(error.message);
+                                }
                             }
                         }
                     },
                     {
                         view:"text",
                         id:"revision_id", 
-                        label:"Номер редакции:", 
+                        label:"Номер текущей редакции:", 
                         labelAlign:"right",
                         labelWidth:lWidth,
-                        value:"",
+                        value:_editableObj.getRevision(),
                         attributes:{
                             maxlength:2
                         }, 
                         on:{
                             onChange: function(newValue, oldValue, config){
+                                try {
+                                    _editableObj.setRevision(newValue);
+                                } catch (error) {
+                                    messageBox.alertWarning(error.message);
+                                }
                             }
                         }
                     },
                     {
                         view:"datepicker",
                         id:"revisionDate_id",
-                        // inputWidth:300,
                         label:'Дата редакции:',
                         labelAlign:"right",
                         labelWidth:lWidth,
                         timepicker:false,
-                        value:new Date(),
+                        format:"%Y-%m-%d",
+                        value:_editableObj.getDate(),
                         on:{
                             onChange: function(newValue, oldValue, config){
+                                try {
+                                    _editableObj.setDate(newValue);
+                                } catch (error) {
+                                    messageBox.alertWarning(error.message);
+                                }
                             }
                         }
                     },
                     {
-                        view:"combo",
-                        id:"revisionAuthor_id",
+                        view:"richselect",
+                        id:"revisionArmEdit_id",
+                        label:"Версия ArmEdit:",
+                        labelAlign:"right",
+                        labelWidth:lWidth,
+                        icon:"mdi mdi-arrow-down",
+                        value:_editableObj.getArmEdit(),
+                        options:{
+                            body:{
+                                template:"#version#"
+                            },   
+                            data:_editableObj.getAllArmEdits()
+                        },
+                        on:{
+                            onChange: async function(newValue, oldValue, config){
+                                try {
+                                    _editableObj.setArmEdit(newValue);
+                                } catch (error) {
+                                    messageBox.alertWarning(error.message);
+                                }
+                            }
+                        }
+                    },
+                    {
+                        view:"multicombo",
+                        id:"revisionAuthors_id",
                         label:"Автор редакции:",
                         labelAlign:"right",
                         labelWidth:lWidth,
-                        value:"",
-                        options:[],
+                        value:_editableObj.getAuthors(),
+                        button:true,
+                        suggest:{
+                            body:{
+                                data:_editableObj.getAllAuthors(),
+                                template:webix.template("#lastName# #firstName#")
+                            }
+                        },
                         on:{
                             onChange: async function(newValue, oldValue, config){
+                                // обновление значений выполняется перед отправлением
+                            }
+                        }
+                    },
+                    {
+                        view:"multicombo",
+                        id:"revisionAlgorithms_id",
+                        label:"Алгоритмы РЗиА:",
+                        labelAlign:"right",
+                        labelWidth:lWidth,
+                        value:_editableObj.getAlgorithms(),
+                        button:true,
+                        suggest:{
+                            body:{
+                                data:_editableObj.getAllAlgorithms(),
+                                template:webix.template("#title#")
+                            }
+                        },
+                        on:{
+                            onChange: async function(newValue, oldValue, config){
+                                // обновление значений выполняется перед отправлением
+                            }
+                        }
+                    },
+                    {
+                        view:"richselect",
+                        id:"revisionCommunications_id",
+                        label:"Протоколы:",
+                        labelAlign:"right",
+                        labelWidth:lWidth,
+                        icon:"mdi mdi-ethernet",
+                        value:_editableObj.getCommunication(),
+                        options:{
+                            body:{
+                                template:"#protocols#"
+                            },   
+                            data:_editableObj.getAllCommunications()
+                        },
+                        on:{
+                            onChange: async function(newValue, oldValue, config){
+                                try {
+                                    _editableObj.setCommunication(newValue);
+                                } catch (error) {
+                                    messageBox.alertWarning(error.message);
+                                }
                             }
                         }
                     },
@@ -153,12 +244,17 @@ class ProjectRevisionEditWindow {
                         label:"Причина изменений:", 
                         labelAlign:"right",
                         labelWidth:lWidth,
-                        value:"",
+                        value:_editableObj.getReason(),
                         attributes:{
-                            maxlength:250
+                            maxlength:500
                         }, 
                         on:{
-                            onChange: function(newValue, oldValue, config){
+                            onChange: async function(newValue, oldValue, config){
+                                try {
+                                    _editableObj.setReason(newValue);
+                                } catch (error) {
+                                    messageBox.alertWarning(error.message);
+                                }
                             }
                         }
                     },
@@ -169,12 +265,17 @@ class ProjectRevisionEditWindow {
                         labelAlign:"right",
                         labelWidth:lWidth, 
                         height:dHeight, 
-                        value:"",
+                        value:_editableObj.getDescription(),
                         attributes:{
-                            maxlength:1000
+                            maxlength:3000
                         }, 
                         on:{
-                            onChange: function(newValue, oldValue, config) {
+                            onChange: function(newValue, oldValue, config){
+                                try {
+                                    _editableObj.setDescription(newValue);
+                                } catch (error) {
+                                    messageBox.alertWarning(error.message);
+                                }
                             }
                         }
                     },
@@ -187,11 +288,22 @@ class ProjectRevisionEditWindow {
                         align:"right",
                         click: async function (){
                             try{ 
-                                // await _editablePrjRev.submit();
+                                // обновить перечень авторов:
+                                let selectedAuthorsId = $$("revisionAuthors_id").getValue().split(",");
+                                _editableObj.setAuthors(selectedAuthorsId);
+
+                                // обновить перечень алгоритмов РЗиА:
+                                let selectedAlgorithmsId = $$("revisionAlgorithms_id").getValue().split(",");
+                                _editableObj.setAlgorithms(selectedAlgorithmsId);
+
+                                // отправить:
+                                await _editableObj.submit();
+
+                                // автоматически закрывать при удачном стечении обстоятельств:
+                                _uiWindow.close();
                             } catch (error){
                                 messageBox.alertWarning(error.message);
                             } finally{
-                                _uiWindow.close();
                             }
                         }
                     }

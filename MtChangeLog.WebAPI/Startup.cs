@@ -10,9 +10,11 @@ using Microsoft.Extensions.Logging;
 using MtChangeLog.DataBase.Contexts;
 using MtChangeLog.DataBase.Repositories.Interfaces;
 using MtChangeLog.DataBase.Repositories.Realizations;
-
+using MtChangeLog.WebAPI.Converters;
+using MtChangeLog.WebAPI.Loggers;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -32,13 +34,18 @@ namespace MtChangeLog.WebAPI
         {
             services.AddDbContext<ApplicationContext>(options =>
             {
-#if DEBUG
-                string sSqLiteConnection = Configuration["ConnectionStrings:SqLiteDbConnection"];
-                options.UseSqlite(sSqLiteConnection);
-#else
-                string sPgSqlConnection = Configuration["ConnectionStrings:PostgreSqlDbConnection"];
-                options.UseNpgsql(sPgSqlConnection);
-#endif
+                switch (this.Configuration["SqlProvider"].ToLower())
+                {
+                    case "postgresql":
+                        string sPgSqlConnection = Configuration["ConnectionStrings:PostgreSqlDbConnection"];
+                        options.UseNpgsql(sPgSqlConnection);
+                        break;
+                    case "sqlite":
+                    default:
+                        string sSqLiteConnection = Configuration["ConnectionStrings:SqLiteDbConnection"];
+                        options.UseSqlite(sSqLiteConnection);
+                        break;
+                }
             });
 
             services.AddTransient<IAnalogModulesRepository, AnalogModulesRepository>();
@@ -50,12 +57,17 @@ namespace MtChangeLog.WebAPI
             services.AddTransient<IProjectVersionsRepository, ProjectVersionsRepository>();
             services.AddTransient<IRelayAlgorithmsRepository, RelayAlgorithmsRepository>();
 
-            services.AddControllers();
+            services.AddControllers().AddJsonOptions(configure => 
+            {
+                configure.JsonSerializerOptions.Converters.Add(new DateTimeConverter());
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
         {
+            loggerFactory.AddFile();
+            
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

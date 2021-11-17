@@ -1,38 +1,38 @@
 class RelayAlgorithm{
     constructor(){
-        this.url = entitiesRepository.getRelayAlgorithmsUrl();
-        this.editable = null;
-        this.editFunc = null;
+        this.editable = {};
     }
 
     // получить автора по умолчанию:
     async defaultInitialize(){
-        this.editable = await entitiesRepository.getDefaultEntity(this.url);
+        // получить шаблон:
+        this.editable = await repository.getRelayAlgorithmTemplate();
 
         // отправить данные:
         this.submit = async function(){
-            let answer = await entitiesRepository.createEntity(this.url, this.editable);
-            if(typeof(beforeEnding) === "function"){
-                await beforeEnding(this.url, answer);
+            let answer = await repository.createRelayAlgorithm(this.editable);
+            if(typeof(this.beforeEnding) === "function"){
+                await this.beforeEnding(answer);
             }
         };
     }
 
     // получить конкретного автора из bd:
     async initialize(entityInfo){
-        this.editable = await entitiesRepository.getEntityDetails(this.url, entityInfo);
+        // получить из БД:
+        this.editable = await repository.getRelayAlgorithmDetails(entityInfo);
 
         // отправить данные:
         this.submit = async function(){
-            let answer = await entitiesRepository.updateEntity(this.url, this.editable);
-            if(typeof(beforeEnding) === "function"){
-                await beforeEnding(this.url, answer);
+            let answer = await repository.updateRelayAlgorithm(this.editable);
+            if(typeof(this.beforeEnding) === "function"){
+                await this.beforeEnding(answer);
             }
         };
     }
 
     //
-    async beforeEnding(url, answer){
+    async beforeEnding(answer){
 
     }
 
@@ -53,11 +53,11 @@ class RelayAlgorithm{
     }
 
     getLogicalNode(){
-        return this.editable.logicalnode;
+        return this.editable.logicalNode;
     }
 
     setLogicalNode(newLN = ""){
-        this.editable.logicalnode = newLN;
+        this.editable.logicalNode = newLN;
     }
 
     getDescription(){

@@ -1,55 +1,55 @@
 class Author{
     constructor(){
-        this.url = entitiesRepository.getAuthorsUrl();
-        this.editable = null;
-        this.editFunc = null;
+        this.editable = {};
     }
 
     // получить автора по умолчанию:
     async defaultInitialize(){
-        this.editable = await entitiesRepository.getDefaultEntity(this.url);
+        // получить шаблон:
+        this.editable = await repository.getAuthorTemplate();
 
         // отправить данные:
         this.submit = async function(){
-            let answer = await entitiesRepository.createEntity(this.url, this.editable);
-            if(typeof(beforeEnding) === "function"){
-                await beforeEnding(this.url, answer);
+            let answer = await repository.createAuthor(this.editable);
+            if(typeof(this.beforeEnding) === "function"){
+                await this.beforeEnding(answer);
             }
         };
     }
 
     // получить конкретного автора из bd:
     async initialize(entityInfo){
-        this.editable = await entitiesRepository.getEntityDetails(this.url, entityInfo);
+        // получить из БД:
+        this.editable = await repository.getAuthorDetails(entityInfo);
 
         // отправить данные:
         this.submit = async function(){
-            let answer = await entitiesRepository.updateEntity(this.url, this.editable);
-            if(typeof(beforeEnding) === "function"){
-                await beforeEnding(this.url, answer);
+            let answer = await repository.updateAuthor(this.editable);
+            if(typeof(this.beforeEnding) === "function"){
+                await this.beforeEnding(answer);
             }
         };
     }
 
     //
-    async beforeEnding(url, answer){
+    async beforeEnding(answer){
 
     }
 
     getFirstName(){
-        return this.editable.firstname;
+        return this.editable.firstName;
     }
 
     setFirstName(newName = ""){
-        this.editable.firstname = newName;
+        this.editable.firstName = newName;
     }
 
     getLastName(){
-        return this.editable.lastname;
+        return this.editable.lastName;
     }
 
     setLastName(newName = ""){
-        this.editable.lastname = newName;
+        this.editable.lastName = newName;
     }
 
     getPosition(){

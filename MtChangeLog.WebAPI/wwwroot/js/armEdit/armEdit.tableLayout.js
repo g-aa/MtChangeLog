@@ -1,23 +1,35 @@
 class ArmEditTableLayout{
     constructor(parentLayout){
         this.parentLayout = parentLayout;
+        
+        let tableLayputId = "armEditTable_id";
         this.tableLayout = {
             view:"datatable",
-            id:"armEditTable_id", 
+            id:tableLayputId, 
             select:"row",
             adjust:true,
             resizeColumn:true,
+            scroll:"xy",
             columns:[
-                { id:"id",             adjust:true, header:["GUID:", ""] },
-                { id:"divg",           adjust:true, header:["ДИВГ:", { content:"multiSelectFilter" }] },
-                { id:"version",        adjust:true, header:["Версия:", { content:"multiSelectFilter" }] },
-                { id:"date",           adjust:true, header:["Дата релиза:", { content:"multiSelectFilter" }] },
-                { id:"description",    fillspace:true, header:["Описание:", ""] }
+                //{ id:"id",          adjust:true,    header:["GUID:", ""] },
+                { id:"divg",        width:200,      header:["ДИВГ:", { content:"multiSelectFilter" }] },
+                { id:"version",     width:200,      header:["Версия:", { content:"multiSelectFilter" }] },
+                { id:"date",        width:250,      header:["Дата релиза:", { content:"multiSelectFilter" }] },
+                { id:"description", adjust:true,    header:["Описание:", ""] },
+                { fillspace:true }
             ],
             data:[]
         }
 
-        let btnWidth = 200;
+        // обновление таблицы:
+        let refresh = async function(){
+            let tableData = await repository.getTableArmEdits();
+            let tableLaypu = $$(tableLayputId);
+            tableLaypu.parse(tableData);
+            tableLaypu.refresh();
+        }
+        this.refresh = refresh;
+
         this.buttonsLayout = {
             view:"toolbar", 
             cols:[
@@ -25,20 +37,15 @@ class ArmEditTableLayout{
                     view:"button", 
                     css:"webix_primary",
                     value:"Добавить", 
-                    width:btnWidth,
+                    width:200,
                     click: async function (){
                         try{
                             let armEdit = new ArmEdit();
                             await armEdit.defaultInitialize();
-                            armEdit.beforeEnding = async function(url, answer){
+                            armEdit.beforeEnding = async function(answer){
+                                await refresh();
                                 messageBox.information(answer);
-                                
-                                let tableData = await entitiesRepository.getEntitiesInfo(url);
-                                let table = $$("armEditTable_id");
-                                table.parse(tableData);
-                                table.refresh();
                             };
-
                             let win = new ArmEditWindow(armEdit);
                             win.show();
                         } catch (error){
@@ -50,22 +57,17 @@ class ArmEditTableLayout{
                     view:"button", 
                     css:"webix_secondary",
                     value:"Редактировать", 
-                    width:btnWidth,
+                    width:200,
                     click: async function (){
                         try{
-                            let selected = $$("armEditTable_id").getSelectedItem();
+                            let selected = $$(tableLayputId).getSelectedItem();
                             if(selected != undefined){
                                 let armEdit = new ArmEdit();
                                 await armEdit.initialize(selected);
-                                armEdit.beforeEnding = async function(url, answer){
+                                armEdit.beforeEnding = async function(answer){
+                                    await refresh();
                                     messageBox.information(answer);
-                                
-                                    let tableData = await entitiesRepository.getEntitiesInfo(url);
-                                    let table = $$("armEditTable_id");
-                                    table.parse(tableData);
-                                    table.refresh();
                                 };
-
                                 let win = new ArmEditWindow(armEdit);
                                 win.show();
                             } else{
@@ -80,11 +82,21 @@ class ArmEditTableLayout{
                     view:"button",
                     css:"webix_danger",
                     value:"Удалить",
-                    width:btnWidth,
+                    width:200,
                     align:"right",
                     click: async function (){
                         try{
-                            
+                            let selected = $$(tableLayputId).getSelectedItem();
+                            if(selected != undefined){
+                                // удалить обьект на сервере:
+                                let answer = await repository.deleteArmEdit(selected);
+                    
+                                // удалить обьект в UI части:
+                                $$(tableLayputId).remove(selected.id);
+                                messageBox.information(answer);
+                            } else{
+                                messageBox.information("выберете ArmEdit для удаления");
+                            }
                         } catch (error){
                             messageBox.error(error.message); 
                         }
@@ -100,15 +112,7 @@ class ArmEditTableLayout{
             rows:[ this.buttonsLayout, this.tableLayout ]
         }, 
         this.parentLayout.getChildViews()[0]);
-
-        let url = entitiesRepository.getArmEditsUrl();
-        entitiesRepository.getEntitiesInfo(url)
-        .then(tableData => {
-            let table = $$("armEditTable_id");
-            table.parse(tableData);
-            table.refresh();
-        })
-        .catch(error => {
+        this.refresh().catch(error => {
             messageBox.error(error.message);
         });
     }
