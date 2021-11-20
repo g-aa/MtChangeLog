@@ -24,19 +24,6 @@ namespace MtChangeLog.DataBase.Contexts
         internal DbSet<DbRelayAlgorithm> RelayAlgorithms { get; set; }
         #endregion
 
-        #region Views
-        internal IQueryable<ProjectVersionView> ProjectVersionViews 
-        {
-            get => this.ProjectVersions.Include(pv => pv.AnalogModule)
-                .ThenInclude(pv => pv.Platforms)
-                .Select(pv => new ProjectVersionView(pv)
-                {
-                    Module = pv.AnalogModule.Title,
-                    Platform = pv.Platform.Title
-                });
-        }
-        #endregion
-
         public ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options)
         {
             //if (this.Platforms.Any()) 

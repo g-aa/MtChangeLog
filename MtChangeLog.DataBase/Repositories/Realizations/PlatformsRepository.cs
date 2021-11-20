@@ -1,8 +1,10 @@
 ﻿using MtChangeLog.DataBase.Contexts;
 using MtChangeLog.DataBase.Entities;
 using MtChangeLog.DataBase.Repositories.Interfaces;
-using MtChangeLog.DataObjects.Entities.Base;
+
 using MtChangeLog.DataObjects.Entities.Editable;
+using MtChangeLog.DataObjects.Entities.Views.Shorts;
+using MtChangeLog.DataObjects.Entities.Views.Tables;
 
 using System;
 using System.Collections.Generic;
@@ -18,27 +20,45 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
 
         }
 
-        public IEnumerable<PlatformBase> GetEntities()
+        public IEnumerable<PlatformShortView> GetShortEntities()
         {
-            return this.context.Platforms.OrderBy(platform => platform.Title).Select(platform => platform.GetBase());
+            var result = this.context.Platforms.OrderBy(e => e.Title).Select(e => e.ToShortView());
+            return result;
+        }
+
+        public IEnumerable<PlatformTableView> GetTableEntities() 
+        {
+            var result = this.context.Platforms.OrderBy(e => e.Title).Select(e => e.ToTableView());
+            return result;
+        }
+
+        public PlatformEditable GetTemplate() 
+        {
+            var template = new PlatformEditable() 
+            {
+                Id = Guid.Empty,
+                Title = "БМРЗ-000",
+                Description = "введите описание для платформы"
+            };
+            return template;
         }
 
         public PlatformEditable GetEntity(Guid guid)
         {
             var dbPlatform = this.GetDbPlatform(guid);
-            return dbPlatform.GetEditable();
+            return dbPlatform.ToEditable();
         }
 
         public void AddEntity(PlatformEditable entity)
         {
-            if (this.context.Platforms.AsEnumerable().FirstOrDefault(platform => platform.Equals(entity)) != null)
-            {
-                throw new ArgumentException($"Platform {entity.Title} is contained in the database");
-            }
             var dbPlatform = new DbPlatform(entity)
             {
                 AnalogModules = this.GetDbAnalogModules(entity.AnalogModules.Select(module => module.Id))
             };
+            if (this.context.Platforms.FirstOrDefault(platform => platform.Equals(dbPlatform)) != null)
+            {
+                throw new ArgumentException($"Platform {entity.Title} is contained in the database");
+            }
             this.context.Platforms.Add(dbPlatform);
             this.context.SaveChanges();
         }
@@ -47,7 +67,6 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
         {
             DbPlatform dbPlatform = this.GetDbPlatform(entity.Id);
             dbPlatform.Update(entity, this.GetDbAnalogModules(entity.AnalogModules.Select(module => module.Id)));
-            // dbPlatform.Projects - обновляются только через project !!!
             this.context.SaveChanges();
         }
 

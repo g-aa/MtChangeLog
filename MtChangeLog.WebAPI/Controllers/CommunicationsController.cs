@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using MtChangeLog.DataBase.Repositories.Interfaces;
-using MtChangeLog.DataObjects.Entities.Base;
 using MtChangeLog.DataObjects.Entities.Editable;
 
 using System;
@@ -24,15 +23,58 @@ namespace MtChangeLog.WebAPI.Controllers
         {
             this.repository = repository;
             this.logger = logger;
+            this.logger.LogInformation("HTTP - CommunicationsController - creating");
         }
 
-        // GET: api/<CommunicationsController>
-        [HttpGet]
-        public IEnumerable<CommunicationBase> Get()
+        // GET: api/<CommunicationsController>/ShortViews
+        [HttpGet("ShortViews")]
+        public IActionResult GetShortViews()
         {
-            var result = this.repository.GetEntities();
-            this.logger.LogInformation($"HTTP GET - all Communications");
-            return result;
+            try
+            {
+                this.logger.LogInformation($"HTTP GET - CommunicationsController - all short entities");
+                var result = this.repository.GetShortEntities();
+                return this.Ok(result);
+            }
+            catch (Exception ex)
+            {
+                this.logger.LogError(ex, "HTTP GET - CommunicationsController - ");
+                return this.BadRequest(ex.Message);
+            }
+        }
+
+        // GET: api/<CommunicationsController>/ShortViews
+        [HttpGet("TableViews")]
+        public IActionResult GetTableViews()
+        {
+            try
+            {
+                this.logger.LogInformation($"HTTP GET - CommunicationsController - all entities for table");
+                var result = this.repository.GetTableEntities();
+                return this.Ok(result);
+            }
+            catch (Exception ex)
+            {
+                this.logger.LogError(ex, "HTTP GET - CommunicationsController - ");
+                return this.BadRequest(ex.Message);
+            }
+        }
+
+        // GET api/<AnalogModulesController>/Template
+        [HttpGet("Template")]
+        public IActionResult GetTemplate()
+        {
+            try
+            {
+                this.logger.LogInformation("HTTP GET - CommunicationsController - template");
+                var result = this.repository.GetTemplate();
+                return this.Ok(result);
+            }
+            catch (Exception ex)
+            {
+                this.logger.LogError(ex, "HTTP GET - CommunicationsController - ");
+                return this.BadRequest(ex.Message);
+            }
         }
 
         // GET api/<CommunicationsController>/00000000-0000-0000-0000-000000000000
@@ -41,73 +83,66 @@ namespace MtChangeLog.WebAPI.Controllers
         {
             try
             {
+                this.logger.LogInformation($"HTTP GET - CommunicationsController - entity by id = {id}");
                 var result = this.repository.GetEntity(id);
-                this.logger.LogInformation($"HTTP GET - Communication by id = {id}");
                 return this.Ok(result);
             }
             catch (ArgumentException ex)
             {
-                this.logger.LogWarning(ex, $"HTTP GET - Communication: ");
+                this.logger.LogWarning(ex, $"HTTP GET - CommunicationsController - ");
                 return this.NotFound(ex.Message);
             }
             catch (Exception ex)
             {
-                this.logger.LogError(ex, $"HTTP GET - Communication: ");
+                this.logger.LogError(ex, $"HTTP GET - CommunicationsController - ");
                 return this.BadRequest(ex.Message);
             }
         }
 
-        // GET api/<CommunicationsController>/default
-        [HttpGet("default")]
-        public IActionResult GetDefault()
-        {
-            return this.Ok(CommunicationBase.Default);
-        }
-
         // POST api/<CommunicationsController>
         [HttpPost]
-        public IActionResult Post([FromBody] CommunicationBase entity)
+        public IActionResult Post([FromBody] CommunicationEditable entity)
         {
             try
             {
+                this.logger.LogInformation($"HTTP POST - CommunicationsController - new entity {entity}");
                 this.repository.AddEntity(entity);
-                this.logger.LogInformation($"HTTP POST - new Communication {entity}");
                 return this.Ok($"Communications {entity} adding to the database");
             }
             catch (ArgumentException ex)
             {
-                this.logger.LogWarning(ex, $"HTTP POST - new Communication: ");
+                this.logger.LogWarning(ex, $"HTTP POST - CommunicationsController - ");
                 return this.Conflict(ex.Message);
             }
             catch (Exception ex)
             {
-                this.logger.LogError(ex, $"HTTP POST - new Communication: ");
+                this.logger.LogError(ex, $"HTTP POST - CommunicationsController - ");
                 return this.BadRequest(ex.Message);
             }
         }
 
         // PUT api/<CommunicationsController>/00000000-0000-0000-0000-000000000000
         [HttpPut("{id}")]
-        public IActionResult Put(Guid id, [FromBody] CommunicationBase entity)
+        public IActionResult Put(Guid id, [FromBody] CommunicationEditable entity)
         {
             try
             {
+                this.logger.LogInformation($"HTTP PUT - CommunicationsController - entity by id = {id}");
                 if (id != entity.Id)
                 {
                     throw new ArgumentException($"url id = {id} is not equal to entity id = {entity.Id}");
                 }
                 this.repository.UpdateEntity(entity);
-                this.logger.LogInformation($"HTTP PUT - Communication by id = {id}");
                 return this.Ok($"Communications {entity} update in the database");
             }
             catch (ArgumentException ex)
             {
-                this.logger.LogWarning(ex, $"HTTP PUT - Communication: ");
+                this.logger.LogWarning(ex, $"HTTP PUT - CommunicationsController - ");
                 return this.Conflict(ex.Message);
             }
             catch (Exception ex)
             {
-                this.logger.LogError(ex, $"HTTP PUT - Communication: ");
+                this.logger.LogError(ex, $"HTTP PUT - CommunicationsController - ");
                 return this.BadRequest(ex.Message);
             }
         }
@@ -118,13 +153,13 @@ namespace MtChangeLog.WebAPI.Controllers
         {
             try
             {
+                this.logger.LogInformation($"HTTP DELETE - CommunicationsController - entity by id = {id}");
                 this.repository.DeleteEntity(id);
-                this.logger.LogInformation($"HTTP DELETE - Communication by id = {id}");
                 return this.Ok($"The Communication id = {id} has been successfully removed");
             }
             catch (Exception ex)
             {
-                this.logger.LogError(ex, $"HTTP DELETE - Communication: ");
+                this.logger.LogError(ex, $"HTTP DELETE - CommunicationsController - ");
                 return this.BadRequest(ex.Message);
             }
         }

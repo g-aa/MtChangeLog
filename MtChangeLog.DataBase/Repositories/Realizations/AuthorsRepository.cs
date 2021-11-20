@@ -1,7 +1,9 @@
 ﻿using MtChangeLog.DataBase.Contexts;
 using MtChangeLog.DataBase.Entities;
 using MtChangeLog.DataBase.Repositories.Interfaces;
-using MtChangeLog.DataObjects.Entities.Base;
+
+using MtChangeLog.DataObjects.Entities.Editable;
+using MtChangeLog.DataObjects.Entities.Views.Shorts;
 
 using System;
 using System.Collections.Generic;
@@ -18,34 +20,51 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
             
         }
 
-        public IEnumerable<AuthorBase> GetEntities()
+        public IEnumerable<AuthorShortView> GetShortEntities() 
         {
-            return this.context.Authors.OrderBy(author => author.LastName).Select(author => author.GetBase());
+            var result = this.context.Authors.OrderBy(e => e.LastName).Select(e => e.ToShortView());
+            return result;
         }
 
-        public AuthorBase GetEntity(Guid guid) 
+        public IEnumerable<AuthorEditable> GetTableEntities() 
+        {
+            var result = this.context.Authors.OrderBy(e => e.LastName).Select(e => e.ToEditable());
+            return result;
+        }
+
+        public AuthorEditable GetTemplate()
+        {
+            var template = new AuthorEditable() 
+            {
+                Id = Guid.Empty,
+                FirstName = "имя",
+                LastName = "фамилия",
+                Position = "введите должность автора"
+            };
+            return template;
+        }
+
+        public AuthorEditable GetEntity(Guid guid) 
         {
             var dbAuthor = this.GetDbAuthor(guid);
-            return dbAuthor.GetBase();
+            return dbAuthor.ToEditable();
         }
 
-        public void AddEntity(AuthorBase entity)
+        public void AddEntity(AuthorEditable entity)
         {
-            if (this.context.Authors.AsEnumerable().FirstOrDefault(a => a.Equals(entity)) != null)
+            var dbAuthor = new DbAuthor(entity);
+            if (this.context.Authors.FirstOrDefault(e => e.Equals(dbAuthor)) != null)
             {
                 throw new ArgumentException($"Author {entity.FirstName} {entity.LastName} is contained in database");
             }
-            var dbArmEdit = new DbAuthor(entity);
-
-            this.context.Authors.Add(dbArmEdit);
+            this.context.Authors.Add(dbAuthor);
             this.context.SaveChanges();
         }
 
-        public void UpdateEntity(AuthorBase entity)
+        public void UpdateEntity(AuthorEditable entity)
         {
-            DbAuthor dbAuthor = this.GetDbAuthor(entity.Id);
+            var dbAuthor = this.GetDbAuthor(entity.Id);
             dbAuthor.Update(entity);
-            // dbAuthor.ProjectRevisions - не должно обновляеться !!!
             this.context.SaveChanges();
         }
 

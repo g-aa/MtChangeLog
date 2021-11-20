@@ -1,5 +1,5 @@
-﻿using MtChangeLog.DataObjects.Entities.Base;
-using MtChangeLog.DataObjects.Entities.Editable;
+﻿using MtChangeLog.DataObjects.Entities.Editable;
+using MtChangeLog.DataObjects.Entities.Views.Shorts;
 
 using System;
 using System.Collections.Generic;
@@ -9,8 +9,10 @@ using System.Threading.Tasks;
 
 namespace MtChangeLog.DataBase.Repositories.Interfaces
 {
-    public interface IRelayAlgorithmsRepository : ICRUD<RelayAlgorithmBase>
+    public interface IRelayAlgorithmsRepository : ICRUD<RelayAlgorithmEditable>
     {
-        IEnumerable<RelayAlgorithmBase> GetEntities();
+        IEnumerable<RelayAlgorithmShortView> GetShortEntities();
+        IEnumerable<RelayAlgorithmEditable> GetTableEntities();
+        RelayAlgorithmEditable GetTemplate();
     }
 }

@@ -8,7 +8,6 @@ namespace MtChangeLog.DataBase.Repositories.Interfaces
 {
     public interface ICRUD<T> where T : new()
     {
-        //IEnumerable<T> GetEntities();
         T GetEntity(Guid guid);
         void AddEntity(T entity);
         void UpdateEntity(T entity);

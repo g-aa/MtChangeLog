@@ -4,13 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MtChangeLog.DataObjects.Entities.Views
+namespace MtChangeLog.DataObjects.Entities.Views.Shorts
 {
-    public class ProjectVersionShortView
+    public class ArmEditShortView
     {
         public Guid Id { get; set; }
-        public string Module { get; set; }
-        public string Title { get; set; }
         public string Version { get; set; }
     }
 }

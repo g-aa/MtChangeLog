@@ -1,7 +1,9 @@
 ﻿using MtChangeLog.DataBase.Contexts;
 using MtChangeLog.DataBase.Entities;
 using MtChangeLog.DataBase.Repositories.Interfaces;
-using MtChangeLog.DataObjects.Entities.Base;
+
+using MtChangeLog.DataObjects.Entities.Editable;
+using MtChangeLog.DataObjects.Entities.Views.Shorts;
 
 using System;
 using System.Collections.Generic;
@@ -18,29 +20,49 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
             
         }
 
-        public IEnumerable<RelayAlgorithmBase> GetEntities()
+        public IEnumerable<RelayAlgorithmShortView> GetShortEntities() 
         {
-            return this.context.RelayAlgorithms.Select(alg => alg.GetBase());
+            var result = this.context.RelayAlgorithms.OrderBy(e => e.ANSI).Select(e => e.ToShortView());
+            return result;
+        }
+        
+        public IEnumerable<RelayAlgorithmEditable> GetTableEntities() 
+        {
+            var result = this.context.RelayAlgorithms.OrderBy(e => e.ANSI).Select(e => e.ToEditable());
+            return result;
+        }
+        
+        public RelayAlgorithmEditable GetTemplate() 
+        {
+            var template = new RelayAlgorithmEditable()
+            {
+                Id = Guid.Empty,
+                Title = "наименование алгоритма РЗА",
+                ANSI = "код ANSI",
+                LogicalNode = "логический узел в МЭК-61850",
+                Description = "шаблон функции релейной защиты"
+            };
+            return template;
         }
 
-        public RelayAlgorithmBase GetEntity(Guid guid)
+        public RelayAlgorithmEditable GetEntity(Guid guid)
         {
             var dbAlgorithm = this.GetDbRelayAlgorithm(guid);
-            return dbAlgorithm.GetBase();
+            return dbAlgorithm.ToEditable();
         }
 
-        public void AddEntity(RelayAlgorithmBase entity)
+        public void AddEntity(RelayAlgorithmEditable entity)
         {
-            if (this.context.RelayAlgorithms.AsEnumerable().FirstOrDefault(alg => alg.Equals(entity)) != null) 
+            var dbAlgorithm = new DbRelayAlgorithm(entity);
+            if (this.context.RelayAlgorithms.FirstOrDefault(e => e.Equals(dbAlgorithm)) != null) 
             {
                 throw new ArgumentException($"Relay algorithm {entity.ANSI} {entity.Title} is contained in database");
             }
-            var dbAlgorithm = new DbRelayAlgorithm(entity);
             this.context.RelayAlgorithms.Add(dbAlgorithm);
             this.context.SaveChanges();
         }
 
-        public void UpdateEntity(RelayAlgorithmBase entity)
+        public void UpdateEntity(RelayAlgorithmEditable entity)
         {
             var dbAlgorithm = this.GetDbRelayAlgorithm(entity.Id);
             dbAlgorithm.Update(entity);

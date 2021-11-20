@@ -1,8 +1,10 @@
 ﻿using MtChangeLog.DataBase.Contexts;
 using MtChangeLog.DataBase.Entities;
 using MtChangeLog.DataBase.Repositories.Interfaces;
-using MtChangeLog.DataObjects.Entities.Base;
+
 using MtChangeLog.DataObjects.Entities.Editable;
+using MtChangeLog.DataObjects.Entities.Views.Shorts;
+using MtChangeLog.DataObjects.Entities.Views.Tables;
 
 using System;
 using System.Collections.Generic;
@@ -19,27 +21,47 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
 
         }
 
-        public IEnumerable<AnalogModuleBase> GetEntities() 
+        public IEnumerable<AnalogModuleShortView> GetShortEntities() 
         {
-            return this.context.AnalogModules.OrderBy(module => module.Title).Select(module => module.GetBase());
+            var result = this.context.AnalogModules.OrderBy(e => e.Title).Select(e => e.ToShortView());
+            return result;
+        }
+
+        public IEnumerable<AnalogModuleTableView> GetTableEntities() 
+        {
+            var result = this.context.AnalogModules.OrderBy(e => e.Title).Select(e => e.ToTableView());
+            return result;
+        }
+
+        public AnalogModuleEditable GetTemplate() 
+        {
+            var template = new AnalogModuleEditable()
+            {
+                Id = Guid.Empty,
+                DIVG = "ДИВГ.00000-00",
+                Title = "БМРЗ-000",
+                Current = "0A",
+                Description = "введите описание для модуля"
+            };
+            return template;
         }
 
         public AnalogModuleEditable GetEntity(Guid guid) 
         {
             var dbModule = this.GetDbAnalogModule(guid);
-            return dbModule.GetEditable();
+            return dbModule.ToEditable();
         }
 
         public void AddEntity(AnalogModuleEditable entity) 
         {
-            if (this.context.AnalogModules.AsEnumerable().FirstOrDefault(module => module.Equals(entity)) != null) 
-            {
-                throw new ArgumentException($"AnalogModule {entity.DIVG} {entity.Title} is contained in database");
-            }
             var dbModule = new DbAnalogModule(entity)
             {
                 Platforms = this.GetDbPlatforms(entity.Platforms.Select(platform => platform.Id))
             };
+            if (this.context.AnalogModules.FirstOrDefault(module => module.Equals(dbModule)) != null) 
+            {
+                throw new ArgumentException($"AnalogModule {entity.DIVG} {entity.Title} is contained in database");
+            }
             this.context.AnalogModules.Add(dbModule);
             this.context.SaveChanges();
         }
@@ -48,8 +70,6 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
         {
             DbAnalogModule dbAnalogModule = this.GetDbAnalogModule(entity.Id);
             dbAnalogModule.Update(entity, this.GetDbPlatforms(entity.Platforms.Select(platform => platform.Id)));
-            // dbAnalogModule.Projects - обновляются только через project !!!
-
             this.context.SaveChanges();
         }
 

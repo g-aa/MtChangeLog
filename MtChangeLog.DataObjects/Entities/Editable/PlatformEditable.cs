@@ -1,4 +1,4 @@
-﻿using MtChangeLog.DataObjects.Entities.Base;
+﻿using MtChangeLog.DataObjects.Entities.Views.Shorts;
 
 using System;
 using System.Collections.Generic;
@@ -8,23 +8,17 @@ using System.Threading.Tasks;
 
 namespace MtChangeLog.DataObjects.Entities.Editable
 {
-    public class PlatformEditable : PlatformBase
+    public class PlatformEditable
     {
-        public IEnumerable<AnalogModuleBase> AnalogModules { get; set; }
+        public Guid Id { get; set; }
+        public string Title { get; set; }
+        public string Description { get; set; }
+        public IEnumerable<AnalogModuleShortView> AnalogModules { get; set; }
 
-        public PlatformEditable() : base()
+        public PlatformEditable()
         {
-            this.AnalogModules = new HashSet<AnalogModuleBase>();
+            this.Id = Guid.NewGuid();
+            this.AnalogModules = new HashSet<AnalogModuleShortView>();
         }
-
-        public PlatformEditable(PlatformBase other) : base(other) 
-        {
-            
-        }
-
-        public static new PlatformEditable Default => new PlatformEditable(PlatformBase.Default)
-        {
-            AnalogModules = new HashSet<AnalogModuleBase>()
-        };
     }
 }

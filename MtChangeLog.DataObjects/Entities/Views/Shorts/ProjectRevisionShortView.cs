@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MtChangeLog.DataObjects.Entities.Views
+namespace MtChangeLog.DataObjects.Entities.Views.Shorts
 {
     public class ProjectRevisionShortView
     {
