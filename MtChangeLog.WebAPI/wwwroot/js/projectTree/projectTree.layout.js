@@ -19,7 +19,7 @@ class ProjectTreeLayout{
                     label:"Тип проекта БМРЗ (тип БФПО):",
                     labelAlign:"right",
                     labelWidth:220,
-                    icon:"mdi mdi-arrow-down",
+                    icon:"mdi mdi-format-title",
                     value:"",
                     options:[],
                     on:{

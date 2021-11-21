@@ -69,7 +69,7 @@ class ProjectRevisionEditWindow {
                         label:"Предыдущая редакция БФПО:",
                         labelAlign:"right",
                         labelWidth:lWidth,
-                        icon:"mdi mdi-arrow-down",
+                        icon:"mdi mdi-alpha-r-box",
                         value:_editableObj.getParentRevision(),
                         options:{
                             body:{
@@ -93,7 +93,7 @@ class ProjectRevisionEditWindow {
                         label:"Версия БФПО:",
                         labelAlign:"right",
                         labelWidth:lWidth,
-                        icon:"mdi mdi-arrow-down",
+                        icon:"mdi mdi-alpha-v-box",
                         value:_editableObj.getProjectVersion(),
                         options:{
                             body:{
@@ -156,7 +156,7 @@ class ProjectRevisionEditWindow {
                         label:"Версия ArmEdit:",
                         labelAlign:"right",
                         labelWidth:lWidth,
-                        icon:"mdi mdi-arrow-down",
+                        icon:"mdi mdi-application-brackets",
                         value:_editableObj.getArmEdit(),
                         options:{
                             body:{

@@ -19,7 +19,7 @@ class ProjectHistoryLayout{
                     label:"Проект (БФПО):",
                     labelAlign:"right",
                     labelWidth:220,
-                    icon:"mdi mdi-arrow-down",
+                    icon:"mdi mdi-alpha-v-box",
                     value:"",
                     options:[],
                     on:{
