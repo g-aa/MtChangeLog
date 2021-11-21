@@ -89,6 +89,5 @@ class AnalogModule{
         this.editable.platforms = this.platforms.filter(function(item){
             return ids.indexOf(item.id) != -1;
         });
-        //this.editable.platforms = values;
     }
 }

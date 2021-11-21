@@ -164,15 +164,9 @@ class AnalogModuleEditWindow{
                         click: async function(){
                             try {
                                 // обновить перечень платформ у модуля:
-                                let selected = $$("modulePlatforms_id").getValue({options:true});
-                                _editableObj.setPlatforms(selected.map(function(item){
-                                    return {
-                                        id:item.id,
-                                        title:item.title,
-                                        description:item.description
-                                    };
-                                }));
-
+                                let selected = $$("modulePlatforms_id").getValue().split(",");
+                                _editableObj.setPlatforms(selected);
+                                
                                 // отправить:
                                 await _editableObj.submit();
                             } catch (error){

@@ -84,8 +84,8 @@ namespace MtChangeLog.WebAPI.Controllers
         {
             try
             {
-                var result = this.repository.GetEntity(id);
                 this.logger.LogInformation($"HTTP GET - PlatformsController - entity by id = {id}");
+                var result = this.repository.GetEntity(id);
                 return this.Ok(result);
             }
             catch (ArgumentException ex)
@@ -106,8 +106,8 @@ namespace MtChangeLog.WebAPI.Controllers
         {
             try
             {
-                this.repository.AddEntity(entity);
                 this.logger.LogInformation($"HTTP POST - PlatformsController - new entity {entity}");
+                this.repository.AddEntity(entity);
                 return this.Ok($"Platform {entity} addig to the database");
             }
             catch (ArgumentException ex) 
@@ -128,12 +128,12 @@ namespace MtChangeLog.WebAPI.Controllers
         {
             try
             {
+                this.logger.LogInformation($"HTTP PUT - PlatformsController - entity by id = {id}");
                 if (id != entity.Id)
                 {
                     throw new ArgumentException($"url id = {id} is not equal to entity id = {entity.Id}");
                 }
                 this.repository.UpdateEntity(entity);
-                this.logger.LogInformation($"HTTP PUT - PlatformsController - entity by id = {id}");
                 return this.Ok($"Platform {entity} update in the database");
             }
             catch (ArgumentException ex) 
@@ -154,8 +154,8 @@ namespace MtChangeLog.WebAPI.Controllers
         {
             try
             {
-                this.repository.DeleteEntity(id);
                 this.logger.LogInformation($"HTTP DELETE - PlatformsController - entity by id = {id}");
+                this.repository.DeleteEntity(id);
                 return this.Ok($"The Platform id = {id} has been successfully removed");
             }
             catch (Exception ex)
