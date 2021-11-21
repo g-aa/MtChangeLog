@@ -18,6 +18,14 @@ let getMainLayout = function () {
                         view: "label",
                         align: "center",
                         label: "<span style='font-size:30px;'>БМРЗ - change log</span>"
+                    },
+                    { 
+                        view:"icon", 
+                        icon:"mdi mdi-information", 
+                        tooltip:"О программе",
+                        click: function(){
+                            // добавить вывод информации о программе
+                        }
                     }
                 ]
             },
