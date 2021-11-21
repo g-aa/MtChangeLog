@@ -94,6 +94,12 @@ let getMainLayout = function () {
                                             }
                                             historyLayout.show();
                                             break;
+                                            case "startPage_id":
+                                                if(startLayout == undefined || startLayout == null){
+                                                    var startLayout = new StartPageLayout(dLayout);
+                                                }
+                                                startLayout.show();
+                                                break;
                                         default:
                                             messageBox.warning("Увы, функционал пока не поддерживается!");
                                     }
@@ -123,6 +129,11 @@ let getMainLayout = function () {
 // основное меню:
 let getMainSidebarMenu = function() {
     let result = [
+        {
+            id:"startPage_id",
+            icon:"mdi mdi-home-circle",
+            value:"начальная страница"
+        },
         {
             id:"authorTableLayout_id",
             icon:"mdi mdi-card-account-details",
@@ -180,4 +191,6 @@ let getMainSidebarMenu = function() {
 // запуск webix на выполнение:
 webix.ready(function () {
     webix.ui(getMainLayout()).show();
+    $$("mainSidebar_id").select("startPage_id");   
+    $$("mainSidebar_id").callEvent("onItemClick", [ "startPage_id" ]);
 });

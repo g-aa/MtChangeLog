@@ -284,6 +284,11 @@ class EntitiesRepository{
     async getProjectHistory(entityId = {}){
         return await this.getEntityDetails("/api/ProjectHistory", { id:entityId });
     }
+
+    // Статистика:
+    async getShortStatistics(){
+        return await this.getEntitiesInfo("/api/Statistics");
+    }
 }
 
 if(repository == undefined || repository == null){

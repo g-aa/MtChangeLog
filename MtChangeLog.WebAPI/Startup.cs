@@ -56,6 +56,7 @@ namespace MtChangeLog.WebAPI
             services.AddTransient<IProjectRevisionsRepository, ProjectRevisionsRepository>();
             services.AddTransient<IProjectVersionsRepository, ProjectVersionsRepository>();
             services.AddTransient<IRelayAlgorithmsRepository, RelayAlgorithmsRepository>();
+            services.AddTransient<IStatisticsRepository, StatisticsRepository>();
 
             services.AddControllers().AddJsonOptions(configure => 
             {
