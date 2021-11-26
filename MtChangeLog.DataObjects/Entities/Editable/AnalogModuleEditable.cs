@@ -13,16 +13,16 @@ namespace MtChangeLog.DataObjects.Entities.Editable
     {
         public Guid Id { get; set; }
         [Required]
-        [RegularExpression("^ДИВГ.[0-9]{5}-[0-9]{2}", ErrorMessage = "Децимальный номер: должно иметь следующий вид ДИВГ.xxxxx-xx, где x - число [0-9]", MatchTimeoutInMilliseconds = 1000)]
+        [RegularExpression("^ДИВГ.[0-9]{5}-[0-9]{2}", ErrorMessage = "Децимальный номер должен иметь следующий вид ДИВГ.xxxxx-xx, где x - число [0-9]", MatchTimeoutInMilliseconds = 1000)]
         public string DIVG { get; set; }
         [Required]
-        [RegularExpression("^БМРЗ-[0-9]{3}", ErrorMessage = "Наименование: должено иметь следующий вид БМРЗ-xxx, где x - число [0-9]", MatchTimeoutInMilliseconds = 1000)]
+        [RegularExpression("^БМРЗ-[0-9]{3}", ErrorMessage = "Наименование должено иметь следующий вид БМРЗ-xxx, где x - число [0-9]", MatchTimeoutInMilliseconds = 1000)]
         public string Title { get; set; }
         [Required]
-        [RegularExpression("^[0-9]A", ErrorMessage ="Ток: должен принимать значение от [0-9]A", MatchTimeoutInMilliseconds = 1000)]
+        [RegularExpression("^[0-9]A", ErrorMessage ="Ток должен принимать значение от [0-9]A", MatchTimeoutInMilliseconds = 1000)]
         public string Current { get; set; }
         [Required(AllowEmptyStrings = true)]
-        [StringLength(500, ErrorMessage = "Описание: должно содержать не больше 500 символов")]
+        [StringLength(500, ErrorMessage = "Описание должно содержать не больше 500 символов")]
         public string Description { get; set; }
         public IEnumerable<PlatformShortView> Platforms { get; set; }
 
