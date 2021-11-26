@@ -14,7 +14,7 @@ namespace MtChangeLog.DataObjects.Entities.Editable
         [RegularExpression("^ДИВГ.[0-9]{5}-[0-9]{2}", ErrorMessage = "Децимальный номер: должен иметь следующий вид ДИВГ.xxxxx-xx, где x - число [0-9]", MatchTimeoutInMilliseconds = 1000)]
         public string DIVG { get; set; }
         [Required]
-        [RegularExpression("^[0-9]{2}", ErrorMessage = "Версия БФПО должна находиться в диапазоне [00-99]", MatchTimeoutInMilliseconds = 1000)]
+        [RegularExpression("^v[0-9]{1}.[0-9]{2}.[0-9]{2}.[0-9]{2}", ErrorMessage = "Версия ArmEdit должна принимать следующий вид vx.xx.xx.xx, где - x число [0-9]", MatchTimeoutInMilliseconds = 1000)]
         public string Version { get; set; }
         public DateTime Date { get; set; }
         [Required]
