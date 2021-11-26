@@ -63,7 +63,7 @@ class AnalogModuleEditWindow{
                 id:"winLayout",
                 rows:[
                     { 
-                        view:"text", 
+                        view:"text",
                         label:"Децимальный номер:", 
                         labelAlign:"right", 
                         labelWidth:lWidth,
@@ -74,7 +74,7 @@ class AnalogModuleEditWindow{
                         on:{
                             onChange: async function(newValue, oldValue, config){
                                 try{
-                                    _editableObj.setDivg(newValue);    
+                                    _editableObj.setDivg(newValue);
                                 } catch (error){
                                     messageBox.warning(error.message);
                                 }
@@ -169,10 +169,13 @@ class AnalogModuleEditWindow{
                                 
                                 // отправить:
                                 await _editableObj.submit();
+
+                                // автоматически закрывать при удачном стечении обстоятельств:
+                                _uiWindow.close();
                             } catch (error){
                                 messageBox.alertWarning(error.message);
                             } finally{
-                                _uiWindow.close();
+                                
                             }
                         }
                     }

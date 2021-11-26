@@ -15,7 +15,15 @@ class EntitiesRepository{
         if (response.ok) {
             return answer;
         } else{
-            throw new Error("HTTP GET error<br>" + response.status + " - " + response.statusText + "<br>" + answer);
+            let message = "HTTP POST<br>" + response.status + "-" + response.statusText + "<br>";
+            if(typeof answer === "string"){
+                message += answer;
+            } else if(answer.hasOwnProperty("errors")){
+                Object.keys(answer.errors).forEach(function(key){
+                    message += answer.errors[key].join("<br>") + "<br>";
+                });
+            }
+            throw new Error(message);
         }
     }
     async getEntityDetails(urlString, module = {}){
@@ -29,7 +37,15 @@ class EntitiesRepository{
         if (response.ok){
             return answer;
         } else{
-            throw new Error("HTTP GET error<br>" + response.status + " - " + response.statusText + "<br>" + answer);
+            let message = "HTTP POST<br>" + response.status + "-" + response.statusText + "<br>";
+            if(typeof answer === "string"){
+                message += answer;
+            } else if(answer.hasOwnProperty("errors")){
+                Object.keys(answer.errors).forEach(function(key){
+                    message += answer.errors[key].join("<br>") + "<br>";
+                });
+            }
+            throw new Error(message);
         }
     }
     async createEntity(urlString, module = {}){
@@ -45,7 +61,15 @@ class EntitiesRepository{
         if (response.ok){
             return answer;
         } else{
-            throw new Error("HTTP POST error<br>" + response.status + " - " + response.statusText + "<br>" + answer);
+            let message = "HTTP POST<br>" + response.status + "-" + response.statusText + "<br>";
+            if(typeof answer === "string"){
+                message += answer;
+            } else if(answer.hasOwnProperty("errors")){
+                Object.keys(answer.errors).forEach(function(key){
+                    message += answer.errors[key].join("<br>") + "<br>";
+                });
+            }
+            throw new Error(message);
         }
     }
     async updateEntity(urlString, module = {}){
@@ -61,7 +85,15 @@ class EntitiesRepository{
         if (response.ok){
             return answer;
         } else{
-            throw new Error("HTTP PUT error<br>" + response.status + " - " + response.statusText + "<br>" + answer);
+            let message = "HTTP POST<br>" + response.status + "-" + response.statusText + "<br>";
+            if(typeof answer === "string"){
+                message += answer;
+            } else if(answer.hasOwnProperty("errors")){
+                Object.keys(answer.errors).forEach(function(key){
+                    message += answer.errors[key].join("<br>") + "<br>";
+                });
+            }
+            throw new Error(message);
         }
     }
     async deleteEntity(urlString, module = {}){
@@ -75,7 +107,15 @@ class EntitiesRepository{
         if (response.ok){
             return answer;
         } else{
-            throw new Error("HTTP DELETE error<br>" + response.status + " - " + response.statusText + "<br>" + answer);
+            let message = "HTTP POST<br>" + response.status + "-" + response.statusText + "<br>";
+            if(typeof answer === "string"){
+                message += answer;
+            } else if(answer.hasOwnProperty("errors")){
+                Object.keys(answer.errors).forEach(function(key){
+                    message += answer.errors[key].join("<br>") + "<br>";
+                });
+            }
+            throw new Error(message);
         }
     }
 
