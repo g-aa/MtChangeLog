@@ -18,7 +18,7 @@ namespace MtChangeLog.DataObjects.Entities.Editable
         public string Version { get; set; }
         public DateTime Date { get; set; }
         [Required]
-        [StringLength(500, ErrorMessage = "Описание должно содержать не больше 500 символо")]
+        [StringLength(500, ErrorMessage = "Описание должно содержать не больше 500 символов")]
         public string Description { get; set; }
     }
 }
