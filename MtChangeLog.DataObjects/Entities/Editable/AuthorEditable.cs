@@ -16,7 +16,7 @@ namespace MtChangeLog.DataObjects.Entities.Editable
         [Required]
         [StringLength(32, ErrorMessage = "Фамилия должна содержать не больше 32 символов")]
         public string LastName { get; set; }
-        [Required]
+        [Required(AllowEmptyStrings = true)]
         [StringLength(250, ErrorMessage = "Должность должна содержать не больше 250 символов")]
         public string Position { get; set; }
     }

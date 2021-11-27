@@ -13,7 +13,7 @@ namespace MtChangeLog.DataObjects.Entities.Editable
         [Required]
         [StringLength(250, ErrorMessage = "Перечень протоколов должен содержать не больше 250 символов")]
         public string Protocols { get; set; }
-        [Required]
+        [Required(AllowEmptyStrings = true)]
         [StringLength(500, ErrorMessage = "Описание должно содержать не больше 500 символов")]
         public string Description { get; set; }
     }

@@ -17,7 +17,7 @@ namespace MtChangeLog.DataObjects.Entities.Editable
         [RegularExpression("^v[0-9]{1}.[0-9]{2}.[0-9]{2}.[0-9]{2}", ErrorMessage = "Версия ArmEdit должна принимать следующий вид vx.xx.xx.xx, где - x число [0-9]", MatchTimeoutInMilliseconds = 1000)]
         public string Version { get; set; }
         public DateTime Date { get; set; }
-        [Required]
+        [Required(AllowEmptyStrings = true)]
         [StringLength(500, ErrorMessage = "Описание должно содержать не больше 500 символов")]
         public string Description { get; set; }
     }
