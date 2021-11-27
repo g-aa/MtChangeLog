@@ -18,5 +18,10 @@ namespace MtChangeLog.DataObjects.Entities.Editable
         [Required(AllowEmptyStrings = true)]
         [StringLength(500, ErrorMessage = "Описание должно содержать не больше 500 символов")]
         public string Description { get; set; }
+
+        public override string ToString()
+        {
+            return this.Protocols;
+        }
     }
 }

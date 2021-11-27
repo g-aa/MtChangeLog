@@ -19,14 +19,14 @@ namespace MtChangeLog.DataObjects.Entities.Editable
         public string Revision { get; set; }
         
         [Required(AllowEmptyStrings = true)]
-        [StringLength(500, ErrorMessage = "Причина изменений должна содержать не больше 500 символов")]
+        [StringLength(500, ErrorMessage = "Причина выпуска новой редакции должна содержать не больше 500 символов")]
         public string Reason { get; set; }
         
         [Required(AllowEmptyStrings = true)]
-        [StringLength(5000, ErrorMessage = "Описание должно содержать не больше 5000 символов")]
+        [StringLength(5000, ErrorMessage = "Описание редакции должно содержать не больше 5000 символов")]
         public string Description { get; set; }
 
-        [Required(ErrorMessage = "Версия БФПО параметр обязательный для заполнения")]
+        [Required(ErrorMessage = "Версия проекта параметр обязательный для заполнения")]
         public ProjectVersionShortView ProjectVersion { get; set; }
         public ProjectRevisionShortView ParentRevision { get; set; }
 

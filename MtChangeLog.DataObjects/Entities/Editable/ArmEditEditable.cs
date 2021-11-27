@@ -11,8 +11,8 @@ namespace MtChangeLog.DataObjects.Entities.Editable
     {
         public Guid Id { get; set; }
         
-        [Required(ErrorMessage = "Децимальный номер обязательный параметр для заполнения")]
-        [RegularExpression("^ДИВГ.[0-9]{5}-[0-9]{2}$", ErrorMessage = "Децимальный номер: должен иметь следующий вид ДИВГ.xxxxx-xx, где x - число [0-9]", MatchTimeoutInMilliseconds = 1000)]
+        [Required(ErrorMessage = "Децимальный номер ArmEdit обязательный параметр для заполнения")]
+        [RegularExpression("^ДИВГ.[0-9]{5}-[0-9]{2}$", ErrorMessage = "Децимальный номер ArmEdit должен иметь следующий вид ДИВГ.xxxxx-xx, где x - число [0-9]", MatchTimeoutInMilliseconds = 1000)]
         public string DIVG { get; set; }
         
         [Required(ErrorMessage = "Версия ArmEdit параметр обязательный для заполнения")]
@@ -21,7 +21,12 @@ namespace MtChangeLog.DataObjects.Entities.Editable
         public DateTime Date { get; set; }
         
         [Required(AllowEmptyStrings = true)]
-        [StringLength(500, ErrorMessage = "Описание должно содержать не больше 500 символов")]
+        [StringLength(500, ErrorMessage = "Описание ArmEdit должно содержать не больше 500 символов")]
         public string Description { get; set; }
+
+        public override string ToString()
+        {
+            return $"{this.DIVG} версия: {this.Version}";
+        }
     }
 }

@@ -11,16 +11,21 @@ namespace MtChangeLog.DataObjects.Entities.Editable
     {
         public Guid Id { get; set; }
         
-        [Required(ErrorMessage = "Имя параметр обязательный для заполнения")]
+        [Required(ErrorMessage = "Имя автора параметр обязательный для заполнения")]
         [StringLength(32, ErrorMessage = "Имя должно содержать не больше 32 символов")]
         public string FirstName { get; set; }
         
-        [Required(ErrorMessage = "Фамилия параметр обязательный для заполнения")]
+        [Required(ErrorMessage = "Фамилия автора параметр обязательный для заполнения")]
         [StringLength(32, ErrorMessage = "Фамилия должна содержать не больше 32 символов")]
         public string LastName { get; set; }
         
         [Required(AllowEmptyStrings = true)]
-        [StringLength(250, ErrorMessage = "Должность должна содержать не больше 250 символов")]
+        [StringLength(250, ErrorMessage = "Должность автора должна содержать не больше 250 символов")]
         public string Position { get; set; }
+
+        public override string ToString()
+        {
+            return $"{this.LastName} {this.FirstName}";
+        }
     }
 }
