@@ -157,7 +157,7 @@ class AnalogModuleEditWindow{
                     {
                         view:"button",
                         id:"submitButton_id",
-                        value:"Сохронить",
+                        value:"Отправить",
                         css:"webix_primary",
                         inputWidth:200,
                         align:"right",
@@ -175,7 +175,6 @@ class AnalogModuleEditWindow{
                             } catch (error){
                                 messageBox.alertWarning(error.message);
                             } finally{
-                                
                             }
                         }
                     }
