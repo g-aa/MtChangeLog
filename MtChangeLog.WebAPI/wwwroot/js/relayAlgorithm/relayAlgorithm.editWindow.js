@@ -70,7 +70,7 @@ class RelayAlgorithmEditWindow {
                         labelWidth:lWidth,
                         value:_editableObj.getTitle(),
                         attributes:{
-                            maxlength:10
+                            maxlength:32
                         }, 
                         on:{
                             onChange: async function(newValue, oldValue, config){
@@ -89,7 +89,7 @@ class RelayAlgorithmEditWindow {
                         labelWidth:lWidth,
                         value:_editableObj.getANSI(),
                         attributes:{
-                            maxlength:4
+                            maxlength:32
                         }, 
                         on:{
                             onChange: async function(newValue, oldValue, config){
@@ -108,7 +108,7 @@ class RelayAlgorithmEditWindow {
                         labelWidth:lWidth,
                         value:_editableObj.getLogicalNode(),
                         attributes:{
-                            maxlength:6
+                            maxlength:32
                         }, 
                         on:{
                             onChange: async function(newValue, oldValue, config){
@@ -128,7 +128,7 @@ class RelayAlgorithmEditWindow {
                         height:150,
                         value:_editableObj.getDescription(),
                         attributes:{
-                            maxlength:255
+                            maxlength:500
                         }, 
                         on:{
                             onChange: async function(newValue, oldValue, config){
@@ -149,11 +149,14 @@ class RelayAlgorithmEditWindow {
                         align:"right",
                         click: async function(){
                             try{ 
+                                // отправить:
                                 await _editableObj.submit();
+
+                                // автоматически закрывать при удачном стечении обстоятельств:
+                                _uiWindow.close();
                             } catch (error){
                                 messageBox.alertWarning(error.message);
                             } finally{
-                                _uiWindow.close();
                             }
                         }
                     }

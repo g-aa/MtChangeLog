@@ -137,7 +137,6 @@ class AuthorEditWindow {
                             } catch (error){
                                 messageBox.alertWarning(error.message);
                             } finally{
-                                _uiWindow.close();
                             }
                         }
                     }
