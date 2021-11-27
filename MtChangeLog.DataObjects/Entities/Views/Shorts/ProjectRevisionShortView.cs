@@ -1,17 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace MtChangeLog.DataObjects.Entities.Views.Shorts
 {
-    public class ProjectRevisionShortView
+    public class ProjectRevisionShortView : ProjectVersionShortView
     {
-        public Guid Id { get; set; }
-        public string Module { get; set; }
-        public string Title { get; set; }
-        public string Version { get; set; }
+        [Required(ErrorMessage = "Редакция БФПО обязательный параметр для заполнения")]
+        [RegularExpression("^[0-9]{2}$", ErrorMessage = "Редакция БФПО, может принимать значение в интервала 00-99", MatchTimeoutInMilliseconds = 1000)]
         public string Revision { get; set; }
     }
 }
