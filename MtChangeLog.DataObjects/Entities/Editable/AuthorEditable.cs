@@ -10,12 +10,15 @@ namespace MtChangeLog.DataObjects.Entities.Editable
     public class AuthorEditable
     {
         public Guid Id { get; set; }
-        [Required]
+        
+        [Required(ErrorMessage = "Имя параметр обязательный для заполнения")]
         [StringLength(32, ErrorMessage = "Имя должно содержать не больше 32 символов")]
         public string FirstName { get; set; }
-        [Required]
+        
+        [Required(ErrorMessage = "Фамилия параметр обязательный для заполнения")]
         [StringLength(32, ErrorMessage = "Фамилия должна содержать не больше 32 символов")]
         public string LastName { get; set; }
+        
         [Required(AllowEmptyStrings = true)]
         [StringLength(250, ErrorMessage = "Должность должна содержать не больше 250 символов")]
         public string Position { get; set; }
