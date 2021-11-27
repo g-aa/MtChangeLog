@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,13 +13,29 @@ namespace MtChangeLog.DataObjects.Entities.Editable
     {
         public Guid Id { get; set; }
         public DateTime Date { get; set; }
+
+        [Required(ErrorMessage = "Редакция БФПО обязательный параметр для заполнения")]
+        [RegularExpression("^[0-9]{2}$", ErrorMessage = "Редакция БФПО, может принимать значение в интервала 00-99", MatchTimeoutInMilliseconds = 1000)]
         public string Revision { get; set; }
+        
+        [Required(AllowEmptyStrings = true)]
+        [StringLength(500, ErrorMessage = "Причина изменений должна содержать не больше 500 символов")]
         public string Reason { get; set; }
+        
+        [Required(AllowEmptyStrings = true)]
+        [StringLength(5000, ErrorMessage = "Описание должно содержать не больше 5000 символов")]
         public string Description { get; set; }
+
+        [Required(ErrorMessage = "Версия БФПО параметр обязательный для заполнения")]
         public ProjectVersionShortView ProjectVersion { get; set; }
         public ProjectRevisionShortView ParentRevision { get; set; }
+
+        [Required(ErrorMessage = "Перечень поддерживаемых протоколов информационного обмена параметр обязательный для заполнения")]
         public CommunicationShortView Communication { get; set; }
+
+        [Required(ErrorMessage = "Версия ArmEdit параметр обязательный для заполнения")]
         public ArmEditShortView ArmEdit { get; set; }
+        
         public IEnumerable<AuthorShortView> Authors { get; set; }
         public IEnumerable<RelayAlgorithmShortView> RelayAlgorithms { get; set; }
 

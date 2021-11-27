@@ -118,6 +118,7 @@ class ProjectRevisionEditWindow {
                         labelAlign:"right",
                         labelWidth:lWidth,
                         value:_editableObj.getRevision(),
+                        //tooltip:"Type in to search",
                         attributes:{
                             maxlength:2
                         }, 
@@ -267,7 +268,7 @@ class ProjectRevisionEditWindow {
                         height:dHeight, 
                         value:_editableObj.getDescription(),
                         attributes:{
-                            maxlength:3000
+                            maxlength:5000
                         }, 
                         on:{
                             onChange: function(newValue, oldValue, config){
