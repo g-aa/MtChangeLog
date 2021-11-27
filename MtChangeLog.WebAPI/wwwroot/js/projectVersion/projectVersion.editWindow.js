@@ -89,7 +89,7 @@ class ProjectEditWindow {
                         labelWidth:lWidth, 
                         value:_editablePrjVers.getTitle(),
                         attributes:{
-                            maxlength:5
+                            maxlength:16
                         }, 
                         on:{
                             onChange: async function(newValue, oldValue, config){
@@ -206,7 +206,7 @@ class ProjectEditWindow {
                         height:120, 
                         value:_editablePrjVers.getDescription(),
                         attributes:{
-                            maxlength:255
+                            maxlength:500
                         }, 
                         on:{
                             onChange: function(newValue, oldValue, config){
@@ -227,11 +227,14 @@ class ProjectEditWindow {
                         align:"right",
                         click: async function(){
                             try{ 
-                                await _editablePrjVers.submit();
+                                // отправить:
+                                await _editableObj.submit();
+
+                                // автоматически закрывать при удачном стечении обстоятельств:
+                                _uiWindow.close();
                             } catch (error){
                                 messageBox.alertWarning(error.message);
                             } finally{
-                                _uiWindow.close();
                             }
                         }
                     }
