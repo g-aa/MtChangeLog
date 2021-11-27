@@ -38,6 +38,7 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
             var result = this.context.ProjectVersions
                 .Include(pv => pv.AnalogModule)
                 .Include(pv => pv.Platform)
+                .OrderBy(pv => pv.AnalogModule.Title).ThenBy(pv => pv.Title).ThenBy(pv => pv.Version)
                 .Select(pv => pv.ToTableView());
             return result;
         }
