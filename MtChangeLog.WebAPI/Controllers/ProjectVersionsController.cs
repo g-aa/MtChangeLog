@@ -96,7 +96,6 @@ namespace MtChangeLog.WebAPI.Controllers
             {
                 this.logger.LogInformation($"HTTP GET - ProjectVersionsController - entity by id = {id}");
                 var result = this.repository.GetEntity(id);
-                
                 return this.Ok(result);
             }
             catch (ArgumentException ex) 
@@ -145,7 +144,6 @@ namespace MtChangeLog.WebAPI.Controllers
                     throw new ArgumentException($"url id = {id} is not equal to entity id = {entity.Id}");
                 }
                 this.repository.UpdateEntity(entity);
-                
                 return this.Ok($"Project version {entity} update in the database");
             }
             catch (ArgumentException ex)

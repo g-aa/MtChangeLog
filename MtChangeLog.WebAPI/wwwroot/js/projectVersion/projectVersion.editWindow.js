@@ -228,7 +228,7 @@ class ProjectEditWindow {
                         click: async function(){
                             try{ 
                                 // отправить:
-                                await _editableObj.submit();
+                                await _editablePrjVers.submit();
 
                                 // автоматически закрывать при удачном стечении обстоятельств:
                                 _uiWindow.close();

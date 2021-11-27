@@ -7,6 +7,8 @@ class ProjectVersion{
         this.configure = async function(){
             this.statuses = await repository.getProjectVersionStatuses();
             this.platforms = await repository.getSortPlatforms();
+            
+            // использовать если будет использоваться значение по умолчанию для шаблона !!!
             //let platform = await repository.getPlatformDetails(this.editable.platform);
             //this.analogModules = platform.analogModules;
         }
@@ -38,7 +40,7 @@ class ProjectVersion{
 
         // отправить данные:
         this.submit = async function(){
-            let answer = await entitiesRepository.updateEntity(this.editable);
+            let answer = await repository.updateProjectVersion(this.editable);
             if(typeof(this.beforeEnding) === "function"){
                 await this.beforeEnding(answer);
             }
