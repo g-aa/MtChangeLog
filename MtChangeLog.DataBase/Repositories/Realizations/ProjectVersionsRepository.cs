@@ -45,6 +45,8 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
 
         public ProjectVersionEditable GetTemplate() 
         {
+            var platform = this.context.Platforms.First(e => e.Default)?.ToShortView();
+            var module = this.context.AnalogModules.First(e => e.Default)?.ToShortView();
             var template = new ProjectVersionEditable()
             {
                 Id = Guid.Empty,
@@ -52,7 +54,9 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
                 Title = "КСЗ",
                 Status = "Test",
                 Version = "00",
-                Description = "введите описание проекта"
+                Description = "введите описание проекта",
+                Platform = platform,
+                AnalogModule = module
             };
             return template;
         }

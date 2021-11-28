@@ -34,11 +34,13 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
 
         public PlatformEditable GetTemplate() 
         {
-            var template = new PlatformEditable() 
+            var modules = this.context.AnalogModules.Where(e => e.Default)?.Select(e => e.ToShortView());
+            var template = new PlatformEditable()
             {
                 Id = Guid.Empty,
                 Title = "БМРЗ-000",
-                Description = "введите описание для платформы"
+                Description = "введите описание для платформы",
+                AnalogModules = modules
             };
             return template;
         }

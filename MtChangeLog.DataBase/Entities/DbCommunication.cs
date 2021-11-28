@@ -15,6 +15,7 @@ namespace MtChangeLog.DataBase.Entities
         public Guid Id { get; set; }
         public string Protocols { get; set; }
         public string Description { get; set; }
+        public bool Default { get; set; }
 
         #region Relationships
         public ICollection<DbProjectRevision> ProjectRevisions { get; set; }

@@ -8,7 +8,7 @@ using System.Text;
 
 namespace MtChangeLog.DataBase.Contexts
 {
-    public class ApplicationContext : DbContext
+    public partial class ApplicationContext : DbContext
     {
         #region ProjectVersionEntities
         internal DbSet<DbPlatform> Platforms { get; set; }
@@ -30,7 +30,10 @@ namespace MtChangeLog.DataBase.Contexts
             //{
             //    this.Database.EnsureDeleted();    
             //}
-            this.Database.EnsureCreated();
+            if (this.Database.EnsureCreated()) 
+            {
+                this.Initialize();
+            }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

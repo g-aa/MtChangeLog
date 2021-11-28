@@ -8,9 +8,8 @@ class ProjectVersion{
             this.statuses = await repository.getProjectVersionStatuses();
             this.platforms = await repository.getSortPlatforms();
             
-            // использовать если будет использоваться значение по умолчанию для шаблона !!!
-            //let platform = await repository.getPlatformDetails(this.editable.platform);
-            //this.analogModules = platform.analogModules;
+            let platform = await repository.getPlatformDetails(this.editable.platform);
+            this.analogModules = platform.analogModules;
         }
     }
 
@@ -34,9 +33,6 @@ class ProjectVersion{
         // получить из БД:
         this.editable = await repository.getProjectVersionDetails(entityInfo);
         await this.configure();
-
-        let platform = await repository.getPlatformDetails(this.editable.platform);
-        this.analogModules = platform.analogModules;
 
         // отправить данные:
         this.submit = async function(){
@@ -108,6 +104,7 @@ class ProjectVersion{
         this.editable.platform = this.platforms.find(function(item, index, array){
             return item.id == id;
         });
+        this.editable.analogModule = this.analogModules[0];
     }
 
     getAnalogModule(){

@@ -18,6 +18,7 @@ namespace MtChangeLog.DataBase.Entities
         public string Title { get; set; }
         public string Current { get; set; }
         public string Description { get; set; }
+        public bool Default { get; set; }
 
         #region Relationships
         public ICollection<DbProjectVersion> ProjectVersion { get; set; }

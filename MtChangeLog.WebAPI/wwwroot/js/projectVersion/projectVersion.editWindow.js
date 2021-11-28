@@ -164,6 +164,7 @@ class ProjectEditWindow {
                                         },   
                                         data:_editablePrjVers.getAnalogModules()
                                     });
+                                    combo.setValue(_editablePrjVers.getAnalogModule())
                                 } catch (error) {
                                     combo.define("options", [ ]);
                                     messageBox.warning(error.message);

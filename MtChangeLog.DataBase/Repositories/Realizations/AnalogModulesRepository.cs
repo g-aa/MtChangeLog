@@ -35,13 +35,15 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
 
         public AnalogModuleEditable GetTemplate() 
         {
+            var platforms = this.context.Platforms.Where(p => p.Default)?.Select(p => p.ToShortView());
             var template = new AnalogModuleEditable()
             {
                 Id = Guid.Empty,
                 DIVG = "ДИВГ.00000-00",
                 Title = "БМРЗ-000",
                 Current = "0A",
-                Description = "введите описание для модуля"
+                Description = "введите описание для модуля",
+                Platforms = platforms
             };
             return template;
         }
