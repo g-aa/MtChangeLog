@@ -7,8 +7,9 @@ class ProjectVersion{
         this.configure = async function(){
             this.statuses = await repository.getProjectVersionStatuses();
             this.platforms = await repository.getSortPlatforms();
-            //let platform = await repository.getPlatformDetails(this.editable.platform);
-            //this.analogModules = platform.analogModules;
+            
+            let platform = await repository.getPlatformDetails(this.editable.platform);
+            this.analogModules = platform.analogModules;
         }
     }
 
@@ -33,12 +34,9 @@ class ProjectVersion{
         this.editable = await repository.getProjectVersionDetails(entityInfo);
         await this.configure();
 
-        let platform = await repository.getPlatformDetails(this.editable.platform);
-        this.analogModules = platform.analogModules;
-
         // отправить данные:
         this.submit = async function(){
-            let answer = await entitiesRepository.updateEntity(this.editable);
+            let answer = await repository.updateProjectVersion(this.editable);
             if(typeof(this.beforeEnding) === "function"){
                 await this.beforeEnding(answer);
             }
@@ -106,6 +104,7 @@ class ProjectVersion{
         this.editable.platform = this.platforms.find(function(item, index, array){
             return item.id == id;
         });
+        this.editable.analogModule = this.analogModules[0];
     }
 
     getAnalogModule(){

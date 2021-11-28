@@ -1,5 +1,6 @@
-﻿using MtChangeLog.DataObjects.Entities.Base;
-using MtChangeLog.DataObjects.Entities.Editable;
+﻿using MtChangeLog.DataObjects.Entities.Editable;
+using MtChangeLog.DataObjects.Entities.Views.Shorts;
+using MtChangeLog.DataObjects.Entities.Views.Tables;
 
 using System;
 using System.Collections.Generic;
@@ -11,6 +12,8 @@ namespace MtChangeLog.DataBase.Repositories.Interfaces
 {
     public interface IPlatformsRepository : ICRUD<PlatformEditable>
     {
-        IEnumerable<PlatformBase> GetEntities();
+        IEnumerable<PlatformShortView> GetShortEntities();
+        IEnumerable<PlatformTableView> GetTableEntities();
+        PlatformEditable GetTemplate();
     }
 }

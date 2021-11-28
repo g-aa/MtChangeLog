@@ -119,35 +119,24 @@ class PlatformEditWindow{
                     {
                         view:"button",
                         id:"submitButton_id",
-                        value:"Сохронить",
+                        value:"Отправить",
                         css:"webix_primary",
                         inputWidth:200,
                         align:"right",
                         click: async function(){
-                            try { 
+                            try{ 
                                 // обновить перечень модулей у платформы:
-                                let selectedAMsId = $$("platformAnalogModules_id").getValue().split(",");
-                                _editableObj.setAnalogModules(selectedAMsId);
+                                let selected = $$("platformAnalogModules_id").getValue().split(",");
+                                _editableObj.setAnalogModules(selected);
                                 
-                                /*
-                                let selected = $$("platformAnalogModules_id").getValue({options:true});
-                                _editableObj.setAnalogModules(selected.map(function(item){
-                                    return {
-                                        id:item.id,
-                                        title:item.title,
-                                        divg:item.divg,
-                                        nominalCurrent:item.nominalCurrent,
-                                        description:item.description
-                                    };
-                                }));
-                                */
-
                                 // отправить:
                                 await _editableObj.submit();
+
+                                // автоматически закрывать при удачном стечении обстоятельств:
+                                _uiWindow.close();
                             } catch (error){
                                 messageBox.alertWarning(error.message);
                             } finally{
-                                _uiWindow.close();
                             }
                         }
                     }

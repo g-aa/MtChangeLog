@@ -1,16 +1,25 @@
-﻿using MtChangeLog.DataObjects.Entities.Base;
-using MtChangeLog.DataObjects.Entities.Editable;
-using MtChangeLog.DataObjects.Entities.Views;
+﻿using MtChangeLog.DataObjects.Entities.Editable;
+using MtChangeLog.DataObjects.Entities.Views.Shorts;
+using MtChangeLog.DataObjects.Entities.Views.Statistics;
+using MtChangeLog.DataObjects.Entities.Views.Tables;
+
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace MtChangeLog.DataBase.Entities
 {
-    internal class DbProjectRevision : ProjectRevisionBase
+    internal class DbProjectRevision : IEquatable<DbProjectRevision>
     {
+        public Guid Id { get; set; }
+        public DateTime Date { get; set; }
+        public string Revision { get; set; }
+        public string Reason { get; set; }
+        public string Description { get; set; }
+
         #region Relationships
         public Guid ProjectVersionId { get; set; }
         public DbProjectVersion ProjectVersion { get; set; }
@@ -28,18 +37,23 @@ namespace MtChangeLog.DataBase.Entities
         public ICollection<DbRelayAlgorithm> RelayAlgorithms { get; set; }
         #endregion
 
-        public DbProjectRevision() : base() 
+        public DbProjectRevision()
         {
+            this.Id = Guid.NewGuid();
+            this.Date = DateTime.Now;
             this.Authors = new HashSet<DbAuthor>();
             this.RelayAlgorithms = new HashSet<DbRelayAlgorithm>();
         }
 
-        public DbProjectRevision(ProjectRevisionBase other) : base(other)
+        public DbProjectRevision(ProjectRevisionEditable other) : this() 
         {
-
+            this.Date = other.Date;
+            this.Revision = other.Revision;
+            this.Reason = other.Reason;
+            this.Description = other.Description;
         }
 
-        public void Update(ProjectRevisionBase other, DbArmEdit armEdit, DbCommunication communication, ICollection<DbAuthor> authors, ICollection<DbRelayAlgorithm> algorithms) 
+        public void Update(ProjectRevisionEditable other, DbArmEdit armEdit, DbCommunication communication, ICollection<DbAuthor> authors, ICollection<DbRelayAlgorithm> algorithms) 
         {
             // this.Id - не обновляется !!!
             // this.Revision - не обновляется !!!
@@ -54,81 +68,102 @@ namespace MtChangeLog.DataBase.Entities
             // this.ParentRevision - не обновляется !!!
         }
 
-        public ProjectRevisionBase GetBase() 
-        {
-            return new ProjectRevisionBase(this);
-        }
-
-        public ProjectRevisionEditable GetEditable() 
-        {
-            return new ProjectRevisionEditable(this)
-            {
-                ParentRevision = this.ParentRevision?.GetShortView(),
-                ProjectVersion = this.ProjectVersion.GetView(),
-                Communication = this.Communication.GetBase(),
-                Authors = this.Authors.Select(author => author.GetBase()),
-                ArmEdit = this.ArmEdit.GetBase(),
-                RelayAlgorithms = this.RelayAlgorithms.Select(alg => alg.GetBase()),
-            };
-        }
-
-        public ProjectRevisionShortView GetShortView() 
+        public ProjectRevisionShortView ToShortView() 
         {
             return new ProjectRevisionShortView()
             {
                 Id = this.Id,
-                Module = this.ProjectVersion.AnalogModule.Title,
-                Title = this.ProjectVersion.Title,
-                Version = this.ProjectVersion.Version,
+                Module = this.ProjectVersion?.AnalogModule?.Title ?? "БМРЗ-000",
+                Title = this.ProjectVersion?.Title ?? "",
+                Version = this.ProjectVersion?.Version ?? "v0.00.00.00",
                 Revision = this.Revision
             };
         }
 
-        public ProjectRevisionTableView GetTableView() 
+        public ProjectRevisionTableView ToTableView() 
         {
             return new ProjectRevisionTableView()
             {
                 Id = this.Id,
-                Module = this.ProjectVersion.AnalogModule.Title,
-                Title = this.ProjectVersion.Title,
-                Version = this.ProjectVersion.Version,
+                Module = this.ProjectVersion?.AnalogModule?.Title ?? "БМРЗ-000",
+                Title = this.ProjectVersion?.Title ?? "",
+                Version = this.ProjectVersion?.Version ?? "",
                 Revision = this.Revision,
                 Date = this.Date,
-                ArmEdit = this.ArmEdit.Version,
+                ArmEdit = this.ArmEdit?.Version ?? "v0.00.00.00",
                 Reason = this.Reason
             };
         }
 
-        public ProjectRevisionTreeView GetTreeView() 
+        public ProjectRevisionEditable ToEditable()
+        {
+            return new ProjectRevisionEditable()
+            {
+                Id = this.Id,
+                Date = this.Date,
+                Revision = this.Revision,
+                Reason = this.Reason,
+                Description = this.Description,
+                ParentRevision = this.ParentRevision?.ToShortView(),
+                ProjectVersion = this.ProjectVersion?.ToShortView(),
+                ArmEdit = this.ArmEdit?.ToShortView(),
+                Communication = this.Communication?.ToShortView(),
+                Authors = this.Authors?.Select(author => author.ToShortView()),
+                RelayAlgorithms = this.RelayAlgorithms.Select(alg => alg.ToShortView()),
+            };
+        }
+
+        public ProjectRevisionTreeView ToTreeView() 
         {
             return new ProjectRevisionTreeView()
             {
                 Id = this.Id,
                 ParentId = this.ParentRevisionId,
-                Module = this.ProjectVersion.AnalogModule.Title,
-                Title = this.ProjectVersion.Title,
-                Version = this.ProjectVersion.Version,
+                Module = this.ProjectVersion?.AnalogModule?.Title ?? "БМРЗ-000",
+                Title = this.ProjectVersion?.Title,
+                Version = this.ProjectVersion?.Version,
                 Revision = this.Revision,
                 Date = this.Date,
-                ArmEdit = this.ArmEdit.Version,
-                Platform = this.ProjectVersion.Platform.Title
+                ArmEdit = this.ArmEdit?.Version ?? "v0.00.00.00",
+                Platform = this.ProjectVersion?.Platform?.Title ?? "БМРЗ-000"
             };
         }
 
-        public ProjectHistoryView GetHistoryView()
+        public ProjectHistoryView ToHistoryView()
         {
             return new ProjectHistoryView()
             {
-                ArmEdit = this.ArmEdit?.Version,
-                Authors = this.Authors?.Select(a => $"{a.FirstName} {a.LastName}"),
+                ArmEdit = this.ArmEdit?.Version ?? "v0.00.00.00",
+                Authors = this.Authors?.Select(a => $"{a?.FirstName} {a?.LastName}"),
                 RelayAlgorithms = this.RelayAlgorithms?.Select(ra => ra.Title),
                 Communication = this.Communication?.Protocols,
                 Date = this.Date,
                 Description = this.Description,
-                Platform = this.ProjectVersion?.Platform.Title,
+                Platform = this.ProjectVersion?.Platform?.Title ?? "БМРЗ-000",
                 Reason = this.Reason,
-                Title = $"{this.ProjectVersion?.AnalogModule.Title}-{this.ProjectVersion?.Title}-{this.ProjectVersion?.Version}_{this.Revision}"
+                Title = $"{this.ProjectVersion?.AnalogModule?.Title}-{this.ProjectVersion?.Title}-{this.ProjectVersion?.Version}_{this.Revision}"
             };
+        }
+
+        public bool Equals([AllowNull] DbProjectRevision other)
+        {
+            return this.Id == other.Id || this.Date == other.Date && this.Revision == other.Revision && this.Reason == other.Reason && this.ProjectVersion.Equals(other.ProjectVersion);
+        }
+        public override bool Equals(object obj)
+        {
+            return this.Equals(obj as DbProjectRevision);
+        }
+
+        public override int GetHashCode()
+        {
+            // при определении уникальности картежа нужно учитывать и версию проекта к которой он привязан !!!
+            // ПС чисто теоретически даты и время компиляции должны отличасться, но так происходит не всегда
+            return HashCode.Combine(this.Date, this.Revision, this.Reason, this.ProjectVersionId);
+        }
+
+        public override string ToString()
+        {
+            return $"revision: {this.Revision}, date: {this.Date}, reason: {this.Reason}";
         }
     }
 }

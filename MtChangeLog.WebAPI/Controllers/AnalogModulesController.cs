@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+
 using MtChangeLog.DataBase.Repositories.Interfaces;
-using MtChangeLog.DataObjects.Entities.Base;
 using MtChangeLog.DataObjects.Entities.Editable;
 
 using System;
@@ -24,15 +24,58 @@ namespace MtChangeLog.WebAPI.Controllers
         {
             this.repository = repository;
             this.logger = logger;
+            this.logger.LogInformation("HTTP - AnalogModulesController - creating");
         }
 
-        // GET: api/<AnalogModulesController>
-        [HttpGet]
-        public IEnumerable<AnalogModuleBase> Get()
+        // GET: api/<AnalogModulesController>/ShortViews
+        [HttpGet("ShortViews")]
+        public IActionResult GetShortViews()
         {
-            var result = this.repository.GetEntities();
-            this.logger.LogInformation("HTTP GET - all AnalogModules");
-            return result;
+            try
+            {
+                this.logger.LogInformation("HTTP GET - AnalogModulesController - all sorts entities");
+                var result = this.repository.GetShortEntities();
+                return this.Ok(result);
+            }
+            catch (Exception ex)
+            {
+                this.logger.LogError(ex, "HTTP GET - AnalogModulesController - ");
+                return this.BadRequest(ex.Message);
+            }
+        }
+
+        // GET: api/<AnalogModulesController>/TableViews
+        [HttpGet("TableViews")]
+        public IActionResult GetTableViews()
+        {
+            try
+            {
+                this.logger.LogInformation("HTTP GET - AnalogModulesController - all entities for table");
+                var result = this.repository.GetTableEntities();
+                return this.Ok(result);
+            }
+            catch (Exception ex)
+            {
+                this.logger.LogError(ex, "HTTP GET - AnalogModulesController - ");
+                return this.BadRequest(ex.Message);
+            }
+        }
+
+        // GET api/<AnalogModulesController>/Template
+        [HttpGet("Template")]
+        public IActionResult GetTemplate()
+        {
+            try
+            {
+                this.logger.LogInformation("HTTP GET - AnalogModulesController - template");
+                var result = this.repository.GetTemplate();
+                return this.Ok(result);
+            }
+            catch (Exception ex)
+            {
+                this.logger.LogError(ex, "HTTP GET - AnalogModulesController - ");
+                return this.BadRequest(ex.Message);
+            }
         }
 
         // GET api/<AnalogModulesController>/00000000-0000-0000-0000-000000000000
@@ -41,27 +84,20 @@ namespace MtChangeLog.WebAPI.Controllers
         {
             try
             {
+                this.logger.LogInformation($"HTTP GET - AnalogModulesController - entity by id = {id}");
                 var result = this.repository.GetEntity(id);
-                this.logger.LogInformation($"HTTP GET - AnalogModule by id = {id}"); 
                 return this.Ok(result);
             }
             catch (ArgumentException ex)
             {
-                this.logger.LogWarning(ex, $"HTTP GET - AnalogModule: ");
+                this.logger.LogWarning(ex, $"HTTP GET - AnalogModulesController - ");
                 return this.NotFound(ex.Message);
             }
             catch (Exception ex) 
             {
-                this.logger.LogError(ex, $"HTTP GET - AnalogModule: ");
+                this.logger.LogError(ex, $"HTTP GET - AnalogModulesController - ");
                 return this.BadRequest(ex.Message);
             }
-        }
-
-        // GET api/<AnalogModulesController>/default
-        [HttpGet("default")]
-        public IActionResult GetDefault() 
-        {
-            return this.Ok(AnalogModuleEditable.Default);
         }
 
         // POST api/<AnalogModulesController>
@@ -70,18 +106,18 @@ namespace MtChangeLog.WebAPI.Controllers
         {
             try
             {
+                this.logger.LogInformation($"HTTP POST - AnalogModulesController - new entity {entity}");
                 this.repository.AddEntity(entity);
-                this.logger.LogInformation($"HTTP POST - new AnalogModule {entity}");
-                return this.Ok($"Analog module {entity.DIVG} {entity.Title} adding to the database");
+                return this.Ok($"Analog module {entity} adding to the database");
             }
             catch (ArgumentException ex)
             {
-                this.logger.LogWarning(ex, $"HTTP POST - new AnalogModule: ");
+                this.logger.LogWarning(ex, $"HTTP POST - AnalogModulesController - ");
                 return this.Conflict(ex.Message);
             }
             catch (Exception ex) 
             {
-                this.logger.LogError(ex, $"HTTP POST - new AnalogModule: ");
+                this.logger.LogError(ex, $"HTTP POST - AnalogModulesController - ");
                 return this.BadRequest(ex.Message);
             }
         }
@@ -92,12 +128,12 @@ namespace MtChangeLog.WebAPI.Controllers
         {
             try
             {
+                this.logger.LogInformation($"HTTP PUT - AnalogModulesController - entity by id = {id}");
                 if (id != entity.Id) 
                 {
                     throw new ArgumentException($"url id = {id} is not equal to entity id = {entity.Id}");
                 }
                 this.repository.UpdateEntity(entity);
-                this.logger.LogInformation($"HTTP PUT - AnalogModule by id = {id}");
                 return this.Ok($"Analog module {entity} update in the database");
             }
             catch (ArgumentException ex) 
@@ -118,13 +154,13 @@ namespace MtChangeLog.WebAPI.Controllers
         {
             try
             {
+                this.logger.LogInformation($"HTTP DELETE - AnalogModulesController - entity by id = {id}");
                 this.repository.DeleteEntity(id);
-                this.logger.LogInformation($"HTTP DELETE - AnalogModule by id = {id}");
                 return this.Ok($"The analog module id = {id} has been successfully removed");
             }
             catch (Exception ex)
             {
-                this.logger.LogError(ex, $"HTTP DELETE - ArmEdit: ");
+                this.logger.LogError(ex, $"HTTP DELETE - AnalogModulesController - ");
                 return this.BadRequest(ex.Message);
             }
         }

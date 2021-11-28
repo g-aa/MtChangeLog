@@ -1,6 +1,6 @@
-﻿using MtChangeLog.DataObjects.Entities.Base;
-using MtChangeLog.DataObjects.Entities.Editable;
-using MtChangeLog.DataObjects.Entities.Views;
+﻿using MtChangeLog.DataObjects.Entities.Editable;
+using MtChangeLog.DataObjects.Entities.Views.Shorts;
+using MtChangeLog.DataObjects.Entities.Views.Tables;
 
 using System;
 using System.Collections.Generic;
@@ -12,9 +12,9 @@ namespace MtChangeLog.DataBase.Repositories.Interfaces
 {
     public interface IProjectVersionsRepository : ICRUD<ProjectVersionEditable>
     {
-        IEnumerable<ProjectVersionView> GetEntities();
         IEnumerable<ProjectVersionShortView> GetShortEntities();
-
+        IEnumerable<ProjectVersionTableView> GetTableEntities();
+        ProjectVersionEditable GetTemplate();
         /// <summary>
         /// получить перечень наименований проектов
         /// </summary>

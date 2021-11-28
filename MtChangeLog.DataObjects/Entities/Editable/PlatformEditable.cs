@@ -1,30 +1,36 @@
-﻿using MtChangeLog.DataObjects.Entities.Base;
+﻿using MtChangeLog.DataObjects.Entities.Views.Shorts;
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace MtChangeLog.DataObjects.Entities.Editable
 {
-    public class PlatformEditable : PlatformBase
+    public class PlatformEditable
     {
-        public IEnumerable<AnalogModuleBase> AnalogModules { get; set; }
+        public Guid Id { get; set; }
+        
+        [Required(ErrorMessage = "Наименование платформы параметр обязательный для заполнения")]
+        [RegularExpression("^БМРЗ-[0-9]{3}[A-Z А-Я]{0,2}$", ErrorMessage = "Наименование платформы должено иметь следующий вид БМРЗ-XXXyy, где XXX - число [0-9], y - символы [A-Z, А-Я] (не обязательны)", MatchTimeoutInMilliseconds = 1000)]
+        public string Title { get; set; }
+        
+        [Required(AllowEmptyStrings = true)]
+        [StringLength(500, ErrorMessage = "Описание платформы должно содержать не больше 500 символов")]
+        public string Description { get; set; }
+        public IEnumerable<AnalogModuleShortView> AnalogModules { get; set; }
 
-        public PlatformEditable() : base()
+        public PlatformEditable()
         {
-            this.AnalogModules = new HashSet<AnalogModuleBase>();
+            this.Id = Guid.NewGuid();
+            this.AnalogModules = new HashSet<AnalogModuleShortView>();
         }
 
-        public PlatformEditable(PlatformBase other) : base(other) 
+        public override string ToString()
         {
-            
+            return this.Title;
         }
-
-        public static new PlatformEditable Default => new PlatformEditable(PlatformBase.Default)
-        {
-            AnalogModules = new HashSet<AnalogModuleBase>()
-        };
     }
 }

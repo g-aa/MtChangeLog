@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+
 using MtChangeLog.DataBase.Repositories.Interfaces;
-using MtChangeLog.DataObjects.Entities.Base;
 using MtChangeLog.DataObjects.Entities.Editable;
 using MtChangeLog.DataObjects.Entities.Views;
 using MtChangeLog.DataObjects.Enumerations;
@@ -26,15 +26,66 @@ namespace MtChangeLog.WebAPI.Controllers
         {
             this.repository = repository;
             this.logger = logger;
+            this.logger.LogInformation("HTTP - ProjectVersionsController - creating");
         }
 
-        // GET: api/<ProjectsVersionsController>
-        [HttpGet]
-        public IEnumerable<ProjectVersionView> Get()
+        // GET: api/<ProjectsVersionsController>/ShortViews
+        [HttpGet("ShortViews")]
+        public IActionResult GetShortViews()
         {
-            var result = this.repository.GetEntities();
-            this.logger.LogInformation($"HTTP GET - all ProjectVersions");
-            return result;
+            try
+            {
+                this.logger.LogInformation("HTTP GET - ProjectsVersionsController - all sorts entities");
+                var result = this.repository.GetShortEntities();
+                return this.Ok(result);
+            }
+            catch (Exception ex)
+            {
+                this.logger.LogError(ex, "HTTP GET - ProjectsVersionsController - ");
+                return this.BadRequest(ex.Message);
+            }
+        }
+
+        // GET: api/<ProjectsVersionsController>/TableViews
+        [HttpGet("TableViews")]
+        public IActionResult GetTableViews()
+        {
+            try
+            {
+                this.logger.LogInformation($"HTTP GET - ProjectVersionsController- all entities for table");
+                var result = this.repository.GetTableEntities();
+                return this.Ok(result);
+            }
+            catch (Exception ex)
+            {
+                this.logger.LogError(ex, "HTTP GET - ProjectVersionsController - ");
+                return this.BadRequest(ex.Message);
+            }
+        }
+
+        // GET api/<ProjectsVersionsController>/Template
+        [HttpGet("Template")]
+        public IActionResult GetTemplate()
+        {
+            try
+            {
+                this.logger.LogInformation("HTTP GET - ProjectVersionsController - template");
+                var result = this.repository.GetTemplate();
+                return this.Ok(result);
+            }
+            catch (Exception ex)
+            {
+                this.logger.LogError(ex, "HTTP GET - ProjectVersionsController - ");
+                return this.BadRequest(ex.Message);
+            }
+        }
+
+        // GET api/<ProjectsVersionsController>/Statuses
+        [HttpGet("Statuses")]
+        public IActionResult GetProjectStatuses()
+        {
+            this.logger.LogInformation("HTTP GET - ProjectVersionsController - all project statuses");
+            return this.Ok(Enum.GetNames(typeof(Status)));
         }
 
         // GET api/<ProjectsVersionsController>/00000000-0000-0000-0000-000000000000
@@ -43,34 +94,20 @@ namespace MtChangeLog.WebAPI.Controllers
         {
             try
             {
+                this.logger.LogInformation($"HTTP GET - ProjectVersionsController - entity by id = {id}");
                 var result = this.repository.GetEntity(id);
-                this.logger.LogInformation($"HTTP GET - ProjectVersion by id = {id}");
                 return this.Ok(result);
             }
             catch (ArgumentException ex) 
             {
-                this.logger.LogWarning(ex, $"HTTP GET - ProjectVersion: ");
+                this.logger.LogWarning(ex, $"HTTP GET - ProjectVersionsController - ");
                 return this.NotFound(ex.Message);
             }
             catch (Exception ex)
             {
-                this.logger.LogError(ex, $"HTTP GET - ProjectVersion: ");
+                this.logger.LogError(ex, $"HTTP GET - ProjectVersionsController - ");
                 return this.BadRequest(ex.Message);
             }
-        }
-
-        // GET api/<ProjectsVersionsController>/default
-        [HttpGet("default")]
-        public IActionResult GetDefault()
-        {
-            return this.Ok(ProjectVersionEditable.Default);
-        }
-
-        // GET api/<ProjectsVersionsController>/statuses
-        [HttpGet("statuses")]
-        public IActionResult GetProjectStatuses() 
-        {
-            return this.Ok(Enum.GetNames(typeof(Status)));
         }
 
         // POST api/<ProjectsVersionsController>
@@ -79,18 +116,18 @@ namespace MtChangeLog.WebAPI.Controllers
         {
             try
             {
+                this.logger.LogInformation($"HTTP POST - ProjectVersionsController - new entity {entity}");
                 this.repository.AddEntity(entity);
-                this.logger.LogInformation($"HTTP POST - new ProjectVersion {entity}");
                 return this.Ok($"The project version {entity} addig to the database");
             }
             catch(ArgumentException ex) 
             {
-                this.logger.LogWarning(ex, $"HTTP POST - new ProjectVersion: ");
+                this.logger.LogWarning(ex, $"HTTP POST - ProjectVersionsController - ");
                 return this.Conflict(ex.Message);
             }
             catch (Exception ex)
             {
-                this.logger.LogError(ex, $"HTTP POST - new ProjectVersion: ");
+                this.logger.LogError(ex, $"HTTP POST - ProjectVersionsController - ");
                 return this.BadRequest(ex.Message);
             }
         }
@@ -101,22 +138,22 @@ namespace MtChangeLog.WebAPI.Controllers
         {
             try
             {
+                this.logger.LogInformation($"HTTP PUT - ProjectVersionsController - entity by id = {id}");
                 if (id != entity.Id)
                 {
                     throw new ArgumentException($"url id = {id} is not equal to entity id = {entity.Id}");
                 }
                 this.repository.UpdateEntity(entity);
-                this.logger.LogInformation($"HTTP PUT - ProjectVersion by id = {id}");
                 return this.Ok($"Project version {entity} update in the database");
             }
             catch (ArgumentException ex)
             {
-                this.logger.LogWarning(ex, $"HTTP PUT - ProjectVersion: ");
+                this.logger.LogWarning(ex, $"HTTP PUT - ProjectVersionsController - ");
                 return this.Conflict(ex.Message);
             }
             catch (Exception ex)
             {
-                this.logger.LogError(ex, $"HTTP PUT - ProjectVersion: ");
+                this.logger.LogError(ex, $"HTTP PUT - ProjectVersionsController - ");
                 return this.BadRequest(ex.Message);
             }
         }
@@ -127,13 +164,13 @@ namespace MtChangeLog.WebAPI.Controllers
         {
             try
             {
+                this.logger.LogInformation($"HTTP DELETE - ProjectVersionsController - entity by id = {id}");
                 this.repository.DeleteEntity(id);
-                this.logger.LogInformation($"HTTP DELETE - ProjectVersion by id = {id}");
                 return this.Ok($"The ProjectVersion id = {id} has been successfully removed");
             }
             catch (Exception ex)
             {
-                this.logger.LogError(ex, $"HTTP DELETE - ProjectVersion: ");
+                this.logger.LogError(ex, $"HTTP DELETE - ProjectVersionsController - ");
                 return this.BadRequest(ex.Message);
             }
         }

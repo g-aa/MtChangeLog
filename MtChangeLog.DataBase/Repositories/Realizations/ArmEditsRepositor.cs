@@ -1,7 +1,9 @@
 ﻿using MtChangeLog.DataBase.Contexts;
 using MtChangeLog.DataBase.Entities;
 using MtChangeLog.DataBase.Repositories.Interfaces;
-using MtChangeLog.DataObjects.Entities.Base;
+
+using MtChangeLog.DataObjects.Entities.Editable;
+using MtChangeLog.DataObjects.Entities.Views.Shorts;
 
 using System;
 using System.Collections.Generic;
@@ -18,31 +20,55 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
             
         }
 
-        public IEnumerable<ArmEditBase> GetEntities() 
+        public IEnumerable<ArmEditShortView> GetShortEntities() 
         {
-            return this.context.ArmEdits.OrderBy(arm => arm.Version).Select(arm => arm.GetBase());
+            var result = this.context.ArmEdits.OrderBy(e => e.Version).Select(e => e.ToShortView());
+            return result;
         }
 
-        public ArmEditBase GetEntity(Guid guid) 
+        public IEnumerable<ArmEditEditable> GetTableEntities() 
+        {
+            var result = this.context.ArmEdits.OrderBy(e => e.Version).Select(e => e.ToEditable());
+            return result;
+        }
+
+        public ArmEditEditable GetTemplate() 
+        {
+            var template = new ArmEditEditable()
+            {
+                Id = Guid.Empty,
+                Date = DateTime.Now,
+                DIVG = "ДИВГ.55101-00",
+                Version = "v0.00.00.00",
+                Description = "введите описание для ArmEdit"
+            };
+            return template;
+        }
+
+        public ArmEditEditable GetEntity(Guid guid) 
         {
             var dbArmEdit = this.GetDbArmEdit(guid);
-            return dbArmEdit.GetBase();
+            return dbArmEdit.ToEditable();
         }
 
-        public void AddEntity(ArmEditBase entity)
+        public void AddEntity(ArmEditEditable entity)
         {
-            if (this.context.ArmEdits.AsEnumerable().FirstOrDefault(arm => arm.Equals(entity)) != null)
-            {
-                throw new ArgumentException($"ArmEdit {entity.DIVG} {entity.Version} is contained in database");
-            }
             var dbArmEdit = new DbArmEdit(entity);
+            if (this.context.ArmEdits.FirstOrDefault(e => e.Equals(dbArmEdit)) != null)
+            {
+                throw new ArgumentException($"ArmEdit {entity} is contained in database");
+            }
             this.context.ArmEdits.Add(dbArmEdit);
             this.context.SaveChanges();
         }
 
-        public void UpdateEntity(ArmEditBase entity)
+        public void UpdateEntity(ArmEditEditable entity)
         {
             DbArmEdit dbArmEdit = this.GetDbArmEdit(entity.Id);
+            if (dbArmEdit.Default)
+            {
+                throw new ArgumentException($"Default entity {entity} can not by update");
+            }
             dbArmEdit.Update(entity);
             this.context.SaveChanges();
         }

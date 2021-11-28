@@ -147,11 +147,14 @@ class ArmEditWindow {
                         align:"right",
                         click: async function(){
                             try{ 
+                                // отправить:
                                 await _editableObj.submit();
+
+                                // автоматически закрывать при удачном стечении обстоятельств:
+                                _uiWindow.close();
                             } catch (error){
                                 messageBox.alertWarning(error.message);
                             } finally{
-                                _uiWindow.close();
                             }
                         }
                     }

@@ -69,7 +69,7 @@ class ProjectRevisionEditWindow {
                         label:"Предыдущая редакция БФПО:",
                         labelAlign:"right",
                         labelWidth:lWidth,
-                        icon:"mdi mdi-arrow-down",
+                        icon:"mdi mdi-alpha-r-box",
                         value:_editableObj.getParentRevision(),
                         options:{
                             body:{
@@ -93,7 +93,7 @@ class ProjectRevisionEditWindow {
                         label:"Версия БФПО:",
                         labelAlign:"right",
                         labelWidth:lWidth,
-                        icon:"mdi mdi-arrow-down",
+                        icon:"mdi mdi-alpha-v-box",
                         value:_editableObj.getProjectVersion(),
                         options:{
                             body:{
@@ -118,6 +118,7 @@ class ProjectRevisionEditWindow {
                         labelAlign:"right",
                         labelWidth:lWidth,
                         value:_editableObj.getRevision(),
+                        //tooltip:"Type in to search",
                         attributes:{
                             maxlength:2
                         }, 
@@ -156,7 +157,7 @@ class ProjectRevisionEditWindow {
                         label:"Версия ArmEdit:",
                         labelAlign:"right",
                         labelWidth:lWidth,
-                        icon:"mdi mdi-arrow-down",
+                        icon:"mdi mdi-application-brackets",
                         value:_editableObj.getArmEdit(),
                         options:{
                             body:{
@@ -267,7 +268,7 @@ class ProjectRevisionEditWindow {
                         height:dHeight, 
                         value:_editableObj.getDescription(),
                         attributes:{
-                            maxlength:3000
+                            maxlength:5000
                         }, 
                         on:{
                             onChange: function(newValue, oldValue, config){

@@ -8,15 +8,15 @@ class MessageBox{
     }
 
     error(sMessage = ""){
-        webix.message({ text: "[ERROR] - " + sMessage, type: "error", expire: this.timeDelay });
+        webix.message({ text:"[ERROR] - " + sMessage, type:"error", expire:this.timeDelay });
     }
 
     warning(sMessage = ""){
-        webix.message({ text: "[ERROR] - " + sMessage, type: "warning", expire: this.timeDelay });
+        webix.message({ text:"[ERROR] - " + sMessage, type:"warning", expire:this.timeDelay });
     }
 
     alertWarning(sMessage = ""){
-        webix.alert({ text: sMessage, type:"alert-warning", title: "Warning!" });
+        webix.modalbox({ title:"Warning!", type:"alert-warning", buttons:["Ok"], text:sMessage, width:650 });
     }
 }
 

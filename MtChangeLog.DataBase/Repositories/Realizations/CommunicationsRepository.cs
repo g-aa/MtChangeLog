@@ -1,7 +1,9 @@
 ﻿using MtChangeLog.DataBase.Contexts;
 using MtChangeLog.DataBase.Entities;
 using MtChangeLog.DataBase.Repositories.Interfaces;
-using MtChangeLog.DataObjects.Entities.Base;
+
+using MtChangeLog.DataObjects.Entities.Editable;
+using MtChangeLog.DataObjects.Entities.Views.Shorts;
 
 using System;
 using System.Collections.Generic;
@@ -18,34 +20,54 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
             
         }
 
-        public IEnumerable<CommunicationBase> GetEntities() 
+        public IEnumerable<CommunicationShortView> GetShortEntities() 
         {
-            return this.context.Communications.Select(com => com.GetBase());
+            var result = this.context.Communications.Select(e => e.ToShortView());
+            return result;
         }
 
-        public CommunicationBase GetEntity(Guid guid) 
+        public IEnumerable<CommunicationEditable> GetTableEntities() 
+        {
+            var result = this.context.Communications.Select(e => e.ToEditable());
+            return result;
+        }
+
+        public CommunicationEditable GetTemplate()
+        {
+            var template = new CommunicationEditable() 
+            {
+                Id = Guid.Empty,
+                Protocols = "modbus-mt",
+                Description = "введите описание протокола"
+            };
+            return template;
+        }
+
+        public CommunicationEditable GetEntity(Guid guid) 
         {
             var dbCommunication =  this.GetDbCommunication(guid);
-            return dbCommunication.GetBase();
+            return dbCommunication.ToEditable();
         }
 
-        public void AddEntity(CommunicationBase entity) 
+        public void AddEntity(CommunicationEditable entity) 
         {
-            if (this.context.Communications.AsEnumerable().FirstOrDefault(com => com.Equals(entity)) != null) 
-            {
-                throw new ArgumentException($"ArmEdit {entity.Protocols} is contained in database");
-            }
             var dbCommunication = new DbCommunication(entity);
-
+            if (this.context.Communications.FirstOrDefault(e => e.Equals(dbCommunication)) != null) 
+            {
+                throw new ArgumentException($"ArmEdit {entity} is contained in database");
+            }
             this.context.Communications.Add(dbCommunication);
             this.context.SaveChanges();
         }
 
-        public void UpdateEntity(CommunicationBase entity) 
+        public void UpdateEntity(CommunicationEditable entity) 
         {
-            DbCommunication dbCommunication = this.GetDbCommunication(entity.Id);
+            var dbCommunication = this.GetDbCommunication(entity.Id);
+            if (dbCommunication.Default)
+            {
+                throw new ArgumentException($"Default entity {entity} can not by update");
+            }
             dbCommunication.Update(entity);
-            // dbCommunication.ProjectRevisions - не должно обновляться !!!
             this.context.SaveChanges();
         }
 

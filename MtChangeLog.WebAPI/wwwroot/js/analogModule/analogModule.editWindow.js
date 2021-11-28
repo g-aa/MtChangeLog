@@ -63,7 +63,7 @@ class AnalogModuleEditWindow{
                 id:"winLayout",
                 rows:[
                     { 
-                        view:"text", 
+                        view:"text",
                         label:"Децимальный номер:", 
                         labelAlign:"right", 
                         labelWidth:lWidth,
@@ -74,7 +74,7 @@ class AnalogModuleEditWindow{
                         on:{
                             onChange: async function(newValue, oldValue, config){
                                 try{
-                                    _editableObj.setDivg(newValue);    
+                                    _editableObj.setDivg(newValue);
                                 } catch (error){
                                     messageBox.warning(error.message);
                                 }
@@ -157,28 +157,24 @@ class AnalogModuleEditWindow{
                     {
                         view:"button",
                         id:"submitButton_id",
-                        value:"Сохронить",
+                        value:"Отправить",
                         css:"webix_primary",
                         inputWidth:200,
                         align:"right",
                         click: async function(){
                             try {
                                 // обновить перечень платформ у модуля:
-                                let selected = $$("modulePlatforms_id").getValue({options:true});
-                                _editableObj.setPlatforms(selected.map(function(item){
-                                    return {
-                                        id:item.id,
-                                        title:item.title,
-                                        description:item.description
-                                    };
-                                }));
-
+                                let selected = $$("modulePlatforms_id").getValue().split(",");
+                                _editableObj.setPlatforms(selected);
+                                
                                 // отправить:
                                 await _editableObj.submit();
+
+                                // автоматически закрывать при удачном стечении обстоятельств:
+                                _uiWindow.close();
                             } catch (error){
                                 messageBox.alertWarning(error.message);
                             } finally{
-                                _uiWindow.close();
                             }
                         }
                     }

@@ -89,7 +89,7 @@ class ProjectEditWindow {
                         labelWidth:lWidth, 
                         value:_editablePrjVers.getTitle(),
                         attributes:{
-                            maxlength:5
+                            maxlength:16
                         }, 
                         on:{
                             onChange: async function(newValue, oldValue, config){
@@ -124,7 +124,7 @@ class ProjectEditWindow {
                         view:"richselect",
                         id:"status_id",
                         label:"Статус:",
-                        icon:"mdi mdi-arrow-down",
+                        icon:"mdi mdi-arrow-down-bold-hexagon-outline",
                         labelAlign:"right",
                         labelWidth:lWidth,
                         value:_editablePrjVers.getStatus(),
@@ -143,7 +143,7 @@ class ProjectEditWindow {
                         view:"richselect",
                         id:"platform_id",
                         label:"Платформа:",
-                        icon:"mdi mdi-arrow-down",
+                        icon:"mdi mdi-application-cog-outline",
                         labelAlign:"right",
                         labelWidth:lWidth,
                         value:_editablePrjVers.getPlatform(),
@@ -164,6 +164,7 @@ class ProjectEditWindow {
                                         },   
                                         data:_editablePrjVers.getAnalogModules()
                                     });
+                                    combo.setValue(_editablePrjVers.getAnalogModule())
                                 } catch (error) {
                                     combo.define("options", [ ]);
                                     messageBox.warning(error.message);
@@ -178,7 +179,7 @@ class ProjectEditWindow {
                         view:"richselect",
                         id:"analogModule_id",
                         label:"Аналоговый модуль:",
-                        icon:"mdi mdi-arrow-down",
+                        icon:"mdi mdi-puzzle",
                         labelAlign:"right",
                         labelWidth:lWidth, 
                         value:_editablePrjVers.getAnalogModule(),
@@ -206,7 +207,7 @@ class ProjectEditWindow {
                         height:120, 
                         value:_editablePrjVers.getDescription(),
                         attributes:{
-                            maxlength:255
+                            maxlength:500
                         }, 
                         on:{
                             onChange: function(newValue, oldValue, config){
@@ -227,11 +228,14 @@ class ProjectEditWindow {
                         align:"right",
                         click: async function(){
                             try{ 
+                                // отправить:
                                 await _editablePrjVers.submit();
+
+                                // автоматически закрывать при удачном стечении обстоятельств:
+                                _uiWindow.close();
                             } catch (error){
                                 messageBox.alertWarning(error.message);
                             } finally{
-                                _uiWindow.close();
                             }
                         }
                     }

@@ -66,7 +66,12 @@ class Platform{
         return this.editable.analogModules;
     }
 
-    setAnalogModules(values = []){
-        this.editable.analogModules = values;
+    setAnalogModules(ids = [""]){
+        if (ids == undefined || ids == null){
+            throw new Error("не указан перечень ids аналоговых модулей!");
+        }
+        this.editable.analogModules = this.modules.filter(function(item){
+            return ids.indexOf(item.id) != -1 
+        });
     }
 }

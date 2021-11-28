@@ -8,7 +8,7 @@ using System.Text;
 
 namespace MtChangeLog.DataBase.Contexts
 {
-    public class ApplicationContext : DbContext
+    public partial class ApplicationContext : DbContext
     {
         #region ProjectVersionEntities
         internal DbSet<DbPlatform> Platforms { get; set; }
@@ -24,26 +24,16 @@ namespace MtChangeLog.DataBase.Contexts
         internal DbSet<DbRelayAlgorithm> RelayAlgorithms { get; set; }
         #endregion
 
-        #region Views
-        internal IQueryable<ProjectVersionView> ProjectVersionViews 
-        {
-            get => this.ProjectVersions.Include(pv => pv.AnalogModule)
-                .ThenInclude(pv => pv.Platforms)
-                .Select(pv => new ProjectVersionView(pv)
-                {
-                    Module = pv.AnalogModule.Title,
-                    Platform = pv.Platform.Title
-                });
-        }
-        #endregion
-
         public ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options)
         {
             //if (this.Platforms.Any()) 
             //{
             //    this.Database.EnsureDeleted();    
             //}
-            this.Database.EnsureCreated();
+            if (this.Database.EnsureCreated()) 
+            {
+                this.Initialize();
+            }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

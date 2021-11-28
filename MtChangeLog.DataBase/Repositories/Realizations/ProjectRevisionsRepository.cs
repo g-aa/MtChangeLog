@@ -1,10 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
+
 using MtChangeLog.DataBase.Contexts;
 using MtChangeLog.DataBase.Entities;
 using MtChangeLog.DataBase.Repositories.Interfaces;
-using MtChangeLog.DataObjects.Entities.Base;
+
 using MtChangeLog.DataObjects.Entities.Editable;
-using MtChangeLog.DataObjects.Entities.Views;
+using MtChangeLog.DataObjects.Entities.Views.Shorts;
+using MtChangeLog.DataObjects.Entities.Views.Statistics;
+using MtChangeLog.DataObjects.Entities.Views.Tables;
 
 using System;
 using System.Collections.Generic;
@@ -27,7 +30,7 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
                 .Include(pr => pr.ArmEdit)
                 .Include(pr => pr.ProjectVersion).ThenInclude(pv => pv.AnalogModule)
                 .OrderBy(pr => pr.Date).ThenBy(pr => pr.ArmEdit.Version)
-                .Select(pr => pr.GetTableView());
+                .Select(pr => pr.ToTableView());
         }
 
         public IEnumerable<ProjectRevisionShortView> GetShortEntities()
@@ -35,7 +38,7 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
             return this.context.ProjectRevisions
                 .Include(pr => pr.ProjectVersion)
                 .ThenInclude(pr => pr.AnalogModule)
-                .Select(pr => pr.GetShortView());
+                .Select(pr => pr.ToShortView());
         }
 
         public IEnumerable<ProjectHistoryView> GetProjectHistories(Guid guid) 
@@ -54,7 +57,7 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
                 .FirstOrDefault();
             if (entity is not null) 
             {
-                result.Add(entity.GetHistoryView());
+                result.Add(entity.ToHistoryView());
                 while (entity.ParentRevisionId != Guid.Empty)
                 {
                     entity = this.context.ProjectRevisions
@@ -65,46 +68,46 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
                         .Include(pr => pr.ProjectVersion.AnalogModule)
                         .Include(pr => pr.RelayAlgorithms)
                         .FirstOrDefault(pr => pr.Id == entity.ParentRevisionId);
-                    result.Add(entity.GetHistoryView());
+                    result.Add(entity.ToHistoryView());
                 }
             }
             return result;
         }
 
-        public IEnumerable<ProjectRevisionTreeView> GetTreeEntities(string projectsType) 
+        public IEnumerable<ProjectRevisionTreeView> GetTreeEntities(string projectTitle) 
         {
            return this.context.ProjectRevisions
                 .Include(pr => pr.ArmEdit)
                 .Include(pr => pr.ProjectVersion).ThenInclude(pv => pv.AnalogModule)
                 .Include(pr => pr.ProjectVersion).ThenInclude(pv => pv.Platform)
-                .Where(pr => pr.ProjectVersion.Title == projectsType)
-                .Select(pr => pr.GetTreeView());
+                .Where(pr => pr.ProjectVersion.Title == projectTitle)
+                .Select(pr => pr.ToTreeView());
         }
 
         public ProjectRevisionEditable GetEntity(Guid guid)
         {
             var dbProjectRevision = this.GetDbProjectRevision(guid);
-            return dbProjectRevision.GetEditable();
+            return dbProjectRevision.ToEditable();
         }
 
-        public ProjectRevisionEditable GetByProjectVersionId(Guid guid) 
+        public ProjectRevisionEditable GetTemplate(Guid guid) 
         {
             var project = this.GetDbProjectVersion(guid);
             var lastRevision = project.ProjectRevisions?.OrderBy(pr => pr.Revision).LastOrDefault();
             var armEdit = this.context.ArmEdits.OrderBy(arm => arm.Version).LastOrDefault();
             var communications = lastRevision is null ? this.context.Communications.OrderBy(c => c.Protocols).LastOrDefault() : lastRevision.Communication;
             var revision = lastRevision is null ? "00" : (int.Parse(lastRevision.Revision) + 1).ToString("D2");
-            var algorithms = lastRevision?.RelayAlgorithms.Select(ra => ra.GetBase());
-            var authors = lastRevision?.Authors.Select(a => a.GetBase());
+            var algorithms = lastRevision?.RelayAlgorithms.Select(ra => ra.ToShortView());
+            var authors = lastRevision?.Authors.Select(a => a.ToShortView());
 
             var result = new ProjectRevisionEditable()
             {
                 Id = Guid.Empty,
-                ParentRevision = lastRevision?.GetShortView(),
-                ProjectVersion = project.GetView(),
+                ParentRevision = lastRevision?.ToShortView(),
+                ProjectVersion = project.ToShortView(),
                 Revision = revision,
-                ArmEdit = armEdit.GetBase(),
-                Communication = communications.GetBase(),
+                ArmEdit = armEdit.ToShortView(),
+                Communication = communications.ToShortView(),
                 RelayAlgorithms = algorithms,
                 Date = DateTime.Now,
                 Authors = authors,
@@ -116,13 +119,6 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
 
         public void AddEntity(ProjectRevisionEditable entity)
         {
-            // полностью переделать выполнять проверку по полному кортежу без учета description !!!
-            
-            
-            if (this.context.ProjectRevisions.AsParallel().AsEnumerable().FirstOrDefault(pr => pr.Equals(entity)) != null) 
-            {
-                throw new ArgumentException($"The revision {entity} is contained in the database");
-            }
             var dbProjectRevision = new DbProjectRevision(entity)
             {
                 ParentRevision = entity.ParentRevision != null ? this.GetDbProjectRevision(entity.ParentRevision.Id) : null,
@@ -132,6 +128,10 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
                 Communication = this.GetDbCommunication(entity.Communication.Id),
                 RelayAlgorithms = this.GetDbRelayAlgorithms(entity.RelayAlgorithms.Select(ra => ra.Id)),
             };
+            if (this.context.ProjectRevisions.Include(pr=>pr.ProjectVersion).AsParallel().FirstOrDefault(pr => pr.Equals(dbProjectRevision)) != null) 
+            {
+                throw new ArgumentException($"The revision {entity} is contained in the database");
+            }
             this.context.ProjectRevisions.Add(dbProjectRevision);
             this.context.SaveChanges();
         }

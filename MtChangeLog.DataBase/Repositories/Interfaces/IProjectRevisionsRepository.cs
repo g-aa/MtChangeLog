@@ -1,6 +1,7 @@
-﻿using MtChangeLog.DataObjects.Entities.Base;
-using MtChangeLog.DataObjects.Entities.Editable;
-using MtChangeLog.DataObjects.Entities.Views;
+﻿using MtChangeLog.DataObjects.Entities.Editable;
+using MtChangeLog.DataObjects.Entities.Views.Shorts;
+using MtChangeLog.DataObjects.Entities.Views.Statistics;
+using MtChangeLog.DataObjects.Entities.Views.Tables;
 
 using System;
 using System.Collections.Generic;
@@ -14,6 +15,7 @@ namespace MtChangeLog.DataBase.Repositories.Interfaces
     {
         IEnumerable<ProjectRevisionShortView> GetShortEntities();
         IEnumerable<ProjectRevisionTableView> GetTableEntities();
+        ProjectRevisionEditable GetTemplate(Guid guid);
         /// <summary>
         /// получить полную историю конкретного проекта (БФПО)
         /// </summary>
@@ -26,6 +28,5 @@ namespace MtChangeLog.DataBase.Repositories.Interfaces
         /// <param name="projectTitle">project version title</param>
         /// <returns></returns>
         IEnumerable<ProjectRevisionTreeView> GetTreeEntities(string projectTitle);
-        ProjectRevisionEditable GetByProjectVersionId(Guid guid);
     }
 }
