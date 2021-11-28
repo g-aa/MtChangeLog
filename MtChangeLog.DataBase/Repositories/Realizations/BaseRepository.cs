@@ -153,9 +153,13 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
             return dbAuthors.ToHashSet();
         }
 
-        internal ICollection<DbPlatform> GetDbPlatforms(IEnumerable<Guid> guids) 
+        internal ICollection<DbPlatform> GetDbPlatformsOrDefault(IEnumerable<Guid> guids) 
         {
             var dbPlatforms = this.context.Platforms.Where(p => guids.Contains(p.Id));
+            if (!dbPlatforms.Any())
+            {
+                dbPlatforms = this.context.Platforms.Where(p => p.Default);
+            }
             if (dbPlatforms is null) 
             {
                 throw new ArgumentException($"Not found platforms by transmitted ids");
