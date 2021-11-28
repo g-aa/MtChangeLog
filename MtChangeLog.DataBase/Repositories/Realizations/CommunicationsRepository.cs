@@ -63,6 +63,10 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
         public void UpdateEntity(CommunicationEditable entity) 
         {
             var dbCommunication = this.GetDbCommunication(entity.Id);
+            if (dbCommunication.Default)
+            {
+                throw new ArgumentException($"default entity {entity} can not by update");
+            }
             dbCommunication.Update(entity);
             this.context.SaveChanges();
         }

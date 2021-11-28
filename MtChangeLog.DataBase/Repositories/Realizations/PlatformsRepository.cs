@@ -68,6 +68,10 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
         public void UpdateEntity(PlatformEditable entity)
         {
             DbPlatform dbPlatform = this.GetDbPlatform(entity.Id);
+            if (dbPlatform.Default)
+            {
+                throw new ArgumentException($"default entity {entity} can not by update");
+            }
             dbPlatform.Update(entity, this.GetDbAnalogModules(entity.AnalogModules.Select(module => module.Id)));
             this.context.SaveChanges();
         }

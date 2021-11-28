@@ -65,6 +65,10 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
         public void UpdateEntity(ArmEditEditable entity)
         {
             DbArmEdit dbArmEdit = this.GetDbArmEdit(entity.Id);
+            if (dbArmEdit.Default)
+            {
+                throw new ArgumentException($"default entity {entity} can not by update");
+            }
             dbArmEdit.Update(entity);
             this.context.SaveChanges();
         }

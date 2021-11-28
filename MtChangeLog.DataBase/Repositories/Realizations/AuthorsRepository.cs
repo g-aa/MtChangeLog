@@ -64,6 +64,10 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
         public void UpdateEntity(AuthorEditable entity)
         {
             var dbAuthor = this.GetDbAuthor(entity.Id);
+            if (dbAuthor.Default)
+            {
+                throw new ArgumentException($"default entity {entity} can not by update");
+            }
             dbAuthor.Update(entity);
             this.context.SaveChanges();
         }

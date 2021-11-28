@@ -71,6 +71,10 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
         public void UpdateEntity(AnalogModuleEditable entity) 
         {
             DbAnalogModule dbAnalogModule = this.GetDbAnalogModule(entity.Id);
+            if (dbAnalogModule.Default) 
+            {
+                throw new ArgumentException($"default entity {entity} can not by update");    
+            }
             dbAnalogModule.Update(entity, this.GetDbPlatforms(entity.Platforms.Select(platform => platform.Id)));
             this.context.SaveChanges();
         }
