@@ -1,121 +1,71 @@
 class EntitiesRepository{
     constructor(){
+        let parsing = async function(method, response){
+            let answer = await response.json();
+            if (response.ok) {
+                return answer;
+            } else{
+                let message = "HTTP " + method + "<br>" + response.status + "-" + response.statusText + "<br>";
+                if(typeof answer === "string"){
+                    message += answer;
+                } else if(answer.hasOwnProperty("errors")){
+                    Object.keys(answer.errors).forEach(function(key){
+                        message += answer.errors[key].join("<br>") + "<br>";
+                    });
+                }
+                throw new Error(message);
+            }
+        }
 
-    }
-
-    // CRUD API:
-    async getEntitiesInfo(urlString){
-        let response = await fetch(urlString, {
-            method:"GET",
-            headers:{ 
-                "Accept":"application/json" 
-            }
-        });
-        let answer = await response.json();
-        if (response.ok) {
-            return answer;
-        } else{
-            let message = "HTTP POST<br>" + response.status + "-" + response.statusText + "<br>";
-            if(typeof answer === "string"){
-                message += answer;
-            } else if(answer.hasOwnProperty("errors")){
-                Object.keys(answer.errors).forEach(function(key){
-                    message += answer.errors[key].join("<br>") + "<br>";
-                });
-            }
-            throw new Error(message);
+        // CRUD API:
+        this.getEntitiesInfo = async function(urlString){
+            let response = await fetch(urlString, {
+                method:"GET",
+                headers:{ 
+                    "Accept":"application/json" 
+                }
+            });
+            return await parsing("GET", response);
         }
-    }
-    async getEntityDetails(urlString, module = {}){
-        let response = await fetch(urlString + "/" + module.id, {
-            method:"GET",
-            headers:{ 
-                "Accept":"application/json" 
-            }
-        });
-        let answer = await response.json();
-        if (response.ok){
-            return answer;
-        } else{
-            let message = "HTTP POST<br>" + response.status + "-" + response.statusText + "<br>";
-            if(typeof answer === "string"){
-                message += answer;
-            } else if(answer.hasOwnProperty("errors")){
-                Object.keys(answer.errors).forEach(function(key){
-                    message += answer.errors[key].join("<br>") + "<br>";
-                });
-            }
-            throw new Error(message);
+        this.getEntityDetails = async function(urlString, module = {}){
+            let response = await fetch(urlString + "/" + module.id, {
+                method:"GET",
+                headers:{ 
+                    "Accept":"application/json" 
+                }
+            });
+            return await parsing("GET", response);
         }
-    }
-    async createEntity(urlString, module = {}){
-        let response = await fetch(urlString, {
-            method:"POST",
-            headers:{ 
-                "Accept":"application/json", 
-                "Content-Type":"application/json" 
-            },
-            body:JSON.stringify(module)
-        });
-        let answer = await response.json();
-        if (response.ok){
-            return answer;
-        } else{
-            let message = "HTTP POST<br>" + response.status + "-" + response.statusText + "<br>";
-            if(typeof answer === "string"){
-                message += answer;
-            } else if(answer.hasOwnProperty("errors")){
-                Object.keys(answer.errors).forEach(function(key){
-                    message += answer.errors[key].join("<br>") + "<br>";
-                });
-            }
-            throw new Error(message);
+        this.createEntity = async function(urlString, module = {}){
+            let response = await fetch(urlString, {
+                method:"POST",
+                headers:{ 
+                    "Accept":"application/json", 
+                    "Content-Type":"application/json" 
+                },
+                body:JSON.stringify(module)
+            });
+            return await parsing("POST", response);
         }
-    }
-    async updateEntity(urlString, module = {}){
-        let response = await fetch(urlString + "/" + module.id, {
-            method:"PUT",
-            headers:{
-                "Accept":"application/json", 
-                "Content-Type":"application/json" 
-            },
-            body:JSON.stringify(module)
-        });
-        let answer = await response.json();
-        if (response.ok){
-            return answer;
-        } else{
-            let message = "HTTP POST<br>" + response.status + "-" + response.statusText + "<br>";
-            if(typeof answer === "string"){
-                message += answer;
-            } else if(answer.hasOwnProperty("errors")){
-                Object.keys(answer.errors).forEach(function(key){
-                    message += answer.errors[key].join("<br>") + "<br>";
-                });
-            }
-            throw new Error(message);
+        this.updateEntity = async function(urlString, module = {}){
+            let response = await fetch(urlString + "/" + module.id, {
+                method:"PUT",
+                headers:{
+                    "Accept":"application/json", 
+                    "Content-Type":"application/json" 
+                },
+                body:JSON.stringify(module)
+            });
+            return await parsing("PUT", response);
         }
-    }
-    async deleteEntity(urlString, module = {}){
-        let response = await fetch(urlString + "/" + module.id, {
-            method:"DELETE",
-            headers:{ 
-                "Accept":"application/json" 
-            }
-        });
-        let answer = await response.json();
-        if (response.ok){
-            return answer;
-        } else{
-            let message = "HTTP POST<br>" + response.status + "-" + response.statusText + "<br>";
-            if(typeof answer === "string"){
-                message += answer;
-            } else if(answer.hasOwnProperty("errors")){
-                Object.keys(answer.errors).forEach(function(key){
-                    message += answer.errors[key].join("<br>") + "<br>";
-                });
-            }
-            throw new Error(message);
+        this.deleteEntity = async function(urlString, module = {}){
+            let response = await fetch(urlString + "/" + module.id, {
+                method:"DELETE",
+                headers:{ 
+                    "Accept":"application/json" 
+                }
+            });
+            return await parsing("DELETE", response);
         }
     }
 
