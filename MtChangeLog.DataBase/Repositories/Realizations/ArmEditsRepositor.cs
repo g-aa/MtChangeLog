@@ -56,7 +56,7 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
             var dbArmEdit = new DbArmEdit(entity);
             if (this.context.ArmEdits.FirstOrDefault(e => e.Equals(dbArmEdit)) != null)
             {
-                throw new ArgumentException($"ArmEdit {entity.DIVG} {entity.Version} is contained in database");
+                throw new ArgumentException($"ArmEdit {entity} is contained in database");
             }
             this.context.ArmEdits.Add(dbArmEdit);
             this.context.SaveChanges();
@@ -67,7 +67,7 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
             DbArmEdit dbArmEdit = this.GetDbArmEdit(entity.Id);
             if (dbArmEdit.Default)
             {
-                throw new ArgumentException($"default entity {entity} can not by update");
+                throw new ArgumentException($"Default entity {entity} can not by update");
             }
             dbArmEdit.Update(entity);
             this.context.SaveChanges();

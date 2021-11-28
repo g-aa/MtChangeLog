@@ -62,7 +62,7 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
             };
             if (this.context.AnalogModules.FirstOrDefault(module => module.Equals(dbModule)) != null) 
             {
-                throw new ArgumentException($"AnalogModule {entity.DIVG} {entity.Title} is contained in database");
+                throw new ArgumentException($"AnalogModule {entity} is contained in database");
             }
             this.context.AnalogModules.Add(dbModule);
             this.context.SaveChanges();
@@ -73,7 +73,7 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
             DbAnalogModule dbAnalogModule = this.GetDbAnalogModule(entity.Id);
             if (dbAnalogModule.Default) 
             {
-                throw new ArgumentException($"default entity {entity} can not by update");    
+                throw new ArgumentException($"Default entity {entity} can not by update");    
             }
             dbAnalogModule.Update(entity, this.GetDbPlatforms(entity.Platforms.Select(platform => platform.Id)));
             this.context.SaveChanges();

@@ -82,7 +82,7 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
             };
             if (this.context.ProjectVersions.FirstOrDefault(p => p.Equals(dbProjectVersion)) != null)
             {
-                throw new ArgumentException($"The project version {entity.DIVG} {entity.Title} is contained in the database");
+                throw new ArgumentException($"The project version {entity} is contained in the database");
             }
             this.context.ProjectVersions.Add(dbProjectVersion);
             this.context.SaveChanges();

@@ -55,7 +55,7 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
             var dbAuthor = new DbAuthor(entity);
             if (this.context.Authors.FirstOrDefault(e => e.Equals(dbAuthor)) != null)
             {
-                throw new ArgumentException($"Author {entity.FirstName} {entity.LastName} is contained in database");
+                throw new ArgumentException($"Author {entity} is contained in database");
             }
             this.context.Authors.Add(dbAuthor);
             this.context.SaveChanges();
@@ -66,7 +66,7 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
             var dbAuthor = this.GetDbAuthor(entity.Id);
             if (dbAuthor.Default)
             {
-                throw new ArgumentException($"default entity {entity} can not by update");
+                throw new ArgumentException($"Default entity {entity} can not by update");
             }
             dbAuthor.Update(entity);
             this.context.SaveChanges();

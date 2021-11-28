@@ -59,7 +59,7 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
             };
             if (this.context.Platforms.FirstOrDefault(platform => platform.Equals(dbPlatform)) != null)
             {
-                throw new ArgumentException($"Platform {entity.Title} is contained in the database");
+                throw new ArgumentException($"Platform {entity} is contained in the database");
             }
             this.context.Platforms.Add(dbPlatform);
             this.context.SaveChanges();
@@ -70,7 +70,7 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
             DbPlatform dbPlatform = this.GetDbPlatform(entity.Id);
             if (dbPlatform.Default)
             {
-                throw new ArgumentException($"default entity {entity} can not by update");
+                throw new ArgumentException($"Default entity {entity} can not by update");
             }
             dbPlatform.Update(entity, this.GetDbAnalogModules(entity.AnalogModules.Select(module => module.Id)));
             this.context.SaveChanges();

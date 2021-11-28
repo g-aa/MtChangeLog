@@ -54,7 +54,7 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
             var dbCommunication = new DbCommunication(entity);
             if (this.context.Communications.FirstOrDefault(e => e.Equals(dbCommunication)) != null) 
             {
-                throw new ArgumentException($"ArmEdit {entity.Protocols} is contained in database");
+                throw new ArgumentException($"ArmEdit {entity} is contained in database");
             }
             this.context.Communications.Add(dbCommunication);
             this.context.SaveChanges();
@@ -65,7 +65,7 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
             var dbCommunication = this.GetDbCommunication(entity.Id);
             if (dbCommunication.Default)
             {
-                throw new ArgumentException($"default entity {entity} can not by update");
+                throw new ArgumentException($"Default entity {entity} can not by update");
             }
             dbCommunication.Update(entity);
             this.context.SaveChanges();

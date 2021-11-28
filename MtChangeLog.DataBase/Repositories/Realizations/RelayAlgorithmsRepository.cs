@@ -56,7 +56,7 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
             var dbAlgorithm = new DbRelayAlgorithm(entity);
             if (this.context.RelayAlgorithms.FirstOrDefault(e => e.Equals(dbAlgorithm)) != null) 
             {
-                throw new ArgumentException($"Relay algorithm {entity.ANSI} {entity.Title} is contained in database");
+                throw new ArgumentException($"Relay algorithm {entity} is contained in database");
             }
             this.context.RelayAlgorithms.Add(dbAlgorithm);
             this.context.SaveChanges();

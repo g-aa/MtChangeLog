@@ -108,7 +108,7 @@ namespace MtChangeLog.WebAPI.Controllers
             {
                 this.logger.LogInformation($"HTTP POST - AnalogModulesController - new entity {entity}");
                 this.repository.AddEntity(entity);
-                return this.Ok($"Analog module {entity.DIVG} {entity.Title} adding to the database");
+                return this.Ok($"Analog module {entity} adding to the database");
             }
             catch (ArgumentException ex)
             {
