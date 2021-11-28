@@ -32,7 +32,7 @@ class AnalogModule{
         this.submit = async function(){
             let answer = await repository.updateAnalogModule(this.editable);
             if(typeof(this.beforeEnding) === "function"){
-                await this.beforeEnding(this.url, answer);
+                await this.beforeEnding(answer);
             }
         };
     }
