@@ -15,14 +15,12 @@ namespace MtChangeLog.WebAPI.Controllers
     [ApiController]
     public class ProjectTreesController : ControllerBase
     {
-        private readonly IProjectVersionsRepository versionsRepository;
-        private readonly IProjectRevisionsRepository revisionsRepository;
+        private readonly IStatisticsRepository repository;
         private readonly ILogger logger;
 
-        public ProjectTreesController(IProjectVersionsRepository versionsRepository, IProjectRevisionsRepository revisionsRepository, ILogger<ProjectRevisionsController> logger) 
+        public ProjectTreesController(IStatisticsRepository repository, ILogger<ProjectRevisionsController> logger) 
         {
-            this.versionsRepository = versionsRepository;
-            this.revisionsRepository = revisionsRepository;
+            this.repository = repository;
             this.logger = logger;
             this.logger.LogInformation("HTTP - ProjectTreesController - creating");
         }
@@ -34,7 +32,7 @@ namespace MtChangeLog.WebAPI.Controllers
             try
             {
                 this.logger.LogInformation($"HTTP GET - ProjectTreesController - projects titles");
-                var result = this.versionsRepository.GetProjectTitles();
+                var result = this.repository.GetProjectTitles();
                 return this.Ok(result);
             }
             catch (Exception ex)
@@ -51,7 +49,7 @@ namespace MtChangeLog.WebAPI.Controllers
             try
             {
                 this.logger.LogInformation($"HTTP GET - ProjectTreesController - {title} projects trees");
-                var result = this.revisionsRepository.GetTreeEntities(title);
+                var result = this.repository.GetTreeEntities(title);
                 return this.Ok(result);
             }
             catch (Exception ex)

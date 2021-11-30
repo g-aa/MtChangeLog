@@ -16,17 +16,5 @@ namespace MtChangeLog.DataBase.Repositories.Interfaces
         IEnumerable<ProjectRevisionShortView> GetShortEntities();
         IEnumerable<ProjectRevisionTableView> GetTableEntities();
         ProjectRevisionEditable GetTemplate(Guid guid);
-        /// <summary>
-        /// получить полную историю конкретного проекта (БФПО)
-        /// </summary>
-        /// <param name="guid">project version id</param>
-        /// <returns></returns>
-        IEnumerable<ProjectHistoryView> GetProjectHistories(Guid guid);
-        /// <summary>
-        /// получить полное дерево проектов (БФПО) с конкретным наименованием
-        /// </summary>
-        /// <param name="projectTitle">project version title</param>
-        /// <returns></returns>
-        IEnumerable<ProjectRevisionTreeView> GetTreeEntities(string projectTitle);
     }
 }

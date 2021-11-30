@@ -61,12 +61,6 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
             return template;
         }
 
-        public IEnumerable<string> GetProjectTitles() 
-        {
-            var result = this.context.ProjectVersions.Select(pv => pv.Title).Distinct().OrderBy(s => s);
-            return result;
-        }
-
         public ProjectVersionEditable GetEntity(Guid guid)
         {
             var dbProjectVersion = this.GetDbProjectVersion(guid);

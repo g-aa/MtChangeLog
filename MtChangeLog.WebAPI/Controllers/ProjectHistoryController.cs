@@ -16,13 +16,13 @@ namespace MtChangeLog.WebAPI.Controllers
     public class ProjectHistoryController : ControllerBase
     {
         private readonly IProjectVersionsRepository versionsRepository;
-        private readonly IProjectRevisionsRepository revisionsRepository;
+        private readonly IStatisticsRepository statisticsRepository;
         private readonly ILogger logger;
 
-        public ProjectHistoryController(IProjectVersionsRepository versionsRepository, IProjectRevisionsRepository revisionsRepository, ILogger<ProjectHistoryController> logger)
+        public ProjectHistoryController(IProjectVersionsRepository versionsRepository, IStatisticsRepository statisticsRepository, ILogger<ProjectHistoryController> logger)
         {
             this.versionsRepository = versionsRepository;
-            this.revisionsRepository = revisionsRepository;
+            this.statisticsRepository = statisticsRepository;
             this.logger = logger;
             this.logger.LogInformation("HTTP - ProjectHistoryController - creating");
         }
@@ -51,7 +51,7 @@ namespace MtChangeLog.WebAPI.Controllers
             try
             {
                 this.logger.LogInformation($"HTTP GET - ProjectHistoryController - full history by project id = {id}");
-                var result = this.revisionsRepository.GetProjectHistories(id);
+                var result = this.statisticsRepository.GetProjectHistories(id);
                 return this.Ok(result);
             }
             catch (Exception ex)
