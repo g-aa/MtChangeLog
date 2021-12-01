@@ -38,7 +38,7 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
             return result;
         }
 
-        public IEnumerable<ProjectHistoryView> GetProjectHistories(Guid guid) 
+        public IEnumerable<ProjectHistoryView> GetProjectVersionHistory(Guid guid) 
         {
             // требуется оптимизировать логику !!!
             var result = new List<ProjectHistoryView>();
@@ -79,6 +79,12 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
                 .Include(pr => pr.ProjectVersion).ThenInclude(pv => pv.Platform)
                 .Where(pr => pr.ProjectVersion.Title == projectTitle)
                 .Select(pr => pr.ToTreeView());
+        }
+
+        public ProjectHistoryView GetProjectRevisionHistory(Guid guid)
+        {
+            var result = this.GetDbProjectRevision(guid).ToHistoryView();
+            return result;
         }
     }
 }

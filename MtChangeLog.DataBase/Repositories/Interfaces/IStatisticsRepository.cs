@@ -20,12 +20,18 @@ namespace MtChangeLog.DataBase.Repositories.Interfaces
         /// </summary>
         /// <param name="guid">project version id</param>
         /// <returns></returns>
-        IEnumerable<ProjectHistoryView> GetProjectHistories(Guid guid);
+        IEnumerable<ProjectHistoryView> GetProjectVersionHistory(Guid guid);
         /// <summary>
         /// получить полное дерево проектов (БФПО) с конкретным наименованием
         /// </summary>
         /// <param name="projectTitle">project version title</param>
         /// <returns></returns>
         IEnumerable<ProjectRevisionTreeView> GetTreeEntities(string projectTitle);
+        /// <summary>
+        /// получить последние изменения в проекте (БФПО)
+        /// </summary>
+        /// <param name="guid">project revision id</param>
+        /// <returns></returns>
+        ProjectHistoryView GetProjectRevisionHistory(Guid guid);
     }
 }

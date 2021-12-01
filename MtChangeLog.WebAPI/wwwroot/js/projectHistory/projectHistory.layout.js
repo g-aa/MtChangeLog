@@ -26,7 +26,7 @@ class ProjectHistoryLayout{
                         onChange: async function(newValue, oldValue, config){
                             try {
                                 let layout = $$(viewLayoutId);
-                                let dataList = await repository.getProjectHistory(newValue);
+                                let dataList = await repository.getProjectVersionHistory(newValue);
                                 let newLayout = {
                                     view:"unitlist",
                                     id:viewLayoutId,
