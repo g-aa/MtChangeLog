@@ -65,6 +65,25 @@ class RelayAlgorithmEditWindow {
                 rows:[
                     { 
                         view:"text", 
+                        label:"Наименование группы:", 
+                        labelAlign:"right",
+                        labelWidth:lWidth,
+                        value:_editableObj.getGroup(),
+                        attributes:{
+                            maxlength:32
+                        }, 
+                        on:{
+                            onChange: async function(newValue, oldValue, config){
+                                try{
+                                    _editableObj.getGroup(newValue);    
+                                } catch (error){
+                                    messageBox.warning(error.message);
+                                }
+                            }
+                        }
+                    },
+                    { 
+                        view:"text", 
                         label:"Наименование:", 
                         labelAlign:"right",
                         labelWidth:lWidth,

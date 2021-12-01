@@ -10,7 +10,11 @@ namespace MtChangeLog.DataObjects.Entities.Editable
     public class RelayAlgorithmEditable
     {
         public Guid Id { get; set; }
-        
+
+        [Required(AllowEmptyStrings = true)]
+        [StringLength(32, ErrorMessage = "Наименование группы алгоритмов должно содержать не больше 32 символо")]
+        public string Group { get; set; }
+
         [Required(ErrorMessage = "Наименование алгоритма параметр обязательный для заполнения")]
         [StringLength(32, ErrorMessage = "Наименование алгоритма должно содержать не больше 32 символо")]
         public string Title { get; set; }

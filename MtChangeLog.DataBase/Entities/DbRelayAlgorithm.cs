@@ -13,6 +13,7 @@ namespace MtChangeLog.DataBase.Entities
     internal class DbRelayAlgorithm : IEquatable<DbRelayAlgorithm>
     {
         public Guid Id { get; set; }
+        public string Group { get; set; }
         public string Title { get; set; }
         public string ANSI { get; set; }
         public string LogicalNode { get; set; }
@@ -30,6 +31,7 @@ namespace MtChangeLog.DataBase.Entities
 
         public DbRelayAlgorithm(RelayAlgorithmEditable other) : base()
         {
+            this.Group = other.Group;
             this.Title= other.Title;
             this.ANSI = other.ANSI;
             this.LogicalNode = other.LogicalNode;
@@ -39,6 +41,7 @@ namespace MtChangeLog.DataBase.Entities
         public void Update(RelayAlgorithmEditable other) 
         {
             // this.Id - не обновляется !!!
+            this.Group = other.Group;
             this.ANSI = other.ANSI;
             this.Title = other.Title;
             this.LogicalNode = other.LogicalNode;
@@ -60,6 +63,7 @@ namespace MtChangeLog.DataBase.Entities
             return new RelayAlgorithmEditable() 
             {
                 Id = this.Id,
+                Group = this.Group,
                 Title = this.Title,
                 ANSI = this.ANSI,
                 LogicalNode = this.LogicalNode,
@@ -69,7 +73,7 @@ namespace MtChangeLog.DataBase.Entities
 
         public bool Equals([AllowNull] DbRelayAlgorithm other)
         {
-            return this.Id == other.Id || this.Title == other.Title && this.ANSI == other.ANSI && this.LogicalNode == other.LogicalNode;
+            return this.Id == other.Id || this.Group == other.Group && this.Title == other.Title && this.ANSI == other.ANSI && this.LogicalNode == other.LogicalNode;
         }
 
         public override bool Equals(object obj)
@@ -79,7 +83,7 @@ namespace MtChangeLog.DataBase.Entities
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(this.Title, this.ANSI, this.LogicalNode);
+            return HashCode.Combine(this.Group, this.Title, this.ANSI, this.LogicalNode);
         }
 
         public override string ToString()
