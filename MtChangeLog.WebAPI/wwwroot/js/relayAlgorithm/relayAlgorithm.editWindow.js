@@ -58,7 +58,7 @@ class RelayAlgorithmEditWindow {
         };
 
         let windowLayout = function (){
-            let lWidth = 160;
+            let lWidth = 180;
             let result = {
                 view:"layout",
                 id:"winLayout",
@@ -75,7 +75,7 @@ class RelayAlgorithmEditWindow {
                         on:{
                             onChange: async function(newValue, oldValue, config){
                                 try{
-                                    _editableObj.getGroup(newValue);    
+                                    _editableObj.setGroup(newValue);    
                                 } catch (error){
                                     messageBox.warning(error.message);
                                 }
