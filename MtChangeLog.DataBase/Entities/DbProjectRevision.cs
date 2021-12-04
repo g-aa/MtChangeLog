@@ -145,6 +145,17 @@ namespace MtChangeLog.DataBase.Entities
             };
         }
 
+        public ProjectHistoryShortView ToHistoryShortView() 
+        {
+            return new ProjectHistoryShortView()
+            {
+                Id = this.Id,
+                Date = this.Date,
+                Title = $"{this.ProjectVersion?.AnalogModule?.Title}-{this.ProjectVersion?.Title}-{this.ProjectVersion?.Version}_{this.Revision}",
+                Platform = this.ProjectVersion?.Platform?.Title ?? "БМРЗ-000"
+            };
+        }
+
         public bool Equals([AllowNull] DbProjectRevision other)
         {
             return this.Id == other.Id || this.Date == other.Date && this.Revision == other.Revision && this.Reason == other.Reason && this.ProjectVersion.Equals(other.ProjectVersion);

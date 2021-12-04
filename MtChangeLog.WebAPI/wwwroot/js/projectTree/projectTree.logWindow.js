@@ -22,7 +22,7 @@ class LogWindow{
                 id:"win_id",
                 modal:true,
                 move:true,
-                //resize:true,
+                resize:true,
                 width:900,
                 height:600,
 		        position:"center",
