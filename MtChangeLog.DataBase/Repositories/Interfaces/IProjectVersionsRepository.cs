@@ -15,10 +15,5 @@ namespace MtChangeLog.DataBase.Repositories.Interfaces
         IEnumerable<ProjectVersionShortView> GetShortEntities();
         IEnumerable<ProjectVersionTableView> GetTableEntities();
         ProjectVersionEditable GetTemplate();
-        /// <summary>
-        /// получить перечень наименований проектов
-        /// </summary>
-        /// <returns></returns>
-        IEnumerable<string> GetProjectTitles();
     }
 }

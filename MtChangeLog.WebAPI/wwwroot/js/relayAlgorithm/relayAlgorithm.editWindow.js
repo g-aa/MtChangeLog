@@ -58,11 +58,30 @@ class RelayAlgorithmEditWindow {
         };
 
         let windowLayout = function (){
-            let lWidth = 160;
+            let lWidth = 180;
             let result = {
                 view:"layout",
                 id:"winLayout",
                 rows:[
+                    { 
+                        view:"text", 
+                        label:"Наименование группы:", 
+                        labelAlign:"right",
+                        labelWidth:lWidth,
+                        value:_editableObj.getGroup(),
+                        attributes:{
+                            maxlength:32
+                        }, 
+                        on:{
+                            onChange: async function(newValue, oldValue, config){
+                                try{
+                                    _editableObj.setGroup(newValue);    
+                                } catch (error){
+                                    messageBox.warning(error.message);
+                                }
+                            }
+                        }
+                    },
                     { 
                         view:"text", 
                         label:"Наименование:", 

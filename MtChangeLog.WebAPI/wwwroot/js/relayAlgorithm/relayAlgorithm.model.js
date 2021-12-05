@@ -36,10 +36,16 @@ class RelayAlgorithm{
 
     }
 
+    getGroup(){
+        return this.editable.group;
+    }
+    setGroup(newGroup = ""){
+        this.editable.group = newGroup;
+    }
+
     getTitle(){
         return this.editable.title;
     }
-
     setTitle(newTitle = ""){
         this.editable.title = newTitle;
     }
@@ -47,7 +53,6 @@ class RelayAlgorithm{
     getANSI(){
         return this.editable.ansi;
     }
-
     setANSI(newansi = ""){
         this.editable.ansi = newansi;
     }
@@ -55,7 +60,6 @@ class RelayAlgorithm{
     getLogicalNode(){
         return this.editable.logicalNode;
     }
-
     setLogicalNode(newLN = ""){
         this.editable.logicalNode = newLN;
     }
@@ -63,7 +67,6 @@ class RelayAlgorithm{
     getDescription(){
         return this.editable.description;
     }
-
     setDescription(newDescription = ""){
         this.editable.description = newDescription;
     }

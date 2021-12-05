@@ -271,8 +271,11 @@ class EntitiesRepository{
     async getProjectHistoryTitles(){
         return await this.getEntitiesInfo("/api/ProjectHistory");
     }
-    async getProjectHistory(entityId = {}){
-        return await this.getEntityDetails("/api/ProjectHistory", { id:entityId });
+    async getProjectVersionHistory(entityId = ""){
+        return await this.getEntityDetails("/api/ProjectHistory/Version", { id:entityId });
+    }
+    async getProjectRevisionHistory(entityId = ""){
+        return await this.getEntityDetails("/api/ProjectHistory/Revision", { id:entityId });
     }
 
     // Статистика:

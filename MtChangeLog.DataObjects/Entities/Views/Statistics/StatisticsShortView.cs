@@ -14,5 +14,7 @@ namespace MtChangeLog.DataObjects.Entities.Views.Statistics
         public int ActualProjectCount { get; set; }
         public int TestProjectCount { get; set; }
         public int DeprecatedProjectCount { get; set; }
+        public IEnumerable<ProjectHistoryShortView> LastModifiedProjects { get; set; }
+        public IEnumerable<ProjectHistoryShortView> MostChangingProjects { get; set; }
     }
 }

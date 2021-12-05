@@ -40,24 +40,23 @@ class ProjectTreeLayout{
                                             links:treeData.links,
                                             on:{
                                                 onItemClick: async function(id){							
-                                                    try{
-                                                        // показать детализацию !!!
-                                                    } catch(ex){
-                                                        webix.message(ex.message);
+                                                    try {
+                                                        let win = new LogWindow(id);
+                                                        await win.show();
+                                                    } catch (error){
+                                                        messageBox.alertWarning(error.message);
                                                     }
                                                 }
                                             }
                                         };
-                                        webix.ui(newLayout, treeDiagram); 
+                                        webix.ui(newLayout, treeDiagram);
                                     } else{
                                         // очистка данных:
                                         treeDiagram.clearAll();
                                         treeDiagram.getLinks().clearAll();
-                                
                                         // обновление данных:
                                         treeDiagram.parse(treeData.data);
                                         treeDiagram.getLinks().parse(treeData.links);
-
                                         // убрать выбор элемента:
                                         treeDiagram.unselectAll();
                                     }

@@ -12,10 +12,11 @@ class RelayAlgorithmTableLayout{
             scroll:"xy",
             columns:[
                 //{ id:"id",          adjust:true, header:["GUID:", ""] },
-                { id:"title",       width:200, header:["Наименование:", { content:"multiSelectFilter" }] },
-                { id:"ansi",        width:150, header:["ANSI код:", { content:"multiSelectFilter" }] },
-                { id:"logicalNode", width:150, header:["LN:", { content:"multiSelectFilter" }] },
-                { id:"description", adjust:true, header:["Описание:", ""] },
+                { id:"group",       width:200,      header:["Наименование группы:", { content:"multiSelectFilter" }]},
+                { id:"title",       width:200,      header:["Наименование:", { content:"multiSelectFilter" }] },
+                { id:"ansi",        width:150,      header:["ANSI код:", { content:"multiSelectFilter" }] },
+                { id:"logicalNode", width:150,      header:["LN:", { content:"multiSelectFilter" }] },
+                { id:"description", adjust:true,    header:["Описание:", ""] },
                 { fillspace:true }
             ],
             data:[]

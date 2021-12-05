@@ -41,49 +41,6 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
                 .Select(pr => pr.ToShortView());
         }
 
-        public IEnumerable<ProjectHistoryView> GetProjectHistories(Guid guid) 
-        {
-            // требуется оптимизировать логику !!!
-            var result = new List<ProjectHistoryView>();
-            var entity = this.context.ProjectRevisions
-                .Include(pr => pr.ArmEdit)
-                .Include(pr => pr.Authors)
-                .Include(pr => pr.Communication)
-                .Include(pr => pr.ProjectVersion.Platform)
-                .Include(pr => pr.ProjectVersion.AnalogModule)
-                .Include(pr => pr.RelayAlgorithms)
-                .Where(pr => pr.ProjectVersion.Id == guid)
-                .OrderByDescending(pr => pr.Revision)
-                .FirstOrDefault();
-            if (entity is not null) 
-            {
-                result.Add(entity.ToHistoryView());
-                while (entity.ParentRevisionId != Guid.Empty)
-                {
-                    entity = this.context.ProjectRevisions
-                        .Include(pr => pr.ArmEdit)
-                        .Include(pr => pr.Authors)
-                        .Include(pr => pr.Communication)
-                        .Include(pr => pr.ProjectVersion.Platform)
-                        .Include(pr => pr.ProjectVersion.AnalogModule)
-                        .Include(pr => pr.RelayAlgorithms)
-                        .FirstOrDefault(pr => pr.Id == entity.ParentRevisionId);
-                    result.Add(entity.ToHistoryView());
-                }
-            }
-            return result;
-        }
-
-        public IEnumerable<ProjectRevisionTreeView> GetTreeEntities(string projectTitle) 
-        {
-           return this.context.ProjectRevisions
-                .Include(pr => pr.ArmEdit)
-                .Include(pr => pr.ProjectVersion).ThenInclude(pv => pv.AnalogModule)
-                .Include(pr => pr.ProjectVersion).ThenInclude(pv => pv.Platform)
-                .Where(pr => pr.ProjectVersion.Title == projectTitle)
-                .Select(pr => pr.ToTreeView());
-        }
-
         public ProjectRevisionEditable GetEntity(Guid guid)
         {
             var dbProjectRevision = this.GetDbProjectRevision(guid);
