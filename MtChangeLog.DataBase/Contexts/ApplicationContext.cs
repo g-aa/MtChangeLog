@@ -1,4 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
+using Microsoft.Extensions.Logging;
+using MtChangeLog.DataBase.Contexts.EntitiesConfigurations;
 using MtChangeLog.DataBase.Entities;
 using MtChangeLog.DataObjects.Entities.Views;
 using System;
@@ -24,11 +27,15 @@ namespace MtChangeLog.DataBase.Contexts
         internal DbSet<DbRelayAlgorithm> RelayAlgorithms { get; set; }
         #endregion
 
+        #region Views
+
+        #endregion
+
         public ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options)
         {
             //if (this.Platforms.Any()) 
             //{
-            //    this.Database.EnsureDeleted();    
+                this.Database.EnsureDeleted();    
             //}
             if (this.Database.EnsureCreated()) 
             {
@@ -36,8 +43,29 @@ namespace MtChangeLog.DataBase.Contexts
             }
         }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
+            optionsBuilder.LogTo((string s) => 
+            { 
+                Console.WriteLine(s); 
+            }, 
+            LogLevel.Information, 
+            DbContextLoggerOptions.DefaultWithUtcTime);
+        }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {   
+            //modelBuilder.HasDefaultSchema("MT");
+
+            new AnalogModuleConfiguration().Configure(modelBuilder.Entity<DbAnalogModule>());
+            new ArmEditConfiguration().Configure(modelBuilder.Entity<DbArmEdit>());
+            new AuthorConfiguration().Configure(modelBuilder.Entity<DbAuthor>());
+            new CommunicationConfiguration().Configure(modelBuilder.Entity<DbCommunication>());
+            new PlatformConfiguration().Configure(modelBuilder.Entity<DbPlatform>());
+            new RelayAlgorithmConfiguration().Configure(modelBuilder.Entity<DbRelayAlgorithm>());
+            new ProjectVersionConfiguration().Configure(modelBuilder.Entity<DbProjectVersion>());
+            new ProjectRevisionConfiguration().Configure(modelBuilder.Entity<DbProjectRevision>());
+
             base.OnModelCreating(modelBuilder);
         }
     }
