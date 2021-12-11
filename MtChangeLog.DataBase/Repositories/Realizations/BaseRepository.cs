@@ -1,8 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-
 using MtChangeLog.DataBase.Contexts;
 using MtChangeLog.DataBase.Entities;
-
 using System;
 using System.Collections.Generic;
 using System.Linq;

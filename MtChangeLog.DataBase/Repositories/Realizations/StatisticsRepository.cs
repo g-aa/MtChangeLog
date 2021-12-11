@@ -125,7 +125,7 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
                                         Max(Revision) AS Revision,
                                         Reason,
                                         Description
-                              FROM ProjectRevisions 
+                              FROM ProjectRevision
                               GROUP BY ProjectVersionId")
                 .Include(pr => pr.ProjectVersion.AnalogModule)
                 .Include(pr => pr.ProjectVersion.Platform);

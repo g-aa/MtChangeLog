@@ -35,7 +35,7 @@ namespace MtChangeLog.DataBase.Contexts
         {
             //if (this.Platforms.Any()) 
             //{
-                this.Database.EnsureDeleted();    
+            //    this.Database.EnsureDeleted();    
             //}
             if (this.Database.EnsureCreated()) 
             {
