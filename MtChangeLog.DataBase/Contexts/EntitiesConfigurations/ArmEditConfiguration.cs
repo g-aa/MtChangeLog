@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using MtChangeLog.DataBase.Entities;
+using MtChangeLog.DataBase.Entities.Tables;
 using System;
 using System.Collections.Generic;
 using System.Linq;

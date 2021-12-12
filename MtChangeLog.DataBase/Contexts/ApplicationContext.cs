@@ -2,7 +2,8 @@
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Logging;
 using MtChangeLog.DataBase.Contexts.EntitiesConfigurations;
-using MtChangeLog.DataBase.Entities;
+using MtChangeLog.DataBase.Entities.Tables;
+using MtChangeLog.DataBase.Entities.Views;
 using MtChangeLog.DataObjects.Entities.Views;
 using System;
 using System.Collections.Generic;
@@ -28,7 +29,7 @@ namespace MtChangeLog.DataBase.Contexts
         #endregion
 
         #region Views
-
+        internal DbSet<DbLastProjectRevision> LastProjectRevisions { get; set; }
         #endregion
 
         public ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options)
@@ -54,8 +55,11 @@ namespace MtChangeLog.DataBase.Contexts
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {   
-            //modelBuilder.HasDefaultSchema("MT");
+        {
+            if (this.Database.IsNpgsql())
+            {
+                modelBuilder.HasDefaultSchema("MT");
+            }
 
             new AnalogModuleConfiguration().Configure(modelBuilder.Entity<DbAnalogModule>());
             new ArmEditConfiguration().Configure(modelBuilder.Entity<DbArmEdit>());
@@ -65,6 +69,12 @@ namespace MtChangeLog.DataBase.Contexts
             new RelayAlgorithmConfiguration().Configure(modelBuilder.Entity<DbRelayAlgorithm>());
             new ProjectVersionConfiguration().Configure(modelBuilder.Entity<DbProjectVersion>());
             new ProjectRevisionConfiguration().Configure(modelBuilder.Entity<DbProjectRevision>());
+
+            modelBuilder.Entity<DbLastProjectRevision>(e => 
+            {
+                e.HasNoKey();
+                e.ToView("LastProjectsRevision");
+            });
 
             base.OnModelCreating(modelBuilder);
         }

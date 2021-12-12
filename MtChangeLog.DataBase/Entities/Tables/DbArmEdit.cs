@@ -6,7 +6,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 
-namespace MtChangeLog.DataBase.Entities
+namespace MtChangeLog.DataBase.Entities.Tables
 {
     internal class DbArmEdit : IEquatable<DbArmEdit>
     {

@@ -93,42 +93,20 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
 
         public IEnumerable<ProjectHistoryShortView> GetNLastModifiedProjects(ushort count) 
         {
-            var result = this.GetLastProjectsRevisionForHistory()
-                .Include(pr => pr.ProjectVersion.AnalogModule)
-                .Include(pr => pr.ProjectVersion.Platform)
-                .OrderByDescending(pr => pr.Date)
+            var result = this.context.LastProjectRevisions
+                .OrderByDescending(e => e.Date)
                 .Take(count)
-                .Select(pr => pr.ToHistoryShortView());
+                .Select(e => e.ToHistoryShortView());
             return result;
         }
 
         public IEnumerable<ProjectHistoryShortView> GetNMostChangingProjects(ushort count) 
         {
-            var result = this.GetLastProjectsRevisionForHistory()
-                .Include(pr => pr.ProjectVersion.AnalogModule)
-                .Include(pr => pr.ProjectVersion.Platform)
-                .OrderByDescending(pr => pr.Revision).ThenByDescending(pr => pr.Date)
+            var result = this.context.LastProjectRevisions
+                .OrderByDescending(e => e.Revision).ThenByDescending(e => e.Date)
                 .Take(count)
-                .Select(pr => pr.ToHistoryShortView());
+                .Select(e => e.ToHistoryShortView());
             return result;
-        }
-
-        private IQueryable<DbProjectRevision> GetLastProjectsRevisionForHistory() 
-        {
-            return this.context.ProjectRevisions
-                .FromSqlRaw(@"SELECT    Id,
-                                        ProjectVersionId,
-                                        ParentRevisionId,
-                                        ArmEditId,
-                                        CommunicationId,
-                                        Date,
-                                        Max(Revision) AS Revision,
-                                        Reason,
-                                        Description
-                              FROM ProjectRevision
-                              GROUP BY ProjectVersionId")
-                .Include(pr => pr.ProjectVersion.AnalogModule)
-                .Include(pr => pr.ProjectVersion.Platform);
         }
     }
 }

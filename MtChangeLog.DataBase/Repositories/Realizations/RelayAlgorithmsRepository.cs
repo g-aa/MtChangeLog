@@ -1,5 +1,5 @@
 ﻿using MtChangeLog.DataBase.Contexts;
-using MtChangeLog.DataBase.Entities;
+using MtChangeLog.DataBase.Entities.Tables;
 using MtChangeLog.DataBase.Repositories.Interfaces;
 using MtChangeLog.DataObjects.Entities.Editable;
 using MtChangeLog.DataObjects.Entities.Views.Shorts;
