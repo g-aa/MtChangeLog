@@ -1,4 +1,5 @@
-﻿using MtChangeLog.DataBase.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using MtChangeLog.DataBase.Entities.Tables;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -57,6 +58,27 @@ namespace MtChangeLog.DataBase.Contexts
 
             this.AnalogModules.Add(module);
             this.Platforms.Add(platform);
+
+            this.Database.ExecuteSqlRaw(
+                @"CREATE VIEW LastProjectsRevision AS
+                SELECT  pr.Id AS Id,
+		                am.Title AS AnalogModule,
+		                pv.Title AS Title,
+		                pv.Version AS Version,
+                        Max(pr.Revision) AS Revision,
+					    p.Title AS Platform,
+		                arm.Version AS ArmEdit,
+                        pr.Date 
+                FROM ProjectRevision pr
+                JOIN ArmEdit arm
+                ON arm.Id = pr.ArmEditId
+                JOIN ProjectVersion pv
+                ON pv.Id = pr.ProjectVersionId
+                JOIN AnalogModule am
+                ON am.Id = pv.AnalogModuleId
+                JOIN Platform p
+			    ON pv.PlatformId = p.Id
+			    GROUP BY pr.ProjectVersionId");
 
             this.SaveChanges();
         }

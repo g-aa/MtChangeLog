@@ -1,5 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using MtChangeLog.DataBase.Entities;
+using Microsoft.EntityFrameworkCore.Diagnostics;
+using Microsoft.Extensions.Logging;
+using MtChangeLog.DataBase.Contexts.EntitiesConfigurations;
+using MtChangeLog.DataBase.Entities.Tables;
+using MtChangeLog.DataBase.Entities.Views;
 using MtChangeLog.DataObjects.Entities.Views;
 using System;
 using System.Collections.Generic;
@@ -24,6 +28,10 @@ namespace MtChangeLog.DataBase.Contexts
         internal DbSet<DbRelayAlgorithm> RelayAlgorithms { get; set; }
         #endregion
 
+        #region Views
+        internal DbSet<DbLastProjectRevision> LastProjectRevisions { get; set; }
+        #endregion
+
         public ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options)
         {
             //if (this.Platforms.Any()) 
@@ -36,8 +44,38 @@ namespace MtChangeLog.DataBase.Contexts
             }
         }
 
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.LogTo((string s) => 
+            { 
+                Console.WriteLine(s); 
+            }, 
+            LogLevel.Information, 
+            DbContextLoggerOptions.DefaultWithUtcTime);
+        }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            if (this.Database.IsNpgsql())
+            {
+                modelBuilder.HasDefaultSchema("MT");
+            }
+
+            new AnalogModuleConfiguration().Configure(modelBuilder.Entity<DbAnalogModule>());
+            new ArmEditConfiguration().Configure(modelBuilder.Entity<DbArmEdit>());
+            new AuthorConfiguration().Configure(modelBuilder.Entity<DbAuthor>());
+            new CommunicationConfiguration().Configure(modelBuilder.Entity<DbCommunication>());
+            new PlatformConfiguration().Configure(modelBuilder.Entity<DbPlatform>());
+            new RelayAlgorithmConfiguration().Configure(modelBuilder.Entity<DbRelayAlgorithm>());
+            new ProjectVersionConfiguration().Configure(modelBuilder.Entity<DbProjectVersion>());
+            new ProjectRevisionConfiguration().Configure(modelBuilder.Entity<DbProjectRevision>());
+
+            modelBuilder.Entity<DbLastProjectRevision>(e => 
+            {
+                e.HasNoKey();
+                e.ToView("LastProjectsRevision");
+            });
+
             base.OnModelCreating(modelBuilder);
         }
     }

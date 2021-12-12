@@ -1,13 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
-
 using MtChangeLog.DataBase.Contexts;
-using MtChangeLog.DataBase.Entities;
+using MtChangeLog.DataBase.Entities.Tables;
 using MtChangeLog.DataBase.Repositories.Interfaces;
-
 using MtChangeLog.DataObjects.Entities.Editable;
 using MtChangeLog.DataObjects.Entities.Views.Shorts;
 using MtChangeLog.DataObjects.Entities.Views.Tables;
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -51,7 +48,7 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
             {
                 Id = Guid.Empty,
                 DIVG = "ДИВГ.00000-00",
-                Title = "КСЗ",
+                Title = "ПЛК",
                 Status = "Test",
                 Version = "00",
                 Description = "введите описание проекта",

@@ -1,6 +1,5 @@
 ﻿using MtChangeLog.DataObjects.Entities.Editable;
 using MtChangeLog.DataObjects.Entities.Views.Shorts;
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
