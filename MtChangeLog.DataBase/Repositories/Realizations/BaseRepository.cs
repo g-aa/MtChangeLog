@@ -20,10 +20,27 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
 
         internal DbAnalogModule GetDbAnalogModule(Guid guid)
         {
-            var dbAnalogModule = this.context.AnalogModules.Include(module => module.Platforms).FirstOrDefault(am => am.Id == guid);
+            var dbAnalogModule = this.context.AnalogModules
+                .Include(am => am.Projects)
+                .Include(am => am.Platforms).ThenInclude(p => p.Projects)
+                .FirstOrDefault(am => am.Id == guid);
             if (dbAnalogModule is null)
             {
                 throw new ArgumentException($"The analog module under id = {guid} was not found in database");
+            }
+            return dbAnalogModule;
+        }
+
+        internal DbAnalogModule GetDbAnalogModuleOrDefault(Guid guid) 
+        {
+            var dbAnalogModule = this.context.AnalogModules.FirstOrDefault(am => am.Id == guid);
+            if(dbAnalogModule is null) 
+            {
+                dbAnalogModule = this.context.AnalogModules.FirstOrDefault(am => am.Default);
+            }
+            if (dbAnalogModule is null)
+            {
+                throw new ArgumentException($"The analog module under id = {guid} or default was not found in database");
             }
             return dbAnalogModule;
         }
@@ -38,12 +55,40 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
             return dbArmEdit;
         }
 
+        internal DbArmEdit GetDbArmEditOrDefault(Guid guid) 
+        {
+            var dbArmEdit = this.context.ArmEdits.FirstOrDefault(arm => arm.Id == guid);
+            if (dbArmEdit is null) 
+            {
+                dbArmEdit = this.context.ArmEdits.FirstOrDefault(arm => arm.Default);
+            }
+            if (dbArmEdit is null)
+            {
+                throw new ArgumentException($"The ArmEdit under id = {guid} or default was not found in database");
+            }
+            return dbArmEdit;
+        }
+
         internal DbAuthor GetDbAuthor(Guid guid)
         {
             var dbAuthor = this.context.Authors.FirstOrDefault(author => author.Id == guid);
             if (dbAuthor is null)
             {
                 throw new ArgumentException($"The author under id = {guid} was not found in database");
+            }
+            return dbAuthor;
+        }
+
+        internal DbAuthor GetDbAuthorOrDefault(Guid guid) 
+        {
+            var dbAuthor = this.context.Authors.FirstOrDefault(author => author.Id == guid);
+            if(dbAuthor is null) 
+            {
+                dbAuthor = this.context.Authors.FirstOrDefault(author => author.Default);
+            }
+            if (dbAuthor is null)
+            {
+                throw new ArgumentException($"The author under id = {guid} or default was not found in database");
             }
             return dbAuthor;
         }
@@ -57,17 +102,48 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
             }
             return dbCommunication;
         }
-
+        
+        internal DbCommunication GetDbCommunicationOrDefault(Guid guid)
+        {
+            var dbCommunication = this.context.Communications.FirstOrDefault(com => com.Id == guid);
+            if (dbCommunication is null) 
+            {
+                dbCommunication = this.context.Communications.FirstOrDefault(com => com.Default);
+            }
+            if (dbCommunication is null)
+            {
+                throw new ArgumentException($"The communication under id = {guid} or default was not found in database");
+            }
+            return dbCommunication;
+        }
+        
         internal DbPlatform GetDbPlatform(Guid guid)
         {
-            var dbPlatform = this.context.Platforms.Include(platform => platform.AnalogModules).FirstOrDefault(p => p.Id == guid);
+            var dbPlatform = this.context.Platforms
+                .Include(p => p.Projects)
+                .Include(p => p.AnalogModules).ThenInclude(am => am.Projects)
+                .FirstOrDefault(p => p.Id == guid);
             if (dbPlatform is null)
             {
                 throw new ArgumentException($"The platform under id = {guid} was not found in database");
             }
             return dbPlatform;
         }
-
+        
+        internal DbPlatform GetDbPlatformOrDefault(Guid guid)
+        {
+            var dbPlatform = this.context.Platforms.FirstOrDefault(p => p.Id == guid);
+            if (dbPlatform is null) 
+            {
+                dbPlatform = this.context.Platforms.FirstOrDefault(p => p.Default);
+            }
+            if (dbPlatform is null) 
+            {
+                throw new ArgumentException($"The platform under id = {guid}  or default was not found in database");
+            }
+            return dbPlatform;
+        }
+        
         internal DbProjectVersion GetDbProjectVersion(Guid guid)
         {
             var dbProjectVersion = this.context.ProjectVersions
@@ -121,9 +197,13 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
             return dbAlgorithm;
         }
 
-        internal ICollection<DbAnalogModule> GetDbAnalogModules(IEnumerable<Guid> guids) 
+        internal ICollection<DbAnalogModule> GetDbAnalogModulesOrDefault(IEnumerable<Guid> guids) 
         {
             var dbAnalogModules = this.context.AnalogModules.Where(am => guids.Contains(am.Id));
+            if (!dbAnalogModules.Any()) 
+            {
+                dbAnalogModules = this.context.AnalogModules.Where(am => am.Default);
+            }
             if (dbAnalogModules is null) 
             {
                 throw new ArgumentException($"Not found analog modules by transmitted ids");
@@ -131,9 +211,13 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
             return dbAnalogModules.ToHashSet();
         }
 
-        internal ICollection<DbArmEdit> GetDbArmEdits(IEnumerable<Guid> guids)
+        internal ICollection<DbArmEdit> GetDbArmEditsOrDefault(IEnumerable<Guid> guids)
         {
-            var dbArmEdits = this.context.ArmEdits.Where(am => guids.Contains(am.Id));
+            var dbArmEdits = this.context.ArmEdits.Where(arm => guids.Contains(arm.Id));
+            if (!dbArmEdits.Any()) 
+            {
+                dbArmEdits = this.context.ArmEdits.Where(arm => arm.Default);
+            }
             if (dbArmEdits is null)
             {
                 throw new ArgumentException($"Not found ArmEdits by transmitted ids");
@@ -141,9 +225,13 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
             return dbArmEdits.ToHashSet();
         }
 
-        internal ICollection<DbAuthor> GetDbAuthors(IEnumerable<Guid> guids)
+        internal ICollection<DbAuthor> GetDbAuthorsOrDefault(IEnumerable<Guid> guids)
         {
             var dbAuthors = this.context.Authors.Where(a => guids.Contains(a.Id));
+            if (!dbAuthors.Any()) 
+            {
+                dbAuthors = this.context.Authors.Where(a => a.Default);
+            }
             if (dbAuthors is null)
             {
                 throw new ArgumentException($"Not found authors by transmitted ids");
