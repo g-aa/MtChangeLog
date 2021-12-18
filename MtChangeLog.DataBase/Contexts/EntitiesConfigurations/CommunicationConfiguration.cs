@@ -16,8 +16,9 @@ namespace MtChangeLog.DataBase.Contexts.EntitiesConfigurations
             builder.ToTable("Communication");
             builder.HasComment("Таблица с перечнем коммуникационных модулей поддерживаемых в блоках БМРЗ-100/120/150/160");
 
+            builder.HasAlternateKey(e => e.Protocols).HasName("AK_Communication_Protocols");
+
             builder.Property(e => e.Protocols)
-                .HasDefaultValue("ModBus-MT")
                 .HasMaxLength(250)
                 .IsRequired();
 

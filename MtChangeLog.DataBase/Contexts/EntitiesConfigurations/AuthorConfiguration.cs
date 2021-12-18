@@ -16,6 +16,8 @@ namespace MtChangeLog.DataBase.Contexts.EntitiesConfigurations
             builder.ToTable("Author");
             builder.HasComment("Таблица с перечнем авторов проектов и ревизий встраиваемого ПО блоков БМРЗ-100/120/150/160");
 
+            builder.HasAlternateKey(e => new { e.FirstName, e.LastName }).HasName("AK_Author_Name");
+
             builder.Property(e => e.FirstName)
                 .HasMaxLength(32)
                 .IsRequired();

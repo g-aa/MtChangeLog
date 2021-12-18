@@ -15,6 +15,8 @@ namespace MtChangeLog.DataBase.Contexts.EntitiesConfigurations
         {
             builder.ToTable("AnalogModule");
             builder.HasComment("Таблица с перечнем аналоговых модулей используемых в блоках БМРЗ-100/120/150/160");
+            builder.HasAlternateKey(e => e.Title).HasName("AK_AnalogModule_Title");
+            //builder.HasAlternateKey(e => e.DIVG).HasName("AK_AnalogModule_DIVG"); //точных данных по ДИВГ нет
 
             builder.HasMany(am => am.Platforms)
                 .WithMany(p => p.AnalogModules)
@@ -27,7 +29,6 @@ namespace MtChangeLog.DataBase.Contexts.EntitiesConfigurations
                 .IsRequired();
 
             builder.Property(e => e.Title)
-                .HasDefaultValue("БМРЗ-000")
                 .HasMaxLength(8)
                 .IsFixedLength()
                 .IsRequired();

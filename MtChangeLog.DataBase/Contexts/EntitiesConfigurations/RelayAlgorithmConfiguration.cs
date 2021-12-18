@@ -16,6 +16,10 @@ namespace MtChangeLog.DataBase.Contexts.EntitiesConfigurations
             builder.ToTable("RelayAlgorithm");
             builder.HasComment("Таблица с перечнем алгоритмов РЗиА поддерживаемых в блоках БМРЗ-100/120/150/160");
 
+            builder.HasAlternateKey(e => e.Title).HasName("AK_RelayAlgorithm_Title");
+            //builder.HasAlternateKey(e => e.ANSI).HasName("AK_RelayAlgorithm_ANSI"); //точных данных по кодам ANSI нет
+            //builder.HasAlternateKey(e => e.LogicalNode).HasName("AK_RelayAlgorithm_LN"); //точных данных по наименованию LN в 61850 нет
+
             builder.Property(e => e.Group)
                 .HasMaxLength(32)
                 .IsRequired();
