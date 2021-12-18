@@ -20,14 +20,14 @@ namespace MtChangeLog.DataBase.Entities.Tables
         public bool Default { get; set; }
 
         #region Relationships
-        public ICollection<DbProjectVersion> ProjectVersion { get; set; }
+        public ICollection<DbProjectVersion> Projects { get; set; }
         public ICollection<DbPlatform> Platforms { get; set; }
         #endregion
 
         public DbAnalogModule()
         {
             this.Id = Guid.NewGuid();
-            this.ProjectVersion = new HashSet<DbProjectVersion>();
+            this.Projects = new HashSet<DbProjectVersion>();
             this.Platforms = new HashSet<DbPlatform>();
         }
 
@@ -41,6 +41,15 @@ namespace MtChangeLog.DataBase.Entities.Tables
 
         public void Update(AnalogModuleEditable other, ICollection<DbPlatform> platforms) 
         {
+            if (this.Default)
+            {
+                throw new ArgumentException($"Default entity {this} can not by update");
+            }
+            var prohibPlatforms = this.Platforms.Except(platforms).Where(e => e.Projects.Intersect(this.Projects).Any()).Select(e => e.Title);
+            if (prohibPlatforms.Any()) 
+            {
+                throw new ArgumentException($"The platform: {string.Join(", ", prohibPlatforms)} used in projects and cannot be excluded from the analog module");
+            }
             // this.Id = - не обновляется !!!
             this.DIVG = other.DIVG;
             this.Title = other.Title;
