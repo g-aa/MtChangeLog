@@ -76,9 +76,9 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
             {
                 ParentRevision = entity.ParentRevision != null ? this.GetDbProjectRevision(entity.ParentRevision.Id) : null,
                 ProjectVersion = this.GetDbProjectVersion(entity.ProjectVersion.Id),
-                ArmEdit = this.GetDbArmEdit(entity.ArmEdit.Id),
+                ArmEdit = this.GetDbArmEditOrDefault(entity.ArmEdit.Id),
                 Authors = this.GetDbAuthorsOrDefault(entity.Authors.Select(a => a.Id)),
-                Communication = this.GetDbCommunication(entity.Communication.Id),
+                Communication = this.GetDbCommunicationOrDefault(entity.Communication.Id),
                 RelayAlgorithms = this.GetDbRelayAlgorithms(entity.RelayAlgorithms.Select(ra => ra.Id)),
             };
             if (this.context.ProjectRevisions.Include(pr=>pr.ProjectVersion).AsParallel().FirstOrDefault(pr => pr.Equals(dbProjectRevision)) != null) 
@@ -93,8 +93,8 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
         {
             var dbProjectRevision = this.GetDbProjectRevision(entity.Id);
             dbProjectRevision.Update(entity, 
-                this.GetDbArmEdit(entity.ArmEdit.Id), 
-                this.GetDbCommunication(entity.Communication.Id), 
+                this.GetDbArmEditOrDefault(entity.ArmEdit.Id), 
+                this.GetDbCommunicationOrDefault(entity.Communication.Id), 
                 this.GetDbAuthorsOrDefault(entity.Authors.Select(a => a.Id)), 
                 this.GetDbRelayAlgorithms(entity.RelayAlgorithms.Select(ra => ra.Id)));
             this.context.SaveChanges();

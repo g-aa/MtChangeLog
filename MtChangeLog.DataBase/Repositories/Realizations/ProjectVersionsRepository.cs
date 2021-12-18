@@ -66,10 +66,12 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
 
         public void AddEntity(ProjectVersionEditable entity)
         {
+            var dbPlatform = this.GetDbPlatformOrDefault(entity.Platform.Id);
+            var dbAnalogModule = dbPlatform.AnalogModules.First(e => e.Id == entity.AnalogModule.Id);
             var dbProjectVersion = new DbProjectVersion(entity)
             {
-                AnalogModule = this.GetDbAnalogModule(entity.AnalogModule.Id),
-                Platform = this.GetDbPlatform(entity.Platform.Id)
+                Platform = dbPlatform,
+                AnalogModule = dbAnalogModule
             };
             if (this.context.ProjectVersions.FirstOrDefault(p => p.Equals(dbProjectVersion)) != null)
             {
@@ -82,7 +84,9 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
         public void UpdateEntity(ProjectVersionEditable entity)
         {
             var dbProjectVersion = this.GetDbProjectVersion(entity.Id);
-            dbProjectVersion.Update(entity, this.GetDbAnalogModule(entity.AnalogModule.Id), this.GetDbPlatform(entity.Platform.Id));
+            var dbPlatform = this.GetDbPlatformOrDefault(entity.Platform.Id);
+            var dbAnalogModule = dbPlatform.AnalogModules.First(e => e.Id == entity.AnalogModule.Id);
+            dbProjectVersion.Update(entity, dbAnalogModule, dbPlatform);
             this.context.SaveChanges();
         }
 
