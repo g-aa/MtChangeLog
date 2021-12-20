@@ -27,7 +27,6 @@ namespace MtChangeLog.DataBase.Contexts.EntitiesConfigurations
                 .UsingEntity(e => e.ToTable("ProjectRevisionRelayAlgorithm"));
 
             builder.Property(e => e.Date)
-                .HasDefaultValue(DateTime.MinValue)
                 .IsRequired();
 
             builder.Property(e => e.Revision)
