@@ -110,7 +110,7 @@ namespace MtChangeLog.DataBase.Entities.Tables
 
         public override string ToString()
         {
-            return $"DIVG: {this.DIVG}, title: {this.Title}, current: {this.Current}";
+            return $"{this.Title}, номинальный ток: {this.Current}";
         }
     }
 }

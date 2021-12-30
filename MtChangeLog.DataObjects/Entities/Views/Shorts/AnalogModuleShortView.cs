@@ -14,5 +14,10 @@ namespace MtChangeLog.DataObjects.Entities.Views.Shorts
         [Required(ErrorMessage = "Наименование аналогово модуля обязательный параметр для заполнения")]
         [RegularExpression("^БМРЗ-[0-9]{3}$", ErrorMessage = "Наименование аналогово модуля должено иметь следующий вид БМРЗ-xxx, где x - число [0-9]", MatchTimeoutInMilliseconds = 1000)]
         public string Title { get; set; }
+
+        public override string ToString()
+        {
+            return this.Title;
+        }
     }
 }

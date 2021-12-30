@@ -15,8 +15,7 @@ namespace MtChangeLog.DataBase.Contexts.EntitiesConfigurations
         {
             builder.ToTable("ProjectRevision");
             builder.HasComment("Таблица с перечнем ревизий (редакций) проектов блоков БМРЗ-100/120/150/160");
-
-            builder.HasAlternateKey(e => new { e.ProjectVersionId, e.Date, e.Revision }).HasName("AK_ProjectRevision_Revision");
+            builder.HasIndex(e => new { e.ProjectVersionId, e.Date, e.Revision }).HasDatabaseName("IX_ProjectRevision_Revision").IsUnique();
 
             builder.HasMany(pr => pr.Authors)
                 .WithMany(a => a.ProjectRevisions)

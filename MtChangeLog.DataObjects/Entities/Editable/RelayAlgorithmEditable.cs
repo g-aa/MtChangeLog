@@ -35,7 +35,7 @@ namespace MtChangeLog.DataObjects.Entities.Editable
 
         public override string ToString()
         {
-            return $"ANSI: {this.ANSI} {this.Title}";
+            return $"ANSI: {this.ANSI}, {this.Title}";
         }
     }
 }

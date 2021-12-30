@@ -28,8 +28,8 @@ namespace MtChangeLog.DataBase.Entities.Tables
         public Guid ArmEditId { get; set; }
         public DbArmEdit ArmEdit { get; set; }
 
-        public Guid CommunicationId { get; set; }
-        public DbCommunication Communication { get; set; }
+        public Guid CommunicationModuleId { get; set; }
+        public DbCommunicationModule CommunicationModule { get; set; }
 
         public ICollection<DbAuthor> Authors { get; set; }
         public ICollection<DbRelayAlgorithm> RelayAlgorithms { get; set; }
@@ -51,7 +51,7 @@ namespace MtChangeLog.DataBase.Entities.Tables
             this.Description = other.Description;
         }
 
-        public void Update(ProjectRevisionEditable other, DbArmEdit armEdit, DbCommunication communication, ICollection<DbAuthor> authors, ICollection<DbRelayAlgorithm> algorithms) 
+        public void Update(ProjectRevisionEditable other, DbArmEdit armEdit, DbCommunicationModule communication, ICollection<DbAuthor> authors, ICollection<DbRelayAlgorithm> algorithms) 
         {
             // this.Id - не обновляется !!!
             // this.Revision - не обновляется !!!
@@ -59,7 +59,7 @@ namespace MtChangeLog.DataBase.Entities.Tables
             this.Reason = other.Reason;
             this.Description = other.Description;
             this.ArmEdit = armEdit;
-            this.Communication = communication;
+            this.CommunicationModule = communication;
             this.Authors = authors;
             this.RelayAlgorithms = algorithms;
             // this.ProjectVersion - не обновляется !!!
@@ -68,7 +68,7 @@ namespace MtChangeLog.DataBase.Entities.Tables
 
         public ProjectRevisionShortView ToShortView() 
         {
-            return new ProjectRevisionShortView()
+            var result = new ProjectRevisionShortView()
             {
                 Id = this.Id,
                 Module = this.ProjectVersion?.AnalogModule?.Title ?? "БМРЗ-000",
@@ -76,11 +76,12 @@ namespace MtChangeLog.DataBase.Entities.Tables
                 Version = this.ProjectVersion?.Version ?? "v0.00.00.00",
                 Revision = this.Revision
             };
+            return result;
         }
 
         public ProjectRevisionTableView ToTableView() 
         {
-            return new ProjectRevisionTableView()
+            var result = new ProjectRevisionTableView()
             {
                 Id = this.Id,
                 Module = this.ProjectVersion?.AnalogModule?.Title ?? "БМРЗ-000",
@@ -91,11 +92,12 @@ namespace MtChangeLog.DataBase.Entities.Tables
                 ArmEdit = this.ArmEdit?.Version ?? "v0.00.00.00",
                 Reason = this.Reason
             };
+            return result;
         }
 
         public ProjectRevisionEditable ToEditable()
         {
-            return new ProjectRevisionEditable()
+            var result = new ProjectRevisionEditable()
             {
                 Id = this.Id,
                 Date = this.Date,
@@ -105,15 +107,16 @@ namespace MtChangeLog.DataBase.Entities.Tables
                 ParentRevision = this.ParentRevision?.ToShortView(),
                 ProjectVersion = this.ProjectVersion?.ToShortView(),
                 ArmEdit = this.ArmEdit?.ToShortView(),
-                Communication = this.Communication?.ToShortView(),
-                Authors = this.Authors?.Select(author => author.ToShortView()),
+                CommunicationModule = this.CommunicationModule?.ToShortView(),
+                Authors = this.Authors.Select(author => author.ToShortView()),
                 RelayAlgorithms = this.RelayAlgorithms.Select(alg => alg.ToShortView()),
             };
+            return result;
         }
 
         public ProjectRevisionTreeView ToTreeView() 
         {
-            return new ProjectRevisionTreeView()
+            var result = new ProjectRevisionTreeView()
             {
                 Id = this.Id,
                 ParentId = this.ParentRevisionId,
@@ -125,39 +128,43 @@ namespace MtChangeLog.DataBase.Entities.Tables
                 ArmEdit = this.ArmEdit?.Version ?? "v0.00.00.00",
                 Platform = this.ProjectVersion?.Platform?.Title ?? "БМРЗ-000"
             };
+            return result;
         }
 
         public ProjectHistoryView ToHistoryView()
         {
-            return new ProjectHistoryView()
+            var result = new ProjectHistoryView()
             {
                 ArmEdit = this.ArmEdit?.Version ?? "v0.00.00.00",
-                Authors = this.Authors?.Select(a => $"{a?.FirstName} {a?.LastName}"),
-                RelayAlgorithms = this.RelayAlgorithms?.Select(ra => ra.Title),
-                Communication = this.Communication?.Protocols,
+                Authors = this.Authors.Select(a => $"{a?.FirstName} {a?.LastName}"),
+                RelayAlgorithms = this.RelayAlgorithms.Select(ra => ra.Title),
+                Communication = string.Join(", ", this.CommunicationModule?.Protocols.OrderBy(e => e.Title).Select(e => e.Title)),
                 Date = this.Date,
                 Description = this.Description,
                 Platform = this.ProjectVersion?.Platform?.Title ?? "БМРЗ-000",
                 Reason = this.Reason,
                 Title = $"{this.ProjectVersion?.AnalogModule?.Title}-{this.ProjectVersion?.Title}-{this.ProjectVersion?.Version}_{this.Revision}"
             };
+            return result;
         }
 
         public ProjectHistoryShortView ToHistoryShortView() 
         {
-            return new ProjectHistoryShortView()
+            var result = new ProjectHistoryShortView()
             {
                 Id = this.Id,
                 Date = this.Date,
                 Title = $"{this.ProjectVersion?.AnalogModule?.Title}-{this.ProjectVersion?.Title}-{this.ProjectVersion?.Version}_{this.Revision}",
                 Platform = this.ProjectVersion?.Platform?.Title ?? "БМРЗ-000"
             };
+            return result;
         }
 
         public bool Equals([AllowNull] DbProjectRevision other)
         {
             return this.Id == other.Id || this.Date == other.Date && this.Revision == other.Revision && this.Reason == other.Reason && this.ProjectVersion.Equals(other.ProjectVersion);
         }
+        
         public override bool Equals(object obj)
         {
             return this.Equals(obj as DbProjectRevision);
@@ -172,7 +179,7 @@ namespace MtChangeLog.DataBase.Entities.Tables
 
         public override string ToString()
         {
-            return $"revision: {this.Revision}, date: {this.Date}, reason: {this.Reason}";
+            return $"редакция: {this.Revision}, дата изменения: {this.Date}, причина: {this.Reason}";
         }
     }
 }

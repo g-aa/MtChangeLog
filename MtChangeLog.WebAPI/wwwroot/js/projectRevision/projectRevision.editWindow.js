@@ -222,17 +222,17 @@ class ProjectRevisionEditWindow {
                         labelAlign:"right",
                         labelWidth:lWidth,
                         icon:"mdi mdi-ethernet",
-                        value:_editableObj.getCommunication(),
+                        value:_editableObj.getCommunicationModule(),
                         options:{
                             body:{
-                                template:"#protocols#"
+                                template:"#title#"
                             },   
-                            data:_editableObj.getAllCommunications()
+                            data:_editableObj.getAllCommunicationModules()
                         },
                         on:{
                             onChange: async function(newValue, oldValue, config){
                                 try {
-                                    _editableObj.setCommunication(newValue);
+                                    _editableObj.setCommunicationModule(newValue);
                                 } catch (error) {
                                     messageBox.alertWarning(error.message);
                                 }

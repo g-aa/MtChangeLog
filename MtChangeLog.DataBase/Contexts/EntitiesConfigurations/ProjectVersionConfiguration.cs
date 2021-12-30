@@ -15,9 +15,8 @@ namespace MtChangeLog.DataBase.Contexts.EntitiesConfigurations
         {
             builder.ToTable("ProjectVersion");
             builder.HasComment("Таблица с перечнем проектов блоков БМРЗ-100/120/150/160");
-
-            builder.HasAlternateKey(e => e.DIVG).HasName("AK_ProjectVersion_DIVG");
-            builder.HasAlternateKey(e => new { e.AnalogModuleId, e.Title, e.Version }).HasName("AK_ProjectVersion_Version");
+            builder.HasIndex(e => e.DIVG).HasDatabaseName("IX_ProjectVersion_DIVG").IsUnique();
+            builder.HasIndex(e => new { e.AnalogModuleId, e.Title, e.Version }).HasDatabaseName("IX_ProjectVersion_Version").IsUnique();
 
             builder.Property(e => e.DIVG)
                 .HasMaxLength(13)
@@ -33,10 +32,6 @@ namespace MtChangeLog.DataBase.Contexts.EntitiesConfigurations
                 .IsFixedLength()
                 .IsRequired();
 
-            builder.Property(e => e.Status)
-                .HasMaxLength(32)
-                .IsRequired();
-
             builder.Property(e => e.Description)
                 .HasMaxLength(500)
                 .IsRequired();
@@ -45,6 +40,9 @@ namespace MtChangeLog.DataBase.Contexts.EntitiesConfigurations
                 .IsRequired();
 
             builder.Property(e => e.PlatformId)
+                .IsRequired();
+
+            builder.Property(e => e.ProjectStatusId)
                 .IsRequired();
         }
     }

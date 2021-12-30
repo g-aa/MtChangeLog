@@ -1,11 +1,11 @@
 class ProjectVersion{
     constructor(){
         this.editable = {};
-        this.statuses = [];
+        this.projectStatuses = [];
         this.platforms = [];
         this.analogModules = [];
         this.configure = async function(){
-            this.statuses = await repository.getProjectVersionStatuses();
+            this.projectStatuses = await repository.getShortProjectStatuses();
             this.platforms = await repository.getSortPlatforms();
             
             let platform = await repository.getPlatformDetails(this.editable.platform);
@@ -43,44 +43,53 @@ class ProjectVersion{
         };
     }
 
-    async beforeEnding(answer) {
+    async beforeEnding(answer){
 
     }
 
-    getDivg() {
+    getDivg(){
         return this.editable.divg;
     }
 
-    setDivg(newDivg = "") {
+    setDivg(newDivg = ""){
         this.editable.divg = newDivg;
     }
 
-    getTitle() {
+    getTitle(){
         return this.editable.title;
     }
 
-    setTitle(newTitle = "") {
+    setTitle(newTitle = ""){
         this.editable.title = newTitle;
     }
 
-    getVersion() {
+    getVersion(){
         return this.editable.version;
     }
 
-    setVersion(newVersion = "") {
+    setVersion(newVersion = ""){
         this.editable.version = newVersion;
     }
 
-    getStatus() {
-        return this.editable.status;
+    getStatus(){
+        if(this.editable !== undefined && this.editable.projectStatus !== undefined && typeof this.editable.projectStatus.id === 'string'){
+            return this.editable.projectStatus.id;
+        } else{
+            return "";
+        }
     }
 
-    getStatuses() {
-        return this.statuses;
+    getStatuses(){
+        return this.projectStatuses;
     }
 
-    setStatus(newStatus = "") {
-        this.editable.status = newStatus;
+    setStatus(id = ""){
+        if(typeof id !== 'string' || id === ""){
+            throw new Error("что-то пошло не так !!!");
+        }
+        this.editable.projectStatus = this.projectStatuses.find(function(item, index, array){
+            return item.id == id;
+        })
     }
 
     getPlatform(){
@@ -91,7 +100,7 @@ class ProjectVersion{
         }
     }
 
-    getPlatforms() {
+    getPlatforms(){
         return this.platforms;
     }
     

@@ -54,6 +54,12 @@ let getMainLayout = function () {
                                             }
                                             platformLayout.show();
                                             break;
+                                        case "prjStatusTableLayout_id":
+                                            if(statusLayout == undefined || statusLayout == null) {
+                                                var statusLayout = new ProjectStatusTableLayout(dLayout);
+                                            }
+                                            statusLayout.show();
+                                            break;
                                         case "prjVersTableLayout_id":
                                             if(projectLayout == undefined || projectLayout == null) {
                                                 var projectLayout = new ProjectTableLayout(dLayout);
@@ -78,9 +84,15 @@ let getMainLayout = function () {
                                             }
                                             authorLayout.show();
                                             break;
+                                        case "protocolTableLayout_id":
+                                            if(protocolLayout == undefined || protocolLayout == null) {
+                                                var protocolLayout = new ProtocolTableLayout(dLayout);
+                                            }
+                                            protocolLayout.show();
+                                            break;
                                         case "communicationTableLayout_id":
                                             if(comLayout == undefined || comLayout == null) {
-                                                var comLayout = new CommunicationTableLayout(dLayout);
+                                                var comLayout = new CommunicationModuleTableLayout(dLayout);
                                             }
                                             comLayout.show();
                                             break;
@@ -102,12 +114,12 @@ let getMainLayout = function () {
                                             }
                                             historyLayout.show();
                                             break;
-                                            case "startPage_id":
-                                                if(startLayout == undefined || startLayout == null){
-                                                    var startLayout = new StartPageLayout(dLayout);
-                                                }
-                                                startLayout.show();
-                                                break;
+                                        case "startPage_id":
+                                            if(startLayout == undefined || startLayout == null){
+                                                var startLayout = new StartPageLayout(dLayout);
+                                            }
+                                            startLayout.show();
+                                            break;
                                         default:
                                             messageBox.warning("Увы, функционал пока не поддерживается!");
                                     }
@@ -168,9 +180,19 @@ let getMainSidebarMenu = function() {
             value:"таблица платформ БМРЗ",
         },
         {
+            id:"protocolTableLayout_id",
+            icon:"mdi mdi-protocol",
+            value:"таблица инф. протоколов"
+        },
+        {
             id:"communicationTableLayout_id",
             icon:"mdi mdi-ethernet",
             value:"таблица коммуникаций"
+        },
+        {
+            id:"prjStatusTableLayout_id",
+            icon:"mdi mdi-list-status",
+            value:"таблица статусов БФПО",
         },
         {
             id:"prjVersTableLayout_id",

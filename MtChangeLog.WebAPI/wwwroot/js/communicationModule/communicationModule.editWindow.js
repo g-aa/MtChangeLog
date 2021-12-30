@@ -1,9 +1,9 @@
-class CommunicationEditWindow {
-    constructor(editableObj){
+class CommunicationModuleEditWindow {
+    constructor(editable){
         
-        let _editableObj = editableObj;
-        if(_editableObj == undefined || _editableObj == null){
-            throw new Error("не выбран перечень коммуникаций для работы");
+        let _editable = editable;
+        if(_editable == undefined || _editable == null){
+            throw new Error("не выбран коммуникационный модуль для работы");
         }
 
         let _uiWindow;
@@ -37,7 +37,7 @@ class CommunicationEditWindow {
                 elements:[
                     {
                         view:"label",
-                        label:"Коммуникации:"
+                        label:"Коммуникационный модуль:"
                     },
                     {
                         
@@ -65,17 +65,17 @@ class CommunicationEditWindow {
                 rows:[
                     { 
                         view:"text", 
-                        label:"Протоколы:", 
+                        label:"Наименование:", 
                         labelAlign:"right",
                         labelWidth:lWidth,
-                        value:_editableObj.getProtocols(),
+                        value:_editable.getTitle(),
                         attributes:{
                             maxlength:255
                         }, 
                         on:{
                             onChange: async function(newValue, oldValue, config){
                                 try{
-                                    _editableObj.setProtocols(newValue);    
+                                    _editable.setTitle(newValue);    
                                 } catch (error){
                                     messageBox.warning(error.message);
                                 }
@@ -87,21 +87,38 @@ class CommunicationEditWindow {
                         label:"Описание:", 
                         labelAlign:"right",
                         labelWidth:lWidth,
-                        height:150,
-                        value:_editableObj.getDescription(),
+                        height:120,
+                        value:_editable.getDescription(),
                         attributes:{
-                            maxlength:255
+                            maxlength:500
                         }, 
                         on:{
                             onChange: async function(newValue, oldValue, config){
                                 try{
-                                    _editableObj.setDescription(newValue);
+                                    _editable.setDescription(newValue);
                                 } catch (error){
                                     messageBox.warning(error.message);
                                 }
                             }
                         }
                     },
+                    
+                    {
+                        view:"multicombo", 
+                        id:"moduleProtocols_id",
+                        label:"Протоколы:",
+                        labelAlign:"right",
+                        labelWidth:lWidth,  
+                        value:_editable.getProtocols(),
+                        button:true,
+                        suggest:{
+                            body:{
+                                data:_editable.getAllProtocols(),
+                                template:webix.template("#title#")
+                            }
+                        }
+                    },
+
                     {
                         view:"button",
                         id:"submitButton_id",
@@ -111,8 +128,12 @@ class CommunicationEditWindow {
                         align:"right",
                         click: async function(){
                             try{ 
+                                // обновить перечень платформ у модуля:
+                                let selected = $$("moduleProtocols_id").getValue().split(",");
+                                _editable.setProtocols(selected);
+                                
                                 // отправить:
-                                await _editableObj.submit();
+                                await _editable.submit();
 
                                 // автоматически закрывать при удачном стечении обстоятельств:
                                 _uiWindow.close();

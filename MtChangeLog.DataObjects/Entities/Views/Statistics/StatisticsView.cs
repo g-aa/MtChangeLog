@@ -6,14 +6,12 @@ using System.Threading.Tasks;
 
 namespace MtChangeLog.DataObjects.Entities.Views.Statistics
 {
-    public class StatisticsShortView
+    public class StatisticsView
     {
         public DateTime Date { get; set; }
         public string ArmEdit { get; set; }
         public int ProjectCount { get; set; }
-        public int ActualProjectCount { get; set; }
-        public int TestProjectCount { get; set; }
-        public int DeprecatedProjectCount { get; set; }
+        public Dictionary<string, int> ProjectDistributions { get; set; }
         public IEnumerable<ProjectHistoryShortView> LastModifiedProjects { get; set; }
         public IEnumerable<ProjectHistoryShortView> MostChangingProjects { get; set; }
     }

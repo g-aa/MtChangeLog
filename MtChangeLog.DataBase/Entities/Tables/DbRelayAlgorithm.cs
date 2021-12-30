@@ -86,7 +86,7 @@ namespace MtChangeLog.DataBase.Entities.Tables
 
         public override string ToString()
         {
-            return $"title: {this.Title}, ANSI: {this.ANSI}, LN: {this.LogicalNode}";
+            return $"ANSI: {this.ANSI}, {this.Title}";
         }
     }
 }

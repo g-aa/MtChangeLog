@@ -99,7 +99,7 @@ namespace MtChangeLog.DataBase.Entities.Tables
 
         public override string ToString()
         {
-            return $"title: {this.Title}";
+            return this.Title;
         }
     }
 }

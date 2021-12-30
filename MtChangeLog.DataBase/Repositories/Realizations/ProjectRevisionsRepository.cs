@@ -20,21 +20,24 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
 
         }
 
+        public IEnumerable<ProjectRevisionShortView> GetShortEntities()
+        {
+            return this.context.ProjectRevisions
+                .Include(pr => pr.ProjectVersion.AnalogModule)
+                .OrderBy(pr => pr.ProjectVersion.AnalogModule.Title)
+                .ThenBy(pr => pr.ProjectVersion.Title)
+                .ThenBy(pr => pr.ProjectVersion.Version)
+                .ThenBy(pr => pr.Revision)
+                .Select(pr => pr.ToShortView());
+        }
+
         public IEnumerable<ProjectRevisionTableView> GetTableEntities()
         {
             return this.context.ProjectRevisions
                 .Include(pr => pr.ArmEdit)
                 .Include(pr => pr.ProjectVersion).ThenInclude(pv => pv.AnalogModule)
-                .OrderBy(pr => pr.Date).ThenBy(pr => pr.ArmEdit.Version)
+                .OrderByDescending(pr => pr.Date).ThenByDescending(pr => pr.ArmEdit.Version)
                 .Select(pr => pr.ToTableView());
-        }
-
-        public IEnumerable<ProjectRevisionShortView> GetShortEntities()
-        {
-            return this.context.ProjectRevisions
-                .Include(pr => pr.ProjectVersion)
-                .ThenInclude(pr => pr.AnalogModule)
-                .Select(pr => pr.ToShortView());
         }
 
         public ProjectRevisionEditable GetEntity(Guid guid)
@@ -48,7 +51,7 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
             var project = this.GetDbProjectVersion(guid);
             var lastRevision = project.ProjectRevisions?.OrderBy(pr => pr.Revision).LastOrDefault();
             var armEdit = this.context.ArmEdits.OrderBy(arm => arm.Version).LastOrDefault();
-            var communications = lastRevision is null ? this.context.Communications.OrderBy(c => c.Protocols).LastOrDefault() : lastRevision.Communication;
+            var communications = lastRevision is null ? this.context.CommunicationModules.OrderBy(c => c.Protocols).LastOrDefault() : lastRevision.CommunicationModule;
             var revision = lastRevision is null ? "00" : (int.Parse(lastRevision.Revision) + 1).ToString("D2");
             var algorithms = lastRevision?.RelayAlgorithms.Select(ra => ra.ToShortView());
             var authors = lastRevision?.Authors.Select(a => a.ToShortView());
@@ -60,7 +63,7 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
                 ProjectVersion = project.ToShortView(),
                 Revision = revision,
                 ArmEdit = armEdit.ToShortView(),
-                Communication = communications.ToShortView(),
+                CommunicationModule = communications.ToShortView(),
                 RelayAlgorithms = algorithms,
                 Date = DateTime.Now,
                 Authors = authors,
@@ -78,7 +81,7 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
                 ProjectVersion = this.GetDbProjectVersion(entity.ProjectVersion.Id),
                 ArmEdit = this.GetDbArmEditOrDefault(entity.ArmEdit.Id),
                 Authors = this.GetDbAuthorsOrDefault(entity.Authors.Select(a => a.Id)),
-                Communication = this.GetDbCommunicationOrDefault(entity.Communication.Id),
+                CommunicationModule = this.GetDbCommunicationOrDefault(entity.CommunicationModule.Id),
                 RelayAlgorithms = this.GetDbRelayAlgorithms(entity.RelayAlgorithms.Select(ra => ra.Id)),
             };
             if (this.context.ProjectRevisions.Include(pr=>pr.ProjectVersion).AsParallel().FirstOrDefault(pr => pr.Equals(dbProjectRevision)) != null) 
@@ -94,7 +97,7 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
             var dbProjectRevision = this.GetDbProjectRevision(entity.Id);
             dbProjectRevision.Update(entity, 
                 this.GetDbArmEditOrDefault(entity.ArmEdit.Id), 
-                this.GetDbCommunicationOrDefault(entity.Communication.Id), 
+                this.GetDbCommunicationOrDefault(entity.CommunicationModule.Id), 
                 this.GetDbAuthorsOrDefault(entity.Authors.Select(a => a.Id)), 
                 this.GetDbRelayAlgorithms(entity.RelayAlgorithms.Select(ra => ra.Id)));
             this.context.SaveChanges();
@@ -102,7 +105,7 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
 
         public void DeleteEntity(Guid guid)
         {
-            throw new NotImplementedException("функционал не поддерживается");
+            throw new NotImplementedException("функционал по удалению редакций проектов (БФПО) на данный момент не доступен");
         }
     }
 }

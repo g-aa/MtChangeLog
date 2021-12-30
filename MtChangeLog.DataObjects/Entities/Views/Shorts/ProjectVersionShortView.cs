@@ -21,5 +21,10 @@ namespace MtChangeLog.DataObjects.Entities.Views.Shorts
         [Required(ErrorMessage = "Версия БФПО обязательный параметр для заполнения")]
         [RegularExpression("^[0-9]{2}$", ErrorMessage = "Версия БФПО, может принимать значение в интервала 00-99", MatchTimeoutInMilliseconds = 1000)]
         public string Version { get; set; }
+
+        public override string ToString()
+        {
+            return $"{this.Module}-{this.Title}-{this.Version}";
+        }
     }
 }

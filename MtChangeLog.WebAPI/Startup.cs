@@ -7,7 +7,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
-
 using MtChangeLog.DataBase.Contexts;
 using MtChangeLog.DataBase.Repositories.Interfaces;
 using MtChangeLog.DataBase.Repositories.Realizations;
@@ -52,10 +51,12 @@ namespace MtChangeLog.WebAPI
             services.AddTransient<IAnalogModulesRepository, AnalogModulesRepository>();
             services.AddTransient<IArmEditsRepository, ArmEditsRepositor>();
             services.AddTransient<IAuthorsRepository, AuthorsRepository>();
-            services.AddTransient<ICommunicationsRepository, CommunicationsRepository>();
+            services.AddTransient<ICommunicationModulesRepository, CommunicationModulesRepository>();
             services.AddTransient<IPlatformsRepository, PlatformsRepository>();
             services.AddTransient<IProjectRevisionsRepository, ProjectRevisionsRepository>();
+            services.AddTransient<IProjectStatusRepository, ProjectStatusRepository>();
             services.AddTransient<IProjectVersionsRepository, ProjectVersionsRepository>();
+            services.AddTransient<IProtocolsRepository, ProtocolsRepository>();
             services.AddTransient<IRelayAlgorithmsRepository, RelayAlgorithmsRepository>();
             services.AddTransient<IStatisticsRepository, StatisticsRepository>();
 

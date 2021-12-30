@@ -83,7 +83,7 @@ namespace MtChangeLog.DataBase.Entities.Tables
 
         public override string ToString()
         {
-            return $"DIVG: {this.DIVG}, version: {this.Version}";
+            return $"ArmEdit: {this.Version}";
         }
     }
 }

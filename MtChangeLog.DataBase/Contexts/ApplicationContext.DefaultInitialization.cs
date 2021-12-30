@@ -31,13 +31,23 @@ namespace MtChangeLog.DataBase.Contexts
             };
             this.Authors.Add(author);
 
-            var com = new DbCommunication()
+            var protocol = new DbProtocol() 
             {
-                Protocols = "Modbus-Mt",
+                Title = "ModBus-MT",
+                Description = "протокол по умолчанию применяемый в блоках БМРЗ",
+                Default = true,
+            };
+            var com = new DbCommunicationModule()
+            {
+                Title = "АК",
                 Description = "тип коммуникационного модуля по умолчанию",
                 Default = true
             };
-            this.Communications.Add(com);
+            protocol.CommunicationModules.Add(com);
+            com.Protocols.Add(protocol);
+
+            this.Protocols.Add(protocol);
+            this.CommunicationModules.Add(com);
 
             var module = new DbAnalogModule()
             {
@@ -58,6 +68,14 @@ namespace MtChangeLog.DataBase.Contexts
 
             this.AnalogModules.Add(module);
             this.Platforms.Add(platform);
+
+            var status = new DbProjectStatus() 
+            {
+                Title = "внутренне",
+                Description = "проект для внутреннего использования в НТЦ Механотроника",
+                Default = true
+            };
+            this.ProjectStatuses.Add(status);
 
             this.Database.ExecuteSqlRaw(
                 @"CREATE VIEW LastProjectsRevision AS

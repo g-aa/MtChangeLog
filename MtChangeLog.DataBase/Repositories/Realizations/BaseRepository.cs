@@ -93,9 +93,37 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
             return dbAuthor;
         }
 
-        internal DbCommunication GetDbCommunication(Guid guid) 
+        internal DbProtocol GetDbProtocol(Guid guid) 
         {
-            var dbCommunication = this.context.Communications.FirstOrDefault(com => com.Id == guid);
+            var dbProtocol = this.context.Protocols
+                .Include(p => p.CommunicationModules)
+                .FirstOrDefault(p => p.Id == guid);
+            if (dbProtocol is null)
+            {
+                throw new ArgumentException($"The information protocol under id = {guid} was not found in database");
+            }
+            return dbProtocol;
+        }
+
+        internal DbProtocol GetDbProtocolOrDefault(Guid guid) 
+        {
+            var dbProtocol = this.context.Protocols.FirstOrDefault(p => p.Id == guid);
+            if (dbProtocol is null) 
+            {
+                dbProtocol = this.context.Protocols.FirstOrDefault(p => p.Default);
+            }
+            if (dbProtocol is null) 
+            {
+                throw new ArgumentException($"The information protocol under id = {guid} or default was not found in database");
+            }
+            return dbProtocol;
+        }
+
+        internal DbCommunicationModule GetDbCommunication(Guid guid) 
+        {
+            var dbCommunication = this.context.CommunicationModules
+                .Include(com => com.Protocols)
+                .FirstOrDefault(com => com.Id == guid);
             if (dbCommunication is null) 
             {
                 throw new ArgumentException($"The communication under id = {guid} was not found in database");
@@ -103,12 +131,12 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
             return dbCommunication;
         }
         
-        internal DbCommunication GetDbCommunicationOrDefault(Guid guid)
+        internal DbCommunicationModule GetDbCommunicationOrDefault(Guid guid)
         {
-            var dbCommunication = this.context.Communications.FirstOrDefault(com => com.Id == guid);
+            var dbCommunication = this.context.CommunicationModules.FirstOrDefault(com => com.Id == guid);
             if (dbCommunication is null) 
             {
-                dbCommunication = this.context.Communications.FirstOrDefault(com => com.Default);
+                dbCommunication = this.context.CommunicationModules.FirstOrDefault(com => com.Default);
             }
             if (dbCommunication is null)
             {
@@ -132,10 +160,11 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
         
         internal DbPlatform GetDbPlatformOrDefault(Guid guid)
         {
-            var dbPlatform = this.context.Platforms.FirstOrDefault(p => p.Id == guid);
+            var query = this.context.Platforms.Include(p => p.AnalogModules);
+            var dbPlatform = query.FirstOrDefault(p => p.Id == guid);
             if (dbPlatform is null) 
             {
-                dbPlatform = this.context.Platforms.FirstOrDefault(p => p.Default);
+                dbPlatform = query.FirstOrDefault(p => p.Default);
             }
             if (dbPlatform is null) 
             {
@@ -144,13 +173,38 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
             return dbPlatform;
         }
         
+        internal DbProjectStatus GetDbProjectStatus(Guid guid) 
+        {
+            var dbProjectStatus = this.context.ProjectStatuses.FirstOrDefault(ps => ps.Id.Equals(guid));
+            if (dbProjectStatus is null) 
+            {
+                throw new ArgumentException($"The project status under id = {guid} was not found in the database");
+            }
+            return dbProjectStatus;
+        }
+
+        internal DbProjectStatus GetDbProjectStatusOrDefault(Guid guid) 
+        {
+            var dbProjectStatus = this.context.ProjectStatuses.FirstOrDefault(ps => ps.Id.Equals(guid));
+            if (dbProjectStatus is null)
+            {
+                dbProjectStatus = this.context.ProjectStatuses.FirstOrDefault(ps => ps.Default);
+            }
+            if (dbProjectStatus is null) 
+            {
+                throw new ArgumentException($"The project status under id = {guid} or default was not found in the database");
+            }
+            return dbProjectStatus;
+        }
+
         internal DbProjectVersion GetDbProjectVersion(Guid guid)
         {
             var dbProjectVersion = this.context.ProjectVersions
                 .Include(pv => pv.AnalogModule)
                 .Include(pv => pv.Platform)
+                .Include(pv => pv.ProjectStatus)
                 .Include(pv => pv.ProjectRevisions).ThenInclude(pr => pr.ArmEdit)
-                .Include(pv => pv.ProjectRevisions).ThenInclude(pr => pr.Communication)
+                .Include(pv => pv.ProjectRevisions).ThenInclude(pr => pr.CommunicationModule)
                 .Include(pv => pv.ProjectRevisions).ThenInclude(pr => pr.Authors)
                 .Include(pv => pv.ProjectRevisions).ThenInclude(pr => pr.RelayAlgorithms)
                 .FirstOrDefault(pv => pv.Id == guid);
@@ -165,7 +219,7 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
         {
             // требует оптимизации в дальнейшем
             var dbProjectRevision = this.context.ProjectRevisions
-                .Include(pr => pr.Communication)
+                .Include(pr => pr.CommunicationModule.Protocols)
                 .Include(pr => pr.ArmEdit)
                 .Include(pr => pr.Authors)
                 .Include(pr => pr.RelayAlgorithms)
@@ -271,6 +325,34 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
                 throw new ArgumentException($"Not found project revisions by transmitted ids");
             }
             return dbProjectRevisions.ToHashSet();
+        }
+
+        internal ICollection<DbProtocol> GetDbProtocolsOrDefault(IEnumerable<Guid> guids) 
+        {
+            var dbProtocols = this.context.Protocols.Where(p => guids.Contains(p.Id));
+            if (!dbProtocols.Any()) 
+            {
+                dbProtocols = this.context.Protocols.Where(p => p.Default);
+            }
+            if (!dbProtocols.Any()) 
+            {
+                throw new ArgumentException($"Not found informations protocols by transmitted ids or default");
+            }
+            return dbProtocols.ToHashSet();
+        }
+
+        internal ICollection<DbCommunicationModule> GetDbCommunicationModulesOrDefault(IEnumerable<Guid> guids) 
+        {
+            var dbCommunications = this.context.CommunicationModules.Where(c => guids.Contains(c.Id));
+            if (!dbCommunications.Any()) 
+            {
+                dbCommunications = this.context.CommunicationModules.Where(c => c.Default);
+            }
+            if (!dbCommunications.Any()) 
+            {
+                throw new ArgumentException($"Not found communication modules by transmitted ids or default");
+            }
+            return dbCommunications.ToHashSet();
         }
 
         internal ICollection<DbRelayAlgorithm> GetDbRelayAlgorithms(IEnumerable<Guid> guids) 

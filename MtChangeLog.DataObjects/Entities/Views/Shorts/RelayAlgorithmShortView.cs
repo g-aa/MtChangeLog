@@ -14,5 +14,10 @@ namespace MtChangeLog.DataObjects.Entities.Views.Shorts
         [Required(ErrorMessage = "Наименование алгоритма параметр обязательный для заполнения")]
         [StringLength(32, ErrorMessage = "Наименование алгоритма должно содержать не больше 32 символо")]
         public string Title { get; set; }
+
+        public override string ToString()
+        {
+            return this.Title;
+        }
     }
 }

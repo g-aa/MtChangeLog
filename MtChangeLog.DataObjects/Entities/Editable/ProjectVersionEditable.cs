@@ -25,13 +25,12 @@ namespace MtChangeLog.DataObjects.Entities.Editable
         public string Version { get; set; }
         
         [Required(AllowEmptyStrings = true)]
-        [StringLength(32, ErrorMessage = "Статус проекта должен содержать не больше 32 символов")]
-        public string Status { get; set; }
-        
-        [Required(AllowEmptyStrings = true)]
         [StringLength(500, ErrorMessage = "Описание проекта должно содержать не больше 500 символов")]
         public string Description { get; set; }
-        
+
+        [Required(ErrorMessage = "Статус проекта параметр обязательный для заполнения")]
+        public ProjectStatusShortView ProjectStatus { get; set; }
+
         [Required(ErrorMessage = "Аналоговый модуль параметр обязательный для заполнения")]
         public AnalogModuleShortView AnalogModule { get; set; }
         
@@ -40,7 +39,7 @@ namespace MtChangeLog.DataObjects.Entities.Editable
 
         public override string ToString()
         {
-            return $"{this.DIVG} {this.AnalogModule.Title}_{this.Title}_{this.Version}";
+            return $"{this.AnalogModule.Title}_{this.Title}_{this.Version}";
         }
     }
 }

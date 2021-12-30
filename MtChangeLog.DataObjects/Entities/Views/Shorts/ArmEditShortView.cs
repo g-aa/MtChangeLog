@@ -14,5 +14,10 @@ namespace MtChangeLog.DataObjects.Entities.Views.Shorts
         [Required(ErrorMessage = "Версия ArmEdit параметр обязательный для заполнения")]
         [RegularExpression("^v[0-9]{1}.[0-9]{2}.[0-9]{2}.[0-9]{2}$", ErrorMessage = "Версия ArmEdit должна принимать следующий вид vx.xx.xx.xx, где - x число [0-9]", MatchTimeoutInMilliseconds = 1000)]
         public string Version { get; set; }
+
+        public override string ToString()
+        {
+            return $"ArmEdit: {this.Version}";
+        }
     }
 }

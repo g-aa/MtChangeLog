@@ -8,10 +8,10 @@ using System.Threading.Tasks;
 
 namespace MtChangeLog.DataBase.Repositories.Interfaces
 {
-    public interface ICommunicationsRepository : ICRUD<CommunicationEditable>
+    public interface IProtocolsRepository : ICRUD<ProtocolEditable>
     {
-        IEnumerable<CommunicationShortView> GetShortEntities();
-        IEnumerable<CommunicationEditable> GetTableEntities();
-        CommunicationEditable GetTemplate();
+        IEnumerable<ProtocolShortView> GetShortEntities();
+        IEnumerable<ProtocolEditable> GetTableEntities();
+        ProtocolEditable GetTemplate();
     }
 }

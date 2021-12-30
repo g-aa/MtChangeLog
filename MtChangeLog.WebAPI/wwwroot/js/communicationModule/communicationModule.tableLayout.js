@@ -1,4 +1,4 @@
-class CommunicationTableLayout{
+class CommunicationModuleTableLayout{
     constructor(parentLayout){
         this.parentLayout = parentLayout;
         
@@ -12,7 +12,8 @@ class CommunicationTableLayout{
             scroll:"xy",
             columns:[
                 //{ id:"id",          adjust:true,    header:["GUID:", ""] },
-                { id:"protocols",   width:850,      header:["Протоколы:", { content:"multiSelectFilter" }] },
+                { id:"title",       width:150,      header:["Наименование:", { content:"multiSelectFilter" }] },
+                { id:"protocols",   width:850,       header:["Перечень протоколов:", ""] },
                 { id:"description", adjust:true,    header:["Описание:", ""] },
                 { fillspace:true }
             ],
@@ -21,7 +22,7 @@ class CommunicationTableLayout{
 
         // обновление таблицы:
         let refresh = async function(){
-            let tableData = await repository.getTableCommunications();
+            let tableData = await repository.getTableCommunicationModules();
             let tableLaypu = $$(tableLayputId);
             tableLaypu.parse(tableData);
             tableLaypu.refresh();
@@ -38,13 +39,13 @@ class CommunicationTableLayout{
                     width:200,
                     click: async function (){
                         try{
-                            let communication = new Communication();
+                            let communication = new CommunicationModule();
                             await communication.defaultInitialize();
                             communication.beforeEnding = async function(answer){
                                 await refresh();
                                 messageBox.information(answer);
                             };
-                            let win = new CommunicationEditWindow(communication);
+                            let win = new CommunicationModuleEditWindow(communication);
                             win.show();
                         } catch (error){
                             messageBox.error(error.message);
@@ -60,13 +61,13 @@ class CommunicationTableLayout{
                         try{
                             let selected = $$(tableLayputId).getSelectedItem();
                             if(selected != undefined){
-                                let communication = new Communication();
+                                let communication = new CommunicationModule();
                                 await communication.initialize(selected);
                                 communication.beforeEnding = async function(answer){
                                     await refresh();
                                     messageBox.information(answer);
                                 };
-                                let win = new CommunicationEditWindow(communication);
+                                let win = new CommunicationModuleEditWindow(communication);
                                 win.show();
                             } else{
                                 messageBox.information("выберете перечень протоколов для редактирования");
@@ -87,7 +88,7 @@ class CommunicationTableLayout{
                             let selected = $$(tableLayputId).getSelectedItem();
                             if(selected != undefined){
                                 // удалить обьект на сервере:
-                                let answer = await repository.deleteCommunication(selected);
+                                let answer = await repository.deleteCommunicationModule(selected);
                     
                                 // удалить обьект в UI части:
                                 $$(tableLayputId).remove(selected.id);
