@@ -15,9 +15,9 @@ namespace MtChangeLog.DataBase.Contexts.EntitiesConfigurations
         {
             builder.ToTable("Platform");
             builder.HasComment("Таблица с перечнем програмных платформ применяемых в блоках БМРЗ-100/120/150/160");
+            builder.HasIndex(e => e.Title).HasDatabaseName("IX_Platform_Title").IsUnique();
 
             builder.Property(e => e.Title)
-                .HasDefaultValue("БМРЗ-000")
                 .HasMaxLength(8)
                 .IsFixedLength()
                 .IsRequired();

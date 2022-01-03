@@ -1,53 +1,54 @@
-class Communication{
+class ProjectStatus{
     constructor(){
         this.editable = {};
     }
 
-    // получить автора по умолчанию:
+    // получить статус проекта по умолчанию:
     async defaultInitialize(){
         // получить шаблон:
-        this.editable = await repository.getCommunicationTemplate();
-
+        this.editable = await repository.getProjectStatusTemplate();
+        
         // отправить данные:
         this.submit = async function(){
-            let answer = await repository.createCommunication(this.editable);
+            let answer = await repository.createProjectStatus(this.editable);
             if(typeof(this.beforeEnding) === "function"){
                 await this.beforeEnding(answer);
             }
         };
     }
 
-    // получить конкретного автора из bd:
+    // получить конкретный статус проекта из db:
     async initialize(entityInfo){
-        this.editable = await repository.getCommunicationDetails(entityInfo);
-
+        // получить из БД:
+        this.editable = await repository.getProjectStatusDetails(entityInfo);
+        
         // отправить данные:
         this.submit = async function(){
-            let answer = await repository.updateCommunication(this.editable);
+            let answer = await repository.updateProjectStatus(this.editable);
             if(typeof(this.beforeEnding) === "function"){
                 await this.beforeEnding(answer);
             }
         };
     }
-
+    
     //
     async beforeEnding(answer){
 
     }
 
-    getProtocols(){
-        return this.editable.protocols;
+    getTitle(){
+        return this.editable.title;
     }
 
-    setProtocols(newProtocols = ""){
-        this.editable.protocols = newProtocols;
+    setTitle(newTitle = ""){
+        this.editable.title = newTitle;
     }
 
     getDescription(){
         return this.editable.description;
     }
 
-    setDescription(newDescription = ""){
-        this.editable.description = newDescription;
+    setDescription(newDesc = ""){
+        this.editable.description = newDesc;
     }
 }

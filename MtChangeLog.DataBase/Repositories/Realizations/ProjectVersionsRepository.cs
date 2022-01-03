@@ -35,6 +35,7 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
             var result = this.context.ProjectVersions
                 .Include(pv => pv.AnalogModule)
                 .Include(pv => pv.Platform)
+                .Include(pv => pv.ProjectStatus)
                 .OrderBy(pv => pv.AnalogModule.Title).ThenBy(pv => pv.Title).ThenBy(pv => pv.Version)
                 .Select(pv => pv.ToTableView());
             return result;
@@ -42,16 +43,17 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
 
         public ProjectVersionEditable GetTemplate() 
         {
-            var platform = this.context.Platforms.First(e => e.Default)?.ToShortView();
-            var module = this.context.AnalogModules.First(e => e.Default)?.ToShortView();
+            var status = this.context.ProjectStatuses.First(e => e.Default).ToShortView();
+            var platform = this.context.Platforms.First(e => e.Default).ToShortView();
+            var module = this.context.AnalogModules.First(e => e.Default).ToShortView();
             var template = new ProjectVersionEditable()
             {
                 Id = Guid.Empty,
                 DIVG = "ДИВГ.00000-00",
                 Title = "ПЛК",
-                Status = "Test",
                 Version = "00",
                 Description = "введите описание проекта",
+                ProjectStatus = status,
                 Platform = platform,
                 AnalogModule = module
             };
@@ -66,10 +68,14 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
 
         public void AddEntity(ProjectVersionEditable entity)
         {
+            var dbStatus = this.GetDbProjectStatusOrDefault(entity.ProjectStatus.Id);
+            var dbPlatform = this.GetDbPlatformOrDefault(entity.Platform.Id);
+            var dbAnalogModule = dbPlatform.AnalogModules.First(e => e.Id == entity.AnalogModule.Id);
             var dbProjectVersion = new DbProjectVersion(entity)
             {
-                AnalogModule = this.GetDbAnalogModule(entity.AnalogModule.Id),
-                Platform = this.GetDbPlatform(entity.Platform.Id)
+                ProjectStatus = dbStatus,
+                Platform = dbPlatform,
+                AnalogModule = dbAnalogModule
             };
             if (this.context.ProjectVersions.FirstOrDefault(p => p.Equals(dbProjectVersion)) != null)
             {
@@ -82,16 +88,16 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
         public void UpdateEntity(ProjectVersionEditable entity)
         {
             var dbProjectVersion = this.GetDbProjectVersion(entity.Id);
-            dbProjectVersion.Update(entity, this.GetDbAnalogModule(entity.AnalogModule.Id), this.GetDbPlatform(entity.Platform.Id));
+            var dbStatus = this.GetDbProjectStatusOrDefault(entity.ProjectStatus.Id);
+            var dbPlatform = this.GetDbPlatformOrDefault(entity.Platform.Id);
+            var dbAnalogModule = dbPlatform.AnalogModules.First(e => e.Id == entity.AnalogModule.Id);
+            dbProjectVersion.Update(entity, dbAnalogModule, dbPlatform, dbStatus);
             this.context.SaveChanges();
         }
 
         public void DeleteEntity(Guid guid)
         {
-            throw new NotImplementedException("функционал не поддерживается");
-            //DbProjectVersion dbProjectVersion = this.GetDbProjectVersion(guid);
-            //this.context.ProjectVersions.Remove(dbProjectVersion);
-            //this.context.SaveChanges();
+            throw new NotImplementedException("функционал по удалению проектов на данный момент не доступен");
         }
     }
 }

@@ -9,7 +9,7 @@ namespace MtChangeLog.DataBase.Repositories.Interfaces
 {
     public interface IStatisticsRepository
     {
-        StatisticsShortView GetShortStatistics();
+        StatisticsView GetShortStatistics();
         /// <summary>
         /// получить перечень наименований проектов
         /// </summary>

@@ -3,7 +3,6 @@ using MtChangeLog.DataBase.Contexts;
 using MtChangeLog.DataBase.Entities;
 using MtChangeLog.DataBase.Repositories.Interfaces;
 using MtChangeLog.DataObjects.Entities.Views.Statistics;
-using MtChangeLog.DataObjects.Enumerations;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,21 +18,29 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
             
         }
 
-        public StatisticsShortView GetShortStatistics() 
+        public StatisticsView GetShortStatistics() 
         {
             ushort count = 10;
-            var result = new StatisticsShortView()
+            var distributions = this.context.ProjectStatuses
+                .Include(e => e.ProjectVersions)
+                .OrderByDescending(e => e.ProjectVersions.Count)
+                .ToDictionary(k => k.Title, v => v.ProjectVersions.Count);
+            var result = new StatisticsView()
             {
                 Date = DateTime.Now,
                 ArmEdit = this.context.ArmEdits.OrderByDescending(e => e.Version).FirstOrDefault()?.Version,
-                ProjectCount = this.context.ProjectVersions.Count(),
-                ActualProjectCount = this.context.ProjectVersions.Where(e => e.Status == Status.Actual.ToString()).Count(),
-                TestProjectCount = this.context.ProjectVersions.Where(e => e.Status == Status.Test.ToString()).Count(),
-                DeprecatedProjectCount = this.context.ProjectVersions.Where(e => e.Status == Status.Deprecated.ToString()).Count(),
+                ProjectCount = distributions.Sum(e => e.Value),
+                ProjectDistributions = distributions,
                 LastModifiedProjects = this.GetNLastModifiedProjects(count),
                 MostChangingProjects = this.GetNMostChangingProjects(count)
             };
             return result;
+        }
+
+        public ProjectHistoryView GetProjectRevisionHistory(Guid guid)
+        {
+            var result = this.GetDbProjectRevision(guid);
+            return result.ToHistoryView();
         }
 
         public IEnumerable<string> GetProjectTitles() 
@@ -44,33 +51,24 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
 
         public IEnumerable<ProjectHistoryView> GetProjectVersionHistory(Guid guid) 
         {
-            // требуется оптимизировать логику !!!
             var result = new List<ProjectHistoryView>();
-            var entity = this.context.ProjectRevisions
+            var query = this.context.ProjectRevisions
                 .Include(pr => pr.ArmEdit)
                 .Include(pr => pr.Authors)
-                .Include(pr => pr.Communication)
+                .Include(pr => pr.CommunicationModule.Protocols)
                 .Include(pr => pr.ProjectVersion.Platform)
                 .Include(pr => pr.ProjectVersion.AnalogModule)
-                .Include(pr => pr.RelayAlgorithms)
-                .Where(pr => pr.ProjectVersion.Id == guid)
+                .Include(pr => pr.RelayAlgorithms);
+
+            var entity = query.Where(pr => pr.ProjectVersion.Id == guid)
                 .OrderByDescending(pr => pr.Revision)
                 .FirstOrDefault();
-            if (entity is not null)
+            if (entity != null)
             {
-                result.Add(entity.ToHistoryView());
-                while (entity.ParentRevisionId != Guid.Empty)
+                do
                 {
-                    entity = this.context.ProjectRevisions
-                        .Include(pr => pr.ArmEdit)
-                        .Include(pr => pr.Authors)
-                        .Include(pr => pr.Communication)
-                        .Include(pr => pr.ProjectVersion.Platform)
-                        .Include(pr => pr.ProjectVersion.AnalogModule)
-                        .Include(pr => pr.RelayAlgorithms)
-                        .FirstOrDefault(pr => pr.Id == entity.ParentRevisionId);
                     result.Add(entity.ToHistoryView());
-                }
+                } while ((entity = query.FirstOrDefault(pr => pr.Id == entity.ParentRevisionId)) != null);
             }
             return result;
         }
@@ -83,12 +81,6 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
                 .Include(pr => pr.ProjectVersion).ThenInclude(pv => pv.Platform)
                 .Where(pr => pr.ProjectVersion.Title == projectTitle)
                 .Select(pr => pr.ToTreeView());
-        }
-
-        public ProjectHistoryView GetProjectRevisionHistory(Guid guid)
-        {
-            var result = this.GetDbProjectRevision(guid).ToHistoryView();
-            return result;
         }
 
         public IEnumerable<ProjectHistoryShortView> GetNLastModifiedProjects(ushort count) 

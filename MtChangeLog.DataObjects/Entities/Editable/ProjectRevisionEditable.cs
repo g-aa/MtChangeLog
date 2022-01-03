@@ -31,7 +31,7 @@ namespace MtChangeLog.DataObjects.Entities.Editable
         public ProjectRevisionShortView ParentRevision { get; set; }
 
         [Required(ErrorMessage = "Перечень поддерживаемых протоколов информационного обмена параметр обязательный для заполнения")]
-        public CommunicationShortView Communication { get; set; }
+        public CommunicationModuleShortView CommunicationModule { get; set; }
 
         [Required(ErrorMessage = "Версия ArmEdit параметр обязательный для заполнения")]
         public ArmEditShortView ArmEdit { get; set; }
@@ -47,7 +47,7 @@ namespace MtChangeLog.DataObjects.Entities.Editable
 
         public override string ToString()
         {
-            return $"Project: {this.ProjectVersion.Module}-{this.ProjectVersion.Version}_{this.Revision}, date: {this.Date}, reason: {this.Reason}";
+            return $"{this.ProjectVersion.Module}-{this.ProjectVersion.Version}_{this.Revision}, дата изменения: {this.Date}";
         }
     }
 }

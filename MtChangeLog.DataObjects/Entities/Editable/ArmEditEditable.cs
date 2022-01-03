@@ -26,7 +26,7 @@ namespace MtChangeLog.DataObjects.Entities.Editable
 
         public override string ToString()
         {
-            return $"{this.DIVG} версия: {this.Version}";
+            return $"ArmEdit: {this.Version}";
         }
     }
 }

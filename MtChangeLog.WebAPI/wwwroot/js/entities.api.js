@@ -161,27 +161,50 @@ class EntitiesRepository{
         return await this.deleteEntity("/api/Authors", entity);
     }
 
+    // протоколы инф. обмена:
+    async getShortProtocols(){
+        return await this.getEntitiesInfo("/api/Protocols/ShortViews");
+    }
+    async getTableProtocols(){
+        return await this.getEntitiesInfo("/api/Protocols/TableViews");
+    }
+    async getProtocolTemplate(){
+        return await this.getEntitiesInfo("/api/Protocols/Template");
+    }
+    async getProtocolDetails(entityInfo = {}){
+        return await this.getEntityDetails("/api/Protocols", entityInfo);
+    }
+    async createProtocol(entity = {}){
+        return await this.createEntity("/api/Protocols", entity);
+    }
+    async updateProtocol(entity = {}){
+        return await this.updateEntity("/api/Protocols", entity);
+    }
+    async deleteProtocol(entity = {}){
+        return await this.deleteEntity("/api/Protocols", entity);
+    }
+
     // коммуникации:
-    async getSortCommunications(){
-        return await this.getEntitiesInfo("/api/Communications/ShortViews");
+    async getSortCommunicationModules(){
+        return await this.getEntitiesInfo("/api/CommunicationModules/ShortViews");
     }
-    async getTableCommunications(){
-        return await this.getEntitiesInfo("/api/Communications/TableViews");
+    async getTableCommunicationModules(){
+        return await this.getEntitiesInfo("/api/CommunicationModules/TableViews");
     }
-    async getCommunicationTemplate(){
-        return await this.getEntitiesInfo("/api/Communications/Template");
+    async getCommunicationModuleTemplate(){
+        return await this.getEntitiesInfo("/api/CommunicationModules/Template");
     }
-    async getCommunicationDetails(entityInfo = {}){
-        return await this.getEntityDetails("/api/Communications", entityInfo);
+    async getCommunicationModuleDetails(entityInfo = {}){
+        return await this.getEntityDetails("/api/CommunicationModules", entityInfo);
     }
-    async createCommunication(entity = {}){
-        return await this.createEntity("/api/Communications", entity);
+    async createCommunicationModule(entity = {}){
+        return await this.createEntity("/api/CommunicationModules", entity);
     }
-    async updateCommunication(entity = {}){
-        return await this.updateEntity("/api/Communications", entity);
+    async updateCommunicationModule(entity = {}){
+        return await this.updateEntity("/api/CommunicationModules", entity);
     }
-    async deleteCommunication(entity = {}){
-        return await this.deleteEntity("/api/Communications", entity);
+    async deleteCommunicationModule(entity = {}){
+        return await this.deleteEntity("/api/CommunicationModules", entity);
     }
 
     // Релейные алгоритмы:
@@ -207,6 +230,29 @@ class EntitiesRepository{
         return await this.deleteEntity("/api/RelayAlgorithms", entity);
     }
 
+    // Статус проекта:
+    async getShortProjectStatuses(){
+        return await this.getEntitiesInfo("/api/ProjectStatuses/ShortViews");
+    }
+    async getTableProjectStatuses(){
+        return await this.getEntitiesInfo("/api/ProjectStatuses/TableViews");
+    }
+    async getProjectStatusTemplate(){
+        return await this.getEntitiesInfo("/api/ProjectStatuses/Template");
+    }
+    async getProjectStatusDetails(entityInfo = {}){
+        return await this.getEntityDetails("/api/ProjectStatuses", entityInfo);
+    }
+    async createProjectStatus(entity = {}){
+        return await this.createEntity("/api/ProjectStatuses", entity);
+    }
+    async updateProjectStatus(entity = {}){
+        return await this.updateEntity("/api/ProjectStatuses", entity);
+    }
+    async deleteProjectStatus(entity = {}){
+        return await this.deleteEntity("/api/ProjectStatuses", entity);
+    }
+
     // Версии проектов:
     async getSortProjectVersions(){
         return await this.getEntitiesInfo("/api/ProjectVersions/ShortViews");
@@ -216,9 +262,6 @@ class EntitiesRepository{
     }
     async getProjectVersionTemplate(){
         return await this.getEntitiesInfo("/api/ProjectVersions/Template");
-    }
-    async getProjectVersionStatuses() {
-        return await this.getEntitiesInfo("/api/ProjectVersions/Statuses");
     }
     async getProjectVersionDetails(entityInfo = {}){
         return await this.getEntityDetails("/api/ProjectVersions", entityInfo);

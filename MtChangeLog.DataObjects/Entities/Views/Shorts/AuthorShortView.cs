@@ -18,5 +18,10 @@ namespace MtChangeLog.DataObjects.Entities.Views.Shorts
         [Required(ErrorMessage = "Фамилия параметр обязательный для заполнения")]
         [StringLength(32, ErrorMessage = "Фамилия должна содержать не больше 32 символов")]
         public string LastName { get; set; }
+
+        public override string ToString()
+        {
+            return $"{this.LastName} {this.FirstName}";
+        }
     }
 }

@@ -4,7 +4,6 @@ using Microsoft.Extensions.Logging;
 using MtChangeLog.DataBase.Contexts.EntitiesConfigurations;
 using MtChangeLog.DataBase.Entities.Tables;
 using MtChangeLog.DataBase.Entities.Views;
-using MtChangeLog.DataObjects.Entities.Views;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,6 +16,7 @@ namespace MtChangeLog.DataBase.Contexts
         #region ProjectVersionEntities
         internal DbSet<DbPlatform> Platforms { get; set; }
         internal DbSet<DbAnalogModule> AnalogModules { get; set; }
+        internal DbSet<DbProjectStatus> ProjectStatuses { get; set; }
         internal DbSet<DbProjectVersion> ProjectVersions { get; set; }
         #endregion
 
@@ -24,7 +24,8 @@ namespace MtChangeLog.DataBase.Contexts
         internal DbSet<DbProjectRevision> ProjectRevisions { get; set; }
         internal DbSet<DbArmEdit> ArmEdits { get; set; }
         internal DbSet<DbAuthor> Authors { get; set; }
-        internal DbSet<DbCommunication> Communications { get; set; }
+        internal DbSet<DbProtocol> Protocols { get; set; }
+        internal DbSet<DbCommunicationModule> CommunicationModules { get; set; }
         internal DbSet<DbRelayAlgorithm> RelayAlgorithms { get; set; }
         #endregion
 
@@ -34,11 +35,8 @@ namespace MtChangeLog.DataBase.Contexts
 
         public ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options)
         {
-            //if (this.Platforms.Any()) 
-            //{
-            //    this.Database.EnsureDeleted();    
-            //}
-            if (this.Database.EnsureCreated()) 
+            //this.Database.EnsureDeleted();
+            if (this.Database.EnsureCreated())
             {
                 this.Initialize();
             }
@@ -64,10 +62,12 @@ namespace MtChangeLog.DataBase.Contexts
             new AnalogModuleConfiguration().Configure(modelBuilder.Entity<DbAnalogModule>());
             new ArmEditConfiguration().Configure(modelBuilder.Entity<DbArmEdit>());
             new AuthorConfiguration().Configure(modelBuilder.Entity<DbAuthor>());
-            new CommunicationConfiguration().Configure(modelBuilder.Entity<DbCommunication>());
+            new ProtocolConfiguration().Configure(modelBuilder.Entity<DbProtocol>());
+            new CommunicationModuleConfiguration().Configure(modelBuilder.Entity<DbCommunicationModule>());
             new PlatformConfiguration().Configure(modelBuilder.Entity<DbPlatform>());
             new RelayAlgorithmConfiguration().Configure(modelBuilder.Entity<DbRelayAlgorithm>());
             new ProjectVersionConfiguration().Configure(modelBuilder.Entity<DbProjectVersion>());
+            new ProjectStatusConfiguration().Configure(modelBuilder.Entity<DbProjectStatus>());
             new ProjectRevisionConfiguration().Configure(modelBuilder.Entity<DbProjectRevision>());
 
             modelBuilder.Entity<DbLastProjectRevision>(e => 

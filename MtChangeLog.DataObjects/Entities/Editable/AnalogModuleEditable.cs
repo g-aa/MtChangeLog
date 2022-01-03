@@ -38,7 +38,7 @@ namespace MtChangeLog.DataObjects.Entities.Editable
 
         public override string ToString()
         {
-            return $"{this.DIVG} {this.Title} ток: {this.Current}";
+            return $"{this.Title}, номинальный ток: {this.Current}";
         }
     }
 }

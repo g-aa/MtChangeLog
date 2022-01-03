@@ -28,5 +28,10 @@ namespace MtChangeLog.DataBase.Entities.Views
                 Title = $"{this.AnalogModule}-{this.Title}-{this.Version}_{this.Revision}"
             };
         }
+
+        public override string ToString()
+        {
+            return $"{this.AnalogModule}-{this.Title}-{this.Version}_{this.Revision}";
+        }
     }
 }

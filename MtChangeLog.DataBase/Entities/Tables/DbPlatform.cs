@@ -36,6 +36,15 @@ namespace MtChangeLog.DataBase.Entities.Tables
 
         public void Update(PlatformEditable other, ICollection<DbAnalogModule> modules) 
         {
+            if (this.Default)
+            {
+                throw new ArgumentException($"Default entity {this} can not by update");
+            }
+            var prohibModules = this.AnalogModules.Except(modules).Where(e => e.Projects.Intersect(this.Projects).Any()).Select(e => e.Title);
+            if (prohibModules.Any()) 
+            {
+                throw new ArgumentException($"The analog modules: {string.Join(",", prohibModules)} used in projects and cannot be excluded from the platform");
+            }
             // this.Id - не обновляется !!!
             this.Title = other.Title;
             this.Description = other.Description;
@@ -90,7 +99,7 @@ namespace MtChangeLog.DataBase.Entities.Tables
 
         public override string ToString()
         {
-            return $"title: {this.Title}";
+            return this.Title;
         }
     }
 }

@@ -15,6 +15,7 @@ namespace MtChangeLog.DataBase.Contexts.EntitiesConfigurations
         {
             builder.ToTable("ProjectRevision");
             builder.HasComment("Таблица с перечнем ревизий (редакций) проектов блоков БМРЗ-100/120/150/160");
+            builder.HasIndex(e => new { e.ProjectVersionId, e.Date, e.Revision }).HasDatabaseName("IX_ProjectRevision_Revision").IsUnique();
 
             builder.HasMany(pr => pr.Authors)
                 .WithMany(a => a.ProjectRevisions)
@@ -25,7 +26,6 @@ namespace MtChangeLog.DataBase.Contexts.EntitiesConfigurations
                 .UsingEntity(e => e.ToTable("ProjectRevisionRelayAlgorithm"));
 
             builder.Property(e => e.Date)
-                .HasDefaultValue(DateTime.MinValue)
                 .IsRequired();
 
             builder.Property(e => e.Revision)

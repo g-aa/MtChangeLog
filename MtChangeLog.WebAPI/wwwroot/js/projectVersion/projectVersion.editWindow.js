@@ -124,11 +124,16 @@ class ProjectEditWindow {
                         view:"richselect",
                         id:"status_id",
                         label:"Статус:",
-                        icon:"mdi mdi-arrow-down-bold-hexagon-outline",
+                        icon:"mdi mdi-list-status",
                         labelAlign:"right",
                         labelWidth:lWidth,
                         value:_editablePrjVers.getStatus(),
-                        options:_editablePrjVers.getStatuses(),
+                        options:{
+                            body:{
+                               template:"#title#"
+                            },   
+                            data:_editablePrjVers.getStatuses()
+                        },
                         on:{
                             onChange: async function(newValue, oldValue, config){
                                 try{

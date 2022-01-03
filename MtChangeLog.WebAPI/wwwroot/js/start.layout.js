@@ -22,13 +22,17 @@ class StartPageLayout{
                                 {
                                     view:"template",
                                     id:statisticsLayoutId,
+                                    scroll:true,
                                     template:function(o){
-                                        let result = "<b>Дата:</b><span style='white-space: pre-wrap'>\t\t\t\t\t\t" + o.date + "</span><br><br>"
-                                        + "<b>Актуальная версия ArmEdit:</b><span style='white-space: pre-wrap'>\t" + o.armEdit + "</span><br><br>"
-                                        + "<b>Число БФПО (проектов):</b><span style='white-space: pre-wrap'>\t" + o.projectCount + "</span><br><br>"
-                                        + "<b>Число актуальных БФПО:</b><span style='white-space: pre-wrap'>\t" + o.actualProjectCount + "</span><br><br>"
-                                        + "<b>Число тестовых БФПО:</b><span style='white-space: pre-wrap'>\t\t" + o.testProjectCount + "</span><br><br>"
-                                        + "<b>Число устаревших БФПО:</b><span style='white-space: pre-wrap'>\t" + o.deprecatedProjectCount + "</span><br><br>";
+                                        let result = "<table cellspacing='8'><tbody>" 
+                                        + "<tr><td><b>Данные на момент времени:</b></td><td>" + o.date + "</td></tr>"
+                                        + "<tr><td><b>Актуальная версия ArmEdit:</b></td><td>" + o.armEdit + "</td></tr>"
+                                        + "<tr><td><b>Число БФПО (проектов):</b></td><td>" + o.projectCount + "</td></tr>"
+                                        + "<tr><td><b>Распределение БФПО по статусам:</b></td></tr>";
+                                        for (var key in o.projectDistributions) {
+                                            result += "<tr><td><b>• " + key + ":</b></td><td>" + o.projectDistributions[key] + "</td><tr>";
+                                        }
+                                        result += "</tbody></table>";
                                         return result;
                                     },
                                     data:{
@@ -37,7 +41,8 @@ class StartPageLayout{
                                         projectCount:"нет данных...",
                                         actualProjectCount:"нет данных...",
                                         testProjectCount:"нет данных...",
-                                        deprecatedProjectCount:"нет данных..."
+                                        deprecatedProjectCount:"нет данных...",
+                                        projectDistributions:{"нет данных":"..."}
                                     }
                                 }
                             ] 

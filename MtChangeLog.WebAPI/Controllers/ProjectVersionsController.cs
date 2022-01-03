@@ -1,11 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-
 using MtChangeLog.DataBase.Repositories.Interfaces;
 using MtChangeLog.DataObjects.Entities.Editable;
 using MtChangeLog.DataObjects.Entities.Views;
-using MtChangeLog.DataObjects.Enumerations;
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -52,7 +49,7 @@ namespace MtChangeLog.WebAPI.Controllers
         {
             try
             {
-                this.logger.LogInformation($"HTTP GET - ProjectVersionsController- all entities for table");
+                this.logger.LogInformation($"HTTP GET - ProjectVersionsController - all entities for table");
                 var result = this.repository.GetTableEntities();
                 return this.Ok(result);
             }
@@ -78,14 +75,6 @@ namespace MtChangeLog.WebAPI.Controllers
                 this.logger.LogError(ex, "HTTP GET - ProjectVersionsController - ");
                 return this.BadRequest(ex.Message);
             }
-        }
-
-        // GET api/<ProjectsVersionsController>/Statuses
-        [HttpGet("Statuses")]
-        public IActionResult GetProjectStatuses()
-        {
-            this.logger.LogInformation("HTTP GET - ProjectVersionsController - all project statuses");
-            return this.Ok(Enum.GetNames(typeof(Status)));
         }
 
         // GET api/<ProjectsVersionsController>/00000000-0000-0000-0000-000000000000

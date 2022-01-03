@@ -6,12 +6,12 @@ class ProjectRevision{
         this.projectVersions = [];
         this.algorithms = [];
         this.parentRevisions = [];
-        this.communications = [];
+        this.communicationModules = [];
         this.configure = async function(){
             this.authors = await repository.getSortAuthors();
             this.armEdits = await repository.getSortArmEdits();
             this.algorithms = await repository.getSortRelayAlgorithms();
-            this.communications = await repository.getSortCommunications();
+            this.communicationModules = await repository.getSortCommunicationModules();
             this.projectVersions = await repository.getSortProjectVersions();
             this.parentRevisions = await repository.getSortProjectRevisions();
         }
@@ -103,19 +103,19 @@ class ProjectRevision{
         });
     }
 
-    getAllCommunications(){
-        return this.communications;
+    getAllCommunicationModules(){
+        return this.communicationModules;
     }
 
-    getCommunication(){
-        return this.editable.communication;
+    getCommunicationModule(){
+        return this.editable.communicationModule;
     }
 
-    setCommunication(id = ""){
-        if (id == undefined || id == null || id == ""){
+    setCommunicationModule(id = ""){
+        if (id === undefined || typeof id !== "string" || id == ""){
             throw new Error("не указан communication id!");
         }
-        this.editable.communication = this.communications.find(function(item){
+        this.editable.communicationModule = this.communicationModules.find(function(item){
             return item.id == id;
         });
     }

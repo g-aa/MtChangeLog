@@ -69,10 +69,6 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
         public void UpdateEntity(AnalogModuleEditable entity) 
         {
             DbAnalogModule dbAnalogModule = this.GetDbAnalogModule(entity.Id);
-            if (dbAnalogModule.Default) 
-            {
-                throw new ArgumentException($"Default entity {entity} can not by update");    
-            }
             dbAnalogModule.Update(entity, this.GetDbPlatformsOrDefault(entity.Platforms.Select(platform => platform.Id)));
             this.context.SaveChanges();
         }
@@ -81,6 +77,10 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
         {
             throw new NotImplementedException("функционал не поддерживается");
             //DbAnalogModule dbAnalogModule = this.GetDbAnalogModule(guid);
+            //if (dbAnalogModule.Default) 
+            //{
+            //    throw new ArgumentException($"Default entity {dbAnalogModule} can not by remove");
+            //}
             //this.context.AnalogModules.Remove(dbAnalogModule);
             //this.context.SaveChanges();
         }

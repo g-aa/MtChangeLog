@@ -53,7 +53,7 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
         {
             var dbPlatform = new DbPlatform(entity)
             {
-                AnalogModules = this.GetDbAnalogModules(entity.AnalogModules.Select(module => module.Id))
+                AnalogModules = this.GetDbAnalogModulesOrDefault(entity.AnalogModules.Select(module => module.Id))
             };
             if (this.context.Platforms.FirstOrDefault(platform => platform.Equals(dbPlatform)) != null)
             {
@@ -66,11 +66,7 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
         public void UpdateEntity(PlatformEditable entity)
         {
             DbPlatform dbPlatform = this.GetDbPlatform(entity.Id);
-            if (dbPlatform.Default)
-            {
-                throw new ArgumentException($"Default entity {entity} can not by update");
-            }
-            dbPlatform.Update(entity, this.GetDbAnalogModules(entity.AnalogModules.Select(module => module.Id)));
+            dbPlatform.Update(entity, this.GetDbAnalogModulesOrDefault(entity.AnalogModules.Select(module => module.Id)));
             this.context.SaveChanges();
         }
 

@@ -15,7 +15,10 @@ namespace MtChangeLog.DataBase.Contexts.EntitiesConfigurations
         {
             builder.ToTable("ArmEdit");
             builder.HasComment("Таблица с перечнем ArmEdit используемых при компиляции проектов блоков БМРЗ-100/120/150/160");
+            builder.HasIndex(e => e.Version).HasDatabaseName("IX_ArmEdit_Version").IsUnique();
+            //builder.HasIndex(e => e.DIVG).HasDatabaseName("IX_ArmEdit_DIVG").IsUnique(); //точных данных по ДИВГ нет
 
+            
             builder.Property(e => e.DIVG)
                 .HasDefaultValue("ДИВГ.55101-00")
                 .HasMaxLength(13)
@@ -23,7 +26,6 @@ namespace MtChangeLog.DataBase.Contexts.EntitiesConfigurations
                 .IsRequired();
 
             builder.Property(e => e.Version)
-                .HasDefaultValue("v0.00.00.00")
                 .HasMaxLength(11)
                 .IsFixedLength()
                 .IsRequired();

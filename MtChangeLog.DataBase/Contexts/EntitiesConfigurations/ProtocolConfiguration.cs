@@ -9,16 +9,16 @@ using System.Threading.Tasks;
 
 namespace MtChangeLog.DataBase.Contexts.EntitiesConfigurations
 {
-    internal class CommunicationConfiguration : IEntityTypeConfiguration<DbCommunication>
+    internal class ProtocolConfiguration : IEntityTypeConfiguration<DbProtocol>
     {
-        public void Configure(EntityTypeBuilder<DbCommunication> builder)
+        public void Configure(EntityTypeBuilder<DbProtocol> builder)
         {
-            builder.ToTable("Communication");
-            builder.HasComment("Таблица с перечнем коммуникационных модулей поддерживаемых в блоках БМРЗ-100/120/150/160");
+            builder.ToTable("Protocol");
+            builder.HasComment("Таблица с перечнем протоколов информационного обмена поддерживаемых в блоках БМРЗ-100/120/150/160");
+            builder.HasIndex(e => e.Title).HasDatabaseName("IX_Protocol_Title").IsUnique();
 
-            builder.Property(e => e.Protocols)
-                .HasDefaultValue("ModBus-MT")
-                .HasMaxLength(250)
+            builder.Property(e => e.Title)
+                .HasMaxLength(32)
                 .IsRequired();
 
             builder.Property(e => e.Description)

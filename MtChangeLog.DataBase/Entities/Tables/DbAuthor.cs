@@ -80,7 +80,7 @@ namespace MtChangeLog.DataBase.Entities.Tables
 
         public override string ToString()
         {
-            return $"{this.FirstName} {this.LastName}, position: {this.Position}";
+            return $"{this.FirstName} {this.LastName}";
         }
     }
 }
