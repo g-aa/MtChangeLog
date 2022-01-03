@@ -5,7 +5,7 @@ function getDataAndLinksForTree(projectData){
     
     let startPoint = { x:20, y:20 };
     let dPoint = { x:20, y:20 };
-	let blokSize = { width:200, height:150 };
+	let blokSize = { width:200, height:130 };
 			
     //
     let projectTypes = [];  // для определения числа столбцов
@@ -35,7 +35,7 @@ function getDataAndLinksForTree(projectData){
         
         // project full name:
         if(item.module != null){
-            value += "ПрО: " + item.module;
+            value += "ПО: <b>" + item.module;
         }
         if(item.title != null){
             value += "-" + item.title;
@@ -44,12 +44,12 @@ function getDataAndLinksForTree(projectData){
             value += "-" + item.version;
         }
         if(item.revision != null){
-            value += "_" + item.revision;
+            value += "_" + item.revision + "</b>";
         }
 
         // compile date:
         if(item.date != null){
-            value += "<br>От: " + item.date;
+            value += "<br>Дата: " + item.date;
         }
 
         // armEdit version:
@@ -58,7 +58,7 @@ function getDataAndLinksForTree(projectData){
         }
 
         if(item.platform != null){
-            value += "<br>Платформа: " + item.platform;
+            value += "<br>Платформа: <b>" + item.platform + "</b>";
         }
 
         let vIdx = projectTypes.indexOf((item.module + "-" + item.title + "-" + item.version));
