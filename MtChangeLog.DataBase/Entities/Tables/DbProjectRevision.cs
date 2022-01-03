@@ -51,7 +51,7 @@ namespace MtChangeLog.DataBase.Entities.Tables
             this.Description = other.Description;
         }
 
-        public void Update(ProjectRevisionEditable other, DbArmEdit armEdit, DbCommunicationModule communication, ICollection<DbAuthor> authors, ICollection<DbRelayAlgorithm> algorithms) 
+        public void Update(ProjectRevisionEditable other, DbArmEdit armEdit, DbCommunicationModule communication, ICollection<DbAuthor> authors, ICollection<DbRelayAlgorithm> algorithms, DbProjectRevision parent) 
         {
             // this.Id - не обновляется !!!
             // this.Revision - не обновляется !!!
@@ -63,7 +63,7 @@ namespace MtChangeLog.DataBase.Entities.Tables
             this.Authors = authors;
             this.RelayAlgorithms = algorithms;
             // this.ProjectVersion - не обновляется !!!
-            // this.ParentRevision - не обновляется !!!
+            this.ParentRevision = parent;
         }
 
         public ProjectRevisionShortView ToShortView() 
@@ -124,7 +124,7 @@ namespace MtChangeLog.DataBase.Entities.Tables
                 Title = this.ProjectVersion?.Title,
                 Version = this.ProjectVersion?.Version,
                 Revision = this.Revision,
-                Date = this.Date,
+                Date = this.Date.ToString("yyyy-MM-dd"),
                 ArmEdit = this.ArmEdit?.Version ?? "v0.00.00.00",
                 Platform = this.ProjectVersion?.Platform?.Title ?? "БМРЗ-000"
             };

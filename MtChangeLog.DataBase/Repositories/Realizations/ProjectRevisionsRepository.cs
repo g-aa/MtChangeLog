@@ -51,7 +51,7 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
             var project = this.GetDbProjectVersion(guid);
             var lastRevision = project.ProjectRevisions?.OrderBy(pr => pr.Revision).LastOrDefault();
             var armEdit = this.context.ArmEdits.OrderBy(arm => arm.Version).LastOrDefault();
-            var communications = lastRevision is null ? this.context.CommunicationModules.OrderBy(c => c.Protocols).LastOrDefault() : lastRevision.CommunicationModule;
+            var communications = lastRevision is null ? this.context.CommunicationModules.OrderBy(c => c.Title).LastOrDefault() : lastRevision.CommunicationModule;
             var revision = lastRevision is null ? "00" : (int.Parse(lastRevision.Revision) + 1).ToString("D2");
             var algorithms = lastRevision?.RelayAlgorithms.Select(ra => ra.ToShortView());
             var authors = lastRevision?.Authors.Select(a => a.ToShortView());
@@ -99,7 +99,8 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
                 this.GetDbArmEditOrDefault(entity.ArmEdit.Id), 
                 this.GetDbCommunicationOrDefault(entity.CommunicationModule.Id), 
                 this.GetDbAuthorsOrDefault(entity.Authors.Select(a => a.Id)), 
-                this.GetDbRelayAlgorithms(entity.RelayAlgorithms.Select(ra => ra.Id)));
+                this.GetDbRelayAlgorithms(entity.RelayAlgorithms.Select(ra => ra.Id)),
+                this.GetDbProjectRevision(entity.ParentRevision.Id));
             this.context.SaveChanges();
         }
 
