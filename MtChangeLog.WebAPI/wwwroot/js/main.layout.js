@@ -39,7 +39,7 @@ let getMainLayout = function () {
                         on: {
                             onItemClick: function (id) {
                                 try {
-                                    messageBox.information("Был выбран: \'" + this.getItem(id).value + "\'");
+                                    //messageBox.information("Был выбран: \'" + this.getItem(id).value + "\'");
                                     let dLayout = $$("dataLayout_id");
                                     switch (id) {
                                         case "analogModuleTableLayout_id":
