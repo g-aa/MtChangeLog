@@ -1,4 +1,5 @@
-﻿using MtChangeLog.DataObjects.Entities.Views.Statistics;
+﻿using MtChangeLog.DataObjects.Entities.Views.Shorts;
+using MtChangeLog.DataObjects.Entities.Views.Statistics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,6 +16,11 @@ namespace MtChangeLog.DataBase.Repositories.Interfaces
         /// </summary>
         /// <returns></returns>
         IEnumerable<string> GetProjectTitles();
+        /// <summary>
+        /// получить перечень версий проектов у которые имеют редакции
+        /// </summary>
+        /// <returns></returns>
+        IEnumerable<ProjectVersionShortView> GetShortEntities();
         /// <summary>
         /// получить полную историю конкретного проекта (БФПО)
         /// </summary>

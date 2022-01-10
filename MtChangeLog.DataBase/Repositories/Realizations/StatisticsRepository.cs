@@ -2,6 +2,7 @@
 using MtChangeLog.DataBase.Contexts;
 using MtChangeLog.DataBase.Entities;
 using MtChangeLog.DataBase.Repositories.Interfaces;
+using MtChangeLog.DataObjects.Entities.Views.Shorts;
 using MtChangeLog.DataObjects.Entities.Views.Statistics;
 using System;
 using System.Collections.Generic;
@@ -46,6 +47,14 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
         public IEnumerable<string> GetProjectTitles() 
         {
             var result = this.context.ProjectVersions.Select(pv => pv.Title).Distinct().OrderBy(s => s);
+            return result;
+        }
+
+        public IEnumerable<ProjectVersionShortView> GetShortEntities() 
+        {
+            var result = this.context.LastProjectRevisions
+                .OrderBy(pv => pv.AnalogModule).ThenBy(pv => pv.Title).ThenBy(pv => pv.Version)
+                .Select(e => e.ToProjectVersionShortView());
             return result;
         }
 

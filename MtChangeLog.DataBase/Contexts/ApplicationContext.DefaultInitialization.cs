@@ -79,14 +79,15 @@ namespace MtChangeLog.DataBase.Contexts
 
             this.Database.ExecuteSqlRaw(
                 @"CREATE VIEW LastProjectsRevision AS
-                SELECT  pr.Id AS Id,
+                SELECT  pv.Id AS VersionId,
+		                pr.Id AS RevisionId,
 		                am.Title AS AnalogModule,
 		                pv.Title AS Title,
 		                pv.Version AS Version,
-                        Max(pr.Revision) AS Revision,
-					    p.Title AS Platform,
+		                Max(pr.Revision) AS Revision,
+		                p.Title AS Platform,
 		                arm.Version AS ArmEdit,
-                        pr.Date 
+		                pr.Date 
                 FROM ProjectRevision pr
                 JOIN ArmEdit arm
                 ON arm.Id = pr.ArmEditId
@@ -95,8 +96,8 @@ namespace MtChangeLog.DataBase.Contexts
                 JOIN AnalogModule am
                 ON am.Id = pv.AnalogModuleId
                 JOIN Platform p
-			    ON pv.PlatformId = p.Id
-			    GROUP BY pr.ProjectVersionId");
+                ON pv.PlatformId = p.Id
+                GROUP BY pr.ProjectVersionId");
 
             this.SaveChanges();
         }
