@@ -1,7 +1,5 @@
 class ProjectHistoryLayout{
-    constructor(parentLayout){
-        this.parentLayout = parentLayout;
-
+    constructor(){
         let viewLayoutId = "viewLayout_id";
         this.viewLayout = {
             view:"template",
@@ -64,13 +62,12 @@ class ProjectHistoryLayout{
         this.cbxLayoutId = cbxLayoutId;
     }
 
-    show(){
+    show(parentLayout){
         webix.ui({
             view: "layout",
             rows: [ this.cbxLayout, this.viewLayout ]
         }, 
-        this.parentLayout.getChildViews()[0]);
-        
+        parentLayout.getChildViews()[0]);
         let cbxLayout = $$(this.cbxLayoutId);
         repository.getProjectHistoryTitles()
         .then(projectsData => {

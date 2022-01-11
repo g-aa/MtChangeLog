@@ -8,12 +8,12 @@ class ProjectRevision{
         this.parentRevisions = [];
         this.communicationModules = [];
         this.configure = async function(){
-            this.authors = await repository.getSortAuthors();
-            this.armEdits = await repository.getSortArmEdits();
-            this.algorithms = await repository.getSortRelayAlgorithms();
-            this.communicationModules = await repository.getSortCommunicationModules();
-            this.projectVersions = await repository.getSortProjectVersions();
-            this.parentRevisions = await repository.getSortProjectRevisions();
+            this.authors = await repository.getShortAuthors();
+            this.armEdits = await repository.getShortArmEdits();
+            this.algorithms = await repository.getShortRelayAlgorithms();
+            this.communicationModules = await repository.getShortCommunicationModules();
+            this.projectVersions = await repository.getShortProjectVersions();
+            this.parentRevisions = await repository.getShortProjectRevisions();
         }
     }
 

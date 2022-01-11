@@ -3,7 +3,7 @@ class AnalogModule{
         this.editable = {};
         this.platforms = [];
         this.configure = async function(){
-            this.platforms = await repository.getSortPlatforms();
+            this.platforms = await repository.getShortPlatforms();
         }
     }
 

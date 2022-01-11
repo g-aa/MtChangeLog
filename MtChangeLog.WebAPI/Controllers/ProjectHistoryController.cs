@@ -15,13 +15,11 @@ namespace MtChangeLog.WebAPI.Controllers
     [ApiController]
     public class ProjectHistoryController : ControllerBase
     {
-        private readonly IProjectVersionsRepository versionsRepository;
         private readonly IStatisticsRepository statisticsRepository;
         private readonly ILogger logger;
 
-        public ProjectHistoryController(IProjectVersionsRepository versionsRepository, IStatisticsRepository statisticsRepository, ILogger<ProjectHistoryController> logger)
+        public ProjectHistoryController(IStatisticsRepository statisticsRepository, ILogger<ProjectHistoryController> logger)
         {
-            this.versionsRepository = versionsRepository;
             this.statisticsRepository = statisticsRepository;
             this.logger = logger;
             this.logger.LogInformation("HTTP - ProjectHistoryController - creating");
@@ -34,7 +32,7 @@ namespace MtChangeLog.WebAPI.Controllers
             try
             {
                 this.logger.LogInformation($"HTTP GET - ProjectHistoryController - all short entities");
-                var result = this.versionsRepository.GetShortEntities();
+                var result = this.statisticsRepository.GetShortEntities();
                 return this.Ok(result);
             }
             catch (Exception ex)

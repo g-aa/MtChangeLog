@@ -24,13 +24,30 @@ namespace MtChangeLog.WebAPI.Controllers
         }
 
         // GET: api/<StatisticsController>
-        [HttpGet]
+        [HttpGet("Short")]
         public IActionResult Get()
         {
             try
             {
                 this.logger.LogInformation($"HTTP GET - StatisticsController - project short statistics");
                 var result = this.repository.GetShortStatistics();
+                return this.Ok(result);
+            }
+            catch (Exception ex)
+            {
+                this.logger.LogError(ex, $"HTTP GET - StatisticsController - ");
+                return this.BadRequest(ex.Message);
+            }
+        }
+
+        // GET: api/<StatisticsController>/LastProjectsRevision
+        [HttpGet("LastProjectsRevision")]
+        public IActionResult GetLastProjectsRevision() 
+        {
+            try
+            {
+                this.logger.LogInformation($"HTTP GET - StatisticsController - last projects revision");
+                var result = this.repository.GetLastProjectRevisions();
                 return this.Ok(result);
             }
             catch (Exception ex)

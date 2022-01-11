@@ -1,7 +1,5 @@
 class RelayAlgorithmTableLayout{
-    constructor(parentLayout){
-        this.parentLayout = parentLayout;
-        
+    constructor(){
         let tableLayputId = "relayAlgorithmTable_id";
         this.tableLayout = {
             view:"datatable",
@@ -107,12 +105,12 @@ class RelayAlgorithmTableLayout{
         }
     }
 
-    show(){
+    show(parentLayout){
         webix.ui({
             view:"layout",
             rows:[ this.buttonsLayout, this.tableLayout ]
         }, 
-        this.parentLayout.getChildViews()[0]);
+        parentLayout.getChildViews()[0]);
         this.refresh().catch(error => {
             messageBox.error(error.message);
         }); 

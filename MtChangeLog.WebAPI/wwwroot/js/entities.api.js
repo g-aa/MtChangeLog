@@ -70,7 +70,7 @@ class EntitiesRepository{
     }
 
     // Аналоговые модули:
-    async getSortAnalogModules(){
+    async getShortAnalogModules(){
         return await this.getEntitiesInfo("/api/AnalogModules/ShortViews");
     }
     async getTableAnalogModules(){
@@ -93,7 +93,7 @@ class EntitiesRepository{
     }
 
     // Платформы:
-    async getSortPlatforms(){
+    async getShortPlatforms(){
         return await this.getEntitiesInfo("/api/Platforms/ShortViews");
     }
     async getTablePlatforms(){
@@ -116,7 +116,7 @@ class EntitiesRepository{
     }
 
     // ArmEdits:
-    async getSortArmEdits(){
+    async getShortArmEdits(){
         return await this.getEntitiesInfo("/api/ArmEdits/ShortViews");
     }
     async getTableArmEdits(){
@@ -139,7 +139,7 @@ class EntitiesRepository{
     }
 
     // Авторы:
-    async getSortAuthors(){
+    async getShortAuthors(){
         return await this.getEntitiesInfo("/api/Authors/ShortViews");
     }
     async getTableAuthors(){
@@ -185,7 +185,7 @@ class EntitiesRepository{
     }
 
     // коммуникации:
-    async getSortCommunicationModules(){
+    async getShortCommunicationModules(){
         return await this.getEntitiesInfo("/api/CommunicationModules/ShortViews");
     }
     async getTableCommunicationModules(){
@@ -208,7 +208,7 @@ class EntitiesRepository{
     }
 
     // Релейные алгоритмы:
-    async getSortRelayAlgorithms(){
+    async getShortRelayAlgorithms(){
         return await this.getEntitiesInfo("/api/RelayAlgorithms/ShortViews");
     }
     async getTableRelayAlgorithms(){
@@ -254,7 +254,7 @@ class EntitiesRepository{
     }
 
     // Версии проектов:
-    async getSortProjectVersions(){
+    async getShortProjectVersions(){
         return await this.getEntitiesInfo("/api/ProjectVersions/ShortViews");
     }
     async getTableProjectVersions(){
@@ -277,7 +277,7 @@ class EntitiesRepository{
     }
 
     // Редакция проекта:
-    async getSortProjectRevisions(){
+    async getShortProjectRevisions(){
         return await this.getEntitiesInfo("/api/ProjectRevisions/ShortViews");
     }
     async getTableProjectRevisions(){
@@ -323,10 +323,11 @@ class EntitiesRepository{
 
     // Статистика:
     async getShortStatistics(){
-        return await this.getEntitiesInfo("/api/Statistics");
+        return await this.getEntitiesInfo("/api/Statistics/Short");
+    }
+    async getLastProjectsRevision(){
+        return await this.getEntitiesInfo("/api/Statistics/LastProjectsRevision");
     }
 }
 
-if(repository == undefined || repository == null){
-    var repository = new EntitiesRepository();
-}
+var repository = new EntitiesRepository();
