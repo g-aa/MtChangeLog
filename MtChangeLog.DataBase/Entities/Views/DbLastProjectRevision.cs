@@ -20,6 +20,20 @@ namespace MtChangeLog.DataBase.Entities.Views
         public string ArmEdit { get; set; }
         public DateTime Date { get; set; }
 
+        public LastProjectRevisionView ToView() 
+        {
+            return new LastProjectRevisionView()
+            {
+                Module = this.AnalogModule,
+                Title = this.Title,
+                Version = this.Version,
+                Revision = this.Revision,
+                Platform = this.Platform,
+                ArmEdit = this.ArmEdit,
+                Date = this.Date.ToString("yyyy-MM-dd")
+            };
+        }
+
         public ProjectHistoryShortView ToHistoryShortView() 
         {
             return new ProjectHistoryShortView()

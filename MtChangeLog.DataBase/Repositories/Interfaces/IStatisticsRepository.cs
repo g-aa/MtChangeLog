@@ -22,6 +22,11 @@ namespace MtChangeLog.DataBase.Repositories.Interfaces
         /// <returns></returns>
         IEnumerable<ProjectVersionShortView> GetShortEntities();
         /// <summary>
+        /// получить перечень последних редакций проектов (БФПО)
+        /// </summary>
+        /// <returns></returns>
+        IEnumerable<LastProjectRevisionView> GetLastProjectRevisions();
+        /// <summary>
         /// получить полную историю конкретного проекта (БФПО)
         /// </summary>
         /// <param name="guid">project version id</param>

@@ -120,6 +120,12 @@ let getMainLayout = function () {
                                             }
                                             startLayout.show();
                                             break;
+                                        case "lastProjectRevision_id":
+                                            if(lastPrjRevLayout == undefined || lastPrjRevLayout == null){
+                                                var lastPrjRevLayout = new LastProjectRevisionLayout(dLayout);
+                                            }
+                                            lastPrjRevLayout.show();
+                                            break;
                                         default:
                                             messageBox.warning("Увы, функционал пока не поддерживается!");
                                     }
@@ -153,6 +159,21 @@ let getMainSidebarMenu = function() {
             id:"startPage_id",
             icon:"mdi mdi-home-circle",
             value:"начальная страница"
+        },
+        {
+            id:"lastProjectRevision_id",
+            icon:"mdi mdi-file-check",
+            value:"актуальные редакции БФПО"
+        },
+        {
+            id:"prohectHistory_id",
+            icon:"mdi mdi-format-list-text",
+            value:"история изменений БФПО"
+        },
+        {
+            id:"projectTrees_id",
+            icon:"mdi mdi-graph",
+            value:"деревья изменений БФПО"
         },
         {
             id:"authorTableLayout_id",
@@ -203,16 +224,6 @@ let getMainSidebarMenu = function() {
             id:"prjRevTableLayout_id",
             icon:"mdi mdi-alpha-r-box",
             value:"таблица редакций БФПО"
-        },
-        {
-            id:"projectTrees_id",
-            icon:"mdi mdi-graph",
-            value:"деревья изменений БФПО"
-        },
-        {
-            id:"prohectHistory_id",
-            icon:"mdi mdi-format-list-text",
-            value:"история изменений БФПО"
         }
     ];
     return result;

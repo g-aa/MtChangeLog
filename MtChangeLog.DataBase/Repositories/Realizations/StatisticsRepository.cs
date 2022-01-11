@@ -53,8 +53,16 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
         public IEnumerable<ProjectVersionShortView> GetShortEntities() 
         {
             var result = this.context.LastProjectRevisions
-                .OrderBy(pv => pv.AnalogModule).ThenBy(pv => pv.Title).ThenBy(pv => pv.Version)
+                .OrderBy(pr => pr.AnalogModule).ThenBy(pr => pr.Title).ThenBy(pr => pr.Version)
                 .Select(e => e.ToProjectVersionShortView());
+            return result;
+        }
+
+        public IEnumerable<LastProjectRevisionView> GetLastProjectRevisions() 
+        {
+            var result = this.context.LastProjectRevisions
+                .OrderBy(pr => pr.Title).ThenBy(pr => pr.AnalogModule).ThenBy(pr => pr.Version)
+                .Select(e => e.ToView());
             return result;
         }
 

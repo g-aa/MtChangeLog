@@ -323,7 +323,10 @@ class EntitiesRepository{
 
     // Статистика:
     async getShortStatistics(){
-        return await this.getEntitiesInfo("/api/Statistics");
+        return await this.getEntitiesInfo("/api/Statistics/Short");
+    }
+    async getLastProjectsRevision(){
+        return await this.getEntitiesInfo("/api/Statistics/LastProjectsRevision");
     }
 }
 
