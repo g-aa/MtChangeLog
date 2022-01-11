@@ -3,7 +3,7 @@ class Platform{
         this.editable = {};
         this.modules = [];
         this.configure = async function(){
-            this.modules = await repository.getSortAnalogModules();
+            this.modules = await repository.getShortAnalogModules();
         }
     }
 

@@ -1,7 +1,5 @@
 class ProjectTreeLayout{
-    constructor(parentLayout){
-        this.parentLayout = parentLayout;
-
+    constructor(){
         let viewLayoutId = "treeLayout_id";
         this.viewLayout = {
             view:"template",
@@ -75,13 +73,12 @@ class ProjectTreeLayout{
         this.cbxLayoutId = cbxLayoutId;
     }
 
-    show(){
+    show(parentLayout){
         webix.ui({
             view: "layout",
             rows: [ this.cbxLayout, this.viewLayout ]
         }, 
-        this.parentLayout.getChildViews()[0]);
-        
+        parentLayout.getChildViews()[0]);
         let cbxLayout = $$(this.cbxLayoutId);
         repository.getProjectTreeTitle()
         .then(titles => {

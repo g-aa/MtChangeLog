@@ -1,8 +1,6 @@
-class ProjectTableLayout{
-    constructor(parentLayout){
-        this.parentLayout = parentLayout;
-
-        let tableLayputId = "projectTable_id";
+class ProjectVersionTableLayout{
+    constructor(){
+        let tableLayputId = "projectVersionTable_id";
         this.tableLayout = {
             view:"datatable",
             id:tableLayputId, 
@@ -134,12 +132,12 @@ class ProjectTableLayout{
         }
     }
 
-    show(){
+    show(parentLayout){
         webix.ui({
             view: "layout",
             rows: [ this.buttonsLayout, this.tableLayout ]
         }, 
-        this.parentLayout.getChildViews()[0]);
+        parentLayout.getChildViews()[0]);
         this.refresh().catch(error => {
             messageBox.error(error.message);
         });

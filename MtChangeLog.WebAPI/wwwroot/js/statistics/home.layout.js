@@ -1,7 +1,5 @@
-class StartPageLayout{
-    constructor(parentLayout){
-        this.parentLayout = parentLayout;
-
+class HomeLayout{
+    constructor(){
         let statisticsLayoutId = "statisticsLayout_id";
         let mostChangedLayoutId = "mostChangedLayout_id";
         let lastChangedLayoutId = "lastChangedLayout_id";
@@ -101,9 +99,8 @@ class StartPageLayout{
         this.mostChangedLayoutId = mostChangedLayoutId;
         this.lastChangedLayoutId = lastChangedLayoutId;
     }
-    show(){
-        webix.ui(this.viewlayout, this.parentLayout.getChildViews()[0]);
-
+    show(parentLayout){
+        webix.ui(this.viewlayout, parentLayout.getChildViews()[0]);
         let statlayout = $$(this.statisticsLayoutId);
         let mostLayout = $$(this.mostChangedLayoutId);
         let lastLayout = $$(this.lastChangedLayoutId);

@@ -1,7 +1,5 @@
-class LastProjectRevisionLayout{
-    constructor(parentLayout){
-        this.parentLayout = parentLayout;
-
+class LastProjectRevisionTableLayout{
+    constructor(){
         let tableLayoutId = "lastProjectRevisionTable_id";
         this.tableLayout = {
             view:"datatable",
@@ -33,9 +31,8 @@ class LastProjectRevisionLayout{
         this.refresh = refresh;
     }
 
-    show(){
-        webix.ui(this.tableLayout, 
-        this.parentLayout.getChildViews()[0]);
+    show(parentLayout){
+        webix.ui(this.tableLayout, parentLayout.getChildViews()[0]);
         this.refresh().catch(error => {
             messageBox.error(error.message);
         });

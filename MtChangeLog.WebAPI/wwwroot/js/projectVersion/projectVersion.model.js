@@ -6,7 +6,7 @@ class ProjectVersion{
         this.analogModules = [];
         this.configure = async function(){
             this.projectStatuses = await repository.getShortProjectStatuses();
-            this.platforms = await repository.getSortPlatforms();
+            this.platforms = await repository.getShortPlatforms();
             
             let platform = await repository.getPlatformDetails(this.editable.platform);
             this.analogModules = platform.analogModules;

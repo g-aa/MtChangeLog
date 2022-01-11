@@ -3,7 +3,7 @@ class Protocol{
         this.editable = {};
         this.communicationModules = [];
         this.configure = async function(){
-            this.communicationModules = await repository.getSortCommunicationModules();
+            this.communicationModules = await repository.getShortCommunicationModules();
         }
     }
 
