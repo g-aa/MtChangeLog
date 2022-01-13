@@ -119,7 +119,10 @@ class MainLayout{
         // макет:
         let sidebarId = "mainSidebar_id";
         let contentLayoutId = "contentLayout_id";
+        let mainLayoutId = "mainLayout_id";
         let mainLayout = {
+            view:"layout",
+            id:mainLayoutId,
             rows: [
                 {
                     view:"toolbar",
@@ -198,6 +201,21 @@ class MainLayout{
                 $$(sidebarId).select(mainMenuItems[0].id);   
                 $$(sidebarId).callEvent("onItemClick", [ mainMenuItems[0].id ]);
             });
+        }
+
+        // запуск прогрес бара при выполнении операций:
+        this.showProgress = function(){
+            let layout = $$(mainLayoutId);
+            layout.disable();
+            webix.extend(layout, webix.ProgressBar);
+            layout.showProgress({ type:"icon" });
+        }
+
+        // остановка прогрес бара:
+        this.closeProgress = function(){
+            let layout = $$(mainLayoutId);
+            layout.hideProgress();
+            layout.enable();
         }
     }
 }

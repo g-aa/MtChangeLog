@@ -10,8 +10,9 @@ class ProjectHistoryLayout{
         let cbxLayoutId = "projectsCbx_id";
         this.cbxLayout = {
             view:"toolbar", 
-            cols:[
-                {
+            padding:3,
+            elements:[
+                { 
                     view:"richselect",
                     id:cbxLayoutId,
                     label:"Проект (БФПО):",
@@ -23,6 +24,7 @@ class ProjectHistoryLayout{
                     on:{
                         onChange: async function(newValue, oldValue, config){
                             try {
+                                mainLayout.showProgress();
                                 let layout = $$(viewLayoutId);
                                 let dataList = await repository.getProjectVersionHistory(newValue);
                                 let newLayout = {
@@ -50,12 +52,43 @@ class ProjectHistoryLayout{
                                 webix.ui(newLayout, layout);
                             } catch (error){
                                 messageBox.alertWarning(error.message);
+                            } finally{
+                                mainLayout.closeProgress();
                             }
                         }
                     }
                 },
                 {
-
+                    
+                },
+                { 
+                    view:"icon", 
+                    icon:"mdi mdi-file-download",
+                    tooltip:"искачать историю проекта в формате *.txt",
+                    click:async function(){
+                        try{
+                            mainLayout.showProgress();
+                            let selected = $$(cbxLayoutId).getValue();
+                            if(selected !== undefined && selected !== ""){
+                                let fileName = "ChangeLog-" + $$(cbxLayoutId).getText() + "-" + new Date().toISOString().slice(0, 10) + ".txt";
+                                let exportData = await repository.getProjectVersionForExport(selected);
+                                let blob = new Blob([exportData], {type: "application/json;charset=utf-8"});
+                                let url = URL.createObjectURL(blob);
+                                let elem = document.createElement("a");
+                                elem.href = url;
+                                elem.download = fileName;
+                                document.body.appendChild(elem);
+                                elem.click();
+                                document.body.removeChild(elem);
+                            } else{
+                                messageBox.information("выберете проект (БФПО) для экспорта в файл")
+                            }
+                        } catch (error){
+                            messageBox.error(error.message);
+                        } finally{
+                            mainLayout.closeProgress();
+                        }
+                    }
                 }
             ]
         }

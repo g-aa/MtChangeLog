@@ -320,6 +320,9 @@ class EntitiesRepository{
     async getProjectRevisionHistory(entityId = ""){
         return await this.getEntityDetails("/api/ProjectHistory/Revision", { id:entityId });
     }
+    async getProjectVersionForExport(entityId = ""){
+        return await this.getEntityDetails("/api/ProjectHistory/Export", { id:entityId });
+    }
 
     // Статистика:
     async getShortStatistics(){

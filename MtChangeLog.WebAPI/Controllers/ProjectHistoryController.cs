@@ -75,5 +75,22 @@ namespace MtChangeLog.WebAPI.Controllers
                 return this.BadRequest(ex.Message);
             }
         }
+
+        // GET: api/<StatisticsController>/Export/00000000-0000-0000-0000-000000000000
+        [HttpGet("Export/{id}")]
+        public IActionResult GetProjectVersionForExport(Guid id) 
+        {
+            try
+            {
+                this.logger.LogInformation($"HTTP GET - ProjectHistoryController - get full history by project version id = {id} for export");
+                var result =  string.Join(Environment.NewLine, this.statisticsRepository.GetProjectVersionHistory(id).Select(e => e.ToText()));
+                return this.Ok(result);
+            }
+            catch (Exception ex)
+            {
+                this.logger.LogError(ex, $"HTTP GET - ProjectHistoryController - ");
+                return this.BadRequest(ex.Message);
+            }
+        }
     }
 }
