@@ -80,19 +80,15 @@ class ProjectTreeLayout{
         this.cbxLayoutId = cbxLayoutId;
     }
 
-    show(parentLayout){
+    async show(parentLayout){
         webix.ui({
             view: "layout",
             rows: [ this.cbxLayout, this.viewLayout ]
         }, 
         parentLayout.getChildViews()[0]);
+
+        let titles = await repository.getProjectTreeTitle();
         let cbxLayout = $$(this.cbxLayoutId);
-        repository.getProjectTreeTitle()
-        .then(titles => {
-            cbxLayout.define("options", titles);
-        })
-        .catch(error => {
-            messageBox.error(error.message);
-        });
+        cbxLayout.define("options", titles);
     }
 }
