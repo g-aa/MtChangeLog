@@ -39,6 +39,7 @@ class RelayAlgorithmTableLayout{
                     width:200,
                     click: async function (){
                         try{
+                            mainLayout.showProgress();
                             let algorithm = new RelayAlgorithm();
                             await algorithm.defaultInitialize();
                             algorithm.beforeEnding = async function(answer){
@@ -49,6 +50,8 @@ class RelayAlgorithmTableLayout{
                             win.show();
                         } catch (error){
                             messageBox.error(error.message);
+                        } finally{
+                            mainLayout.closeProgress();
                         }
                     }
                 },
@@ -59,6 +62,7 @@ class RelayAlgorithmTableLayout{
                     width:200,
                     click: async function (){
                         try{
+                            mainLayout.showProgress();
                             let selected = $$(tableLayputId).getSelectedItem();
                             if(selected != undefined){
                                 let algorithm = new RelayAlgorithm();
@@ -74,6 +78,8 @@ class RelayAlgorithmTableLayout{
                             }
                         } catch (error){
                             messageBox.error(error.message);
+                        } finally{
+                            mainLayout.closeProgress();
                         }
                     }
                 },
@@ -85,6 +91,7 @@ class RelayAlgorithmTableLayout{
                     align:"right",
                     click: async function (){
                         try{
+                            mainLayout.showProgress();
                             let selected = $$(tableLayputId).getSelectedItem();
                             if(selected != undefined){
                                 // удалить обьект на сервере:
@@ -98,6 +105,8 @@ class RelayAlgorithmTableLayout{
                             }
                         } catch (error){
                             messageBox.error(error.message); 
+                        } finally{
+                            mainLayout.closeProgress();
                         }
                     } 
                 }
@@ -105,14 +114,12 @@ class RelayAlgorithmTableLayout{
         }
     }
 
-    show(parentLayout){
+    async show(parentLayout){
         webix.ui({
             view:"layout",
             rows:[ this.buttonsLayout, this.tableLayout ]
         }, 
         parentLayout.getChildViews()[0]);
-        this.refresh().catch(error => {
-            messageBox.error(error.message);
-        }); 
+        await this.refresh(); 
     }
 }

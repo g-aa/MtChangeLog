@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MtChangeLog.DataObjects.Entities.Views.Shorts;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -7,18 +8,12 @@ using System.Threading.Tasks;
 
 namespace MtChangeLog.DataObjects.Entities.Editable
 {
-    public class RelayAlgorithmEditable
+    public class RelayAlgorithmEditable : RelayAlgorithmShortView
     {
-        public Guid Id { get; set; }
-
         [Required(AllowEmptyStrings = true)]
         [StringLength(32, ErrorMessage = "Наименование группы алгоритмов должно содержать не больше 32 символо")]
         public string Group { get; set; }
 
-        [Required(ErrorMessage = "Наименование алгоритма параметр обязательный для заполнения")]
-        [StringLength(32, ErrorMessage = "Наименование алгоритма должно содержать не больше 32 символо")]
-        public string Title { get; set; }
-        
         [Required(ErrorMessage = "Код ANSI параметр обязательный для заполнения")]
         [StringLength(32, ErrorMessage = "Код ANSI должен содержать не больше 32 символо")]
         [RegularExpression("^[0-9 A-Z -/]{0,32}$", ErrorMessage = "Код ANSI может содержать следующие символы 0-9, A-Z, -, /", MatchTimeoutInMilliseconds = 1000)]
@@ -35,7 +30,7 @@ namespace MtChangeLog.DataObjects.Entities.Editable
 
         public override string ToString()
         {
-            return $"ANSI: {this.ANSI}, {this.Title}";
+            return $"ANSI: {this.ANSI}, {base.ToString()}";
         }
     }
 }

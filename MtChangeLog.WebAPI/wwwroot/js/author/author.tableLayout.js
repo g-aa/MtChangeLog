@@ -37,6 +37,7 @@ class AuthorTableLayout{
                     width:200,
                     click: async function (){
                         try{
+                            mainLayout.showProgress();
                             let author = new Author();
                             await author.defaultInitialize();
                             author.beforeEnding = async function(answer){
@@ -47,6 +48,8 @@ class AuthorTableLayout{
                             win.show();
                         } catch (error){
                             messageBox.error(error.message);
+                        } finally{
+                            mainLayout.closeProgress();
                         }
                     }
                 },
@@ -57,6 +60,7 @@ class AuthorTableLayout{
                     width:200,
                     click: async function (){
                         try{
+                            mainLayout.showProgress();
                             let selected = $$(tableLayputId).getSelectedItem();
                             if(selected != undefined){
                                 let author = new Author();
@@ -72,6 +76,8 @@ class AuthorTableLayout{
                             }
                         } catch (error){
                             messageBox.error(error.message);
+                        } finally{
+                            mainLayout.closeProgress();
                         }
                     }
                 },
@@ -83,6 +89,7 @@ class AuthorTableLayout{
                     align:"right",
                     click: async function (){
                         try{
+                            mainLayout.showProgress();
                             let selected = $$(tableLayputId).getSelectedItem();
                             if(selected != undefined){
                                 // удалить обьект на сервере:
@@ -96,6 +103,8 @@ class AuthorTableLayout{
                             }
                         } catch (error){
                             messageBox.error(error.message); 
+                        } finally{
+                            mainLayout.closeProgress();
                         }
                     } 
                 }
@@ -103,14 +112,12 @@ class AuthorTableLayout{
         }
     }
 
-    show(parentLayout){
+    async show(parentLayout){
         webix.ui({
             view:"layout",
             rows:[ this.buttonsLayout, this.tableLayout ]
         }, 
         parentLayout.getChildViews()[0]);
-        this.refresh().catch(error => {
-            messageBox.error(error.message);
-        });
+        await this.refresh();
     }
 }

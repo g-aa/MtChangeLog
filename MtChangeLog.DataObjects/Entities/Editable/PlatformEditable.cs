@@ -1,5 +1,4 @@
 ﻿using MtChangeLog.DataObjects.Entities.Views.Shorts;
-
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -9,14 +8,8 @@ using System.Threading.Tasks;
 
 namespace MtChangeLog.DataObjects.Entities.Editable
 {
-    public class PlatformEditable
+    public class PlatformEditable : PlatformShortView
     {
-        public Guid Id { get; set; }
-        
-        [Required(ErrorMessage = "Наименование платформы параметр обязательный для заполнения")]
-        [RegularExpression("^БМРЗ-[0-9]{3}[A-Z А-Я]{0,2}$", ErrorMessage = "Наименование платформы должено иметь следующий вид БМРЗ-XXXyy, где XXX - число [0-9], y - символы [A-Z, А-Я] (не обязательны)", MatchTimeoutInMilliseconds = 1000)]
-        public string Title { get; set; }
-        
         [Required(AllowEmptyStrings = true)]
         [StringLength(500, ErrorMessage = "Описание платформы должно содержать не больше 500 символов")]
         public string Description { get; set; }
@@ -30,7 +23,7 @@ namespace MtChangeLog.DataObjects.Entities.Editable
 
         public override string ToString()
         {
-            return this.Title;
+            return base.ToString();
         }
     }
 }

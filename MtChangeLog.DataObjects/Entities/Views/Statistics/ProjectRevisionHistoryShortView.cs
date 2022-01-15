@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MtChangeLog.DataObjects.Entities.Views.Statistics
 {
-    public class ProjectHistoryShortView
+    public class ProjectRevisionHistoryShortView
     {
         public Guid Id { get; set; }
         /// <summary>

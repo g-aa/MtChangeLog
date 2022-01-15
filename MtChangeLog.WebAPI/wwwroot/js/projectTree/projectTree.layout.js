@@ -10,19 +10,21 @@ class ProjectTreeLayout{
         let cbxLayoutId = "projectType_id";
         this.cbxLayout = {
             view:"toolbar", 
-            cols:[
+            padding:3,
+            elements:[
                 {
                     view:"richselect",
                     id:cbxLayoutId,
                     label:"Тип проекта БМРЗ (тип БФПО):",
                     labelAlign:"right",
                     labelWidth:220,
-                    icon:"mdi mdi-format-title",
+                    icon:"mdi mdi-order-bool-ascending-variant",
                     value:"",
                     options:[],
                     on:{
                         onChange: async function(newValue, oldValue, config){
                             try {
+                                mainLayout.showProgress();
                                 let treeDiagram = $$(viewLayoutId);
                                 let data = await repository.getProjectTree(newValue);
                                 if(data != undefined){
@@ -39,10 +41,13 @@ class ProjectTreeLayout{
                                             on:{
                                                 onItemClick: async function(id){							
                                                     try {
+                                                        mainLayout.showProgress();
                                                         let win = new LogWindow(id);
                                                         await win.show();
                                                     } catch (error){
                                                         messageBox.alertWarning(error.message);
+                                                    } finally{
+                                                        mainLayout.closeProgress();
                                                     }
                                                 }
                                             }
@@ -61,6 +66,8 @@ class ProjectTreeLayout{
                                 }
                             } catch (error){
                                 messageBox.alertWarning(error.message);
+                            } finally {
+                                mainLayout.closeProgress();
                             }
                         }
                     }
@@ -73,19 +80,15 @@ class ProjectTreeLayout{
         this.cbxLayoutId = cbxLayoutId;
     }
 
-    show(parentLayout){
+    async show(parentLayout){
         webix.ui({
             view: "layout",
             rows: [ this.cbxLayout, this.viewLayout ]
         }, 
         parentLayout.getChildViews()[0]);
+
+        let titles = await repository.getProjectTreeTitle();
         let cbxLayout = $$(this.cbxLayoutId);
-        repository.getProjectTreeTitle()
-        .then(titles => {
-            cbxLayout.define("options", titles);
-        })
-        .catch(error => {
-            messageBox.error(error.message);
-        });
+        cbxLayout.define("options", titles);
     }
 }

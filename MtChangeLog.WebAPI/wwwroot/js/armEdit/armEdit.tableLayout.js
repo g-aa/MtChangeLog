@@ -38,6 +38,7 @@ class ArmEditTableLayout{
                     width:200,
                     click: async function (){
                         try{
+                            mainLayout.showProgress();
                             let armEdit = new ArmEdit();
                             await armEdit.defaultInitialize();
                             armEdit.beforeEnding = async function(answer){
@@ -48,6 +49,8 @@ class ArmEditTableLayout{
                             win.show();
                         } catch (error){
                             messageBox.error(error.message);
+                        } finally{
+                            mainLayout.closeProgress();
                         }
                     }
                 },
@@ -58,6 +61,7 @@ class ArmEditTableLayout{
                     width:200,
                     click: async function (){
                         try{
+                            mainLayout.showProgress();
                             let selected = $$(tableLayputId).getSelectedItem();
                             if(selected != undefined){
                                 let armEdit = new ArmEdit();
@@ -73,6 +77,8 @@ class ArmEditTableLayout{
                             }
                         } catch (error){
                             messageBox.error(error.message);
+                        } finally{
+                            mainLayout.closeProgress();
                         }
                     }
                 },
@@ -84,6 +90,7 @@ class ArmEditTableLayout{
                     align:"right",
                     click: async function (){
                         try{
+                            mainLayout.showProgress();
                             let selected = $$(tableLayputId).getSelectedItem();
                             if(selected != undefined){
                                 // удалить обьект на сервере:
@@ -97,6 +104,8 @@ class ArmEditTableLayout{
                             }
                         } catch (error){
                             messageBox.error(error.message); 
+                        } finally{
+                            mainLayout.closeProgress();
                         }
                     } 
                 }
@@ -104,14 +113,12 @@ class ArmEditTableLayout{
         }
     }
 
-    show(parentLayout){
+    async show(parentLayout){
         webix.ui({
             view:"layout",
             rows:[ this.buttonsLayout, this.tableLayout ]
         }, 
         parentLayout.getChildViews()[0]);
-        this.refresh().catch(error => {
-            messageBox.error(error.message);
-        });
+        await this.refresh();
     }
 }

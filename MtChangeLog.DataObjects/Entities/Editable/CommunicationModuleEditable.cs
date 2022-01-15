@@ -8,14 +8,8 @@ using System.Threading.Tasks;
 
 namespace MtChangeLog.DataObjects.Entities.Editable
 {
-    public class CommunicationModuleEditable
+    public class CommunicationModuleEditable : CommunicationModuleShortView
     {
-        public Guid Id { get; set; }
-        
-        [Required(ErrorMessage = "Наименование адаптера параметр обязательный для заполнения")]
-        [StringLength(255, ErrorMessage ="Наименование адаптера должно содержать не больше 32 символов")]
-        public string Title { get; set; }
-
         [Required(AllowEmptyStrings = true)]
         [StringLength(500, ErrorMessage = "Описание должно содержать не больше 500 символов")]
         public string Description { get; set; }
@@ -24,7 +18,7 @@ namespace MtChangeLog.DataObjects.Entities.Editable
 
         public override string ToString()
         {
-            return this.Title;
+            return base.ToString();
         }
     }
 }

@@ -1,9 +1,8 @@
 class ProtocolEditWindow {
     constructor(editable){
-        
         let _editable = editable;
-        if(_editable == undefined || _editable == null){
-            throw new Error("не выбран протокол для работы");
+        if(!_editable instanceof Protocol){
+            throw new Error("не выбран протокол инф. обмена для работы");
         }
 
         let _uiWindow;
@@ -12,6 +11,19 @@ class ProtocolEditWindow {
                 _uiWindow = webix.ui(window());
                 _uiWindow.show();
             });
+        }
+
+        // запуск прогрес бара при выполнении операций:
+        let showProgress = function(){
+            _uiWindow.disable();
+            webix.extend(_uiWindow, webix.ProgressBar);
+            _uiWindow.showProgress({ type:"icon" });
+        }
+
+        // остановка прогрес бара:
+        let closeProgress = function(){
+            _uiWindow.hideProgress();
+            _uiWindow.enable();
         }
 
         let window = function (){
@@ -126,6 +138,7 @@ class ProtocolEditWindow {
                         align:"right",
                         click: async function(){
                             try{ 
+                                showProgress();
                                 // обновить перечень платформ у модуля:
                                 let selected = $$("protocolModules_id").getValue().split(",");
                                 _editable.setCommunicationModules(selected);
@@ -138,6 +151,7 @@ class ProtocolEditWindow {
                             } catch (error){
                                 messageBox.alertWarning(error.message);
                             } finally{
+                                closeProgress();
                             }
                         }
                     }

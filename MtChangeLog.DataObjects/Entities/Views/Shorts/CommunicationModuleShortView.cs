@@ -15,8 +15,6 @@ namespace MtChangeLog.DataObjects.Entities.Views.Shorts
         [StringLength(255, ErrorMessage = "Наименование адаптера должно содержать не больше 32 символов")]
         public string Title { get; set; }
 
-        public string Protocols { get; set; }
-
         public override string ToString()
         {
             return this.Title;

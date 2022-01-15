@@ -131,9 +131,9 @@ namespace MtChangeLog.DataBase.Entities.Tables
             return result;
         }
 
-        public ProjectHistoryView ToHistoryView()
+        public ProjectRevisionHistoryView ToHistoryView()
         {
-            var result = new ProjectHistoryView()
+            var result = new ProjectRevisionHistoryView()
             {
                 ArmEdit = this.ArmEdit?.Version ?? "v0.00.00.00",
                 Authors = this.Authors.Select(a => $"{a?.FirstName} {a?.LastName}"),
@@ -148,9 +148,9 @@ namespace MtChangeLog.DataBase.Entities.Tables
             return result;
         }
 
-        public ProjectHistoryShortView ToHistoryShortView() 
+        public ProjectRevisionHistoryShortView ToHistoryShortView() 
         {
-            var result = new ProjectHistoryShortView()
+            var result = new ProjectRevisionHistoryShortView()
             {
                 Id = this.Id,
                 Date = this.Date,

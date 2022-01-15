@@ -78,10 +78,13 @@ class HomeLayout{
                     on:{
                         onItemClick: async function(id){
                             try {
+                                mainLayout.showProgress();
                                 let win = new LogWindow(id.row);
-                                win.show();
+                                await win.show();
                             } catch (error){
                                 messageBox.alertWarning(error.message);
+                            } finally {
+                                mainLayout.closeProgress();
                             }
                         }
                     },
@@ -99,20 +102,18 @@ class HomeLayout{
         this.mostChangedLayoutId = mostChangedLayoutId;
         this.lastChangedLayoutId = lastChangedLayoutId;
     }
-    show(parentLayout){
+    async show(parentLayout){
         webix.ui(this.viewlayout, parentLayout.getChildViews()[0]);
+        let data = await repository.getShortStatistics();
+        
         let statlayout = $$(this.statisticsLayoutId);
+        statlayout.setValues(data, true);
+
         let mostLayout = $$(this.mostChangedLayoutId);
+        mostLayout.define("data", data.mostChangingProjects);
+
         let lastLayout = $$(this.lastChangedLayoutId);
-        repository.getShortStatistics()
-        .then(data => {
-            statlayout.setValues(data, true);
-            mostLayout.define("data", data.mostChangingProjects);
-            lastLayout.parse(data.lastModifiedProjects);
-            lastLayout.refresh();
-        })
-        .catch(error => {
-            messageBox.error(error.message);
-        });
+        lastLayout.parse(data.lastModifiedProjects);
+        lastLayout.refresh();
     }
 }

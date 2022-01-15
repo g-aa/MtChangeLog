@@ -1,5 +1,4 @@
 ﻿using MtChangeLog.DataObjects.Entities.Views.Shorts;
-
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -9,18 +8,12 @@ using System.Threading.Tasks;
 
 namespace MtChangeLog.DataObjects.Entities.Editable
 {
-    public class AnalogModuleEditable
+    public class AnalogModuleEditable : AnalogModuleShortView
     {
-        public Guid Id { get; set; }
-        
         [Required(ErrorMessage = "Децимальный номер аналогового модуля обязательный параметр для заполнения")]
         [RegularExpression("^ДИВГ.[0-9]{5}-[0-9]{2}$", ErrorMessage = "Децимальный номер аналогового модуля должен иметь следующий вид ДИВГ.xxxxx-xx, где x - число [0-9]", MatchTimeoutInMilliseconds = 1000)]
         public string DIVG { get; set; }
 
-        [Required(ErrorMessage = "Наименование аналогового модуля обязательный параметр для заполнения")]
-        [RegularExpression("^БМРЗ-[0-9]{3}$", ErrorMessage = "Наименование аналогового модуля должено иметь следующий вид БМРЗ-xxx, где x - число [0-9]", MatchTimeoutInMilliseconds = 1000)]
-        public string Title { get; set; }
-        
         [Required(ErrorMessage = "Номинальный ток аналогового модуля обязательный параметр для заполнения")]
         [RegularExpression("^[0-9]A$", ErrorMessage ="Номинальный ток аналогового модуля должен принимать значение от [0-9]A", MatchTimeoutInMilliseconds = 1000)]
         public string Current { get; set; }
@@ -38,7 +31,7 @@ namespace MtChangeLog.DataObjects.Entities.Editable
 
         public override string ToString()
         {
-            return $"{this.Title}, номинальный ток: {this.Current}";
+            return $"{base.ToString()}, номинальный ток: {this.Current}";
         }
     }
 }

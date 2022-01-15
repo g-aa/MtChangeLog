@@ -1,7 +1,7 @@
 class AnalogModuleEditWindow{
     constructor(editableObj){
         let _editableObj = editableObj;
-        if(_editableObj == undefined || _editableObj == null){
+        if(!_editableObj instanceof AnalogModule){
             throw new Error("не выбран аналоговый модуль для работы");
         }
         
@@ -12,6 +12,19 @@ class AnalogModuleEditWindow{
                 _uiWindow.show();
             });
         };
+
+        // запуск прогрес бара при выполнении операций:
+        let showProgress = function(){
+            _uiWindow.disable();
+            webix.extend(_uiWindow, webix.ProgressBar);
+            _uiWindow.showProgress({ type:"icon" });
+        }
+
+        // остановка прогрес бара:
+        let closeProgress = function(){
+            _uiWindow.hideProgress();
+            _uiWindow.enable();
+        }
 
         let window = function () {
             let result = {
@@ -163,6 +176,7 @@ class AnalogModuleEditWindow{
                         align:"right",
                         click: async function(){
                             try {
+                                showProgress();
                                 // обновить перечень платформ у модуля:
                                 let selected = $$("modulePlatforms_id").getValue().split(",");
                                 _editableObj.setPlatforms(selected);
@@ -175,6 +189,7 @@ class AnalogModuleEditWindow{
                             } catch (error){
                                 messageBox.alertWarning(error.message);
                             } finally{
+                                closeProgress();
                             }
                         }
                     }

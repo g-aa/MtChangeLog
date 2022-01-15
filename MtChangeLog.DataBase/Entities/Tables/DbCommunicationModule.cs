@@ -53,7 +53,6 @@ namespace MtChangeLog.DataBase.Entities.Tables
             {
                 Id = this.Id,
                 Title = this.Title,
-                Protocols =  this.Protocols.Any() ? string.Join(", ", this.Protocols.OrderBy(e => e.Title).Select(e => e.Title)) : ""
             };
             return result;
         }

@@ -10,8 +10,9 @@ class ProjectHistoryLayout{
         let cbxLayoutId = "projectsCbx_id";
         this.cbxLayout = {
             view:"toolbar", 
-            cols:[
-                {
+            padding:3,
+            elements:[
+                { 
                     view:"richselect",
                     id:cbxLayoutId,
                     label:"Проект (БФПО):",
@@ -23,8 +24,9 @@ class ProjectHistoryLayout{
                     on:{
                         onChange: async function(newValue, oldValue, config){
                             try {
+                                mainLayout.showProgress();
                                 let layout = $$(viewLayoutId);
-                                let dataList = await repository.getProjectVersionHistory(newValue);
+                                let result = await repository.getProjectVersionHistory(newValue);
                                 let newLayout = {
                                     view:"unitlist",
                                     id:viewLayoutId,
@@ -45,41 +47,67 @@ class ProjectHistoryLayout{
                                         height:"auto"
                                     },
                                     select:true,
-                                    data:dataList
+                                    data:result.history
                                 }
                                 webix.ui(newLayout, layout);
                             } catch (error){
                                 messageBox.alertWarning(error.message);
+                            } finally{
+                                mainLayout.closeProgress();
                             }
                         }
                     }
                 },
                 {
-
+                    
+                },
+                { 
+                    view:"icon", 
+                    icon:"mdi mdi-file-download",
+                    tooltip:"искачать историю проекта в формате *.txt",
+                    click:async function(){
+                        try{
+                            mainLayout.showProgress();
+                            let selected = $$(cbxLayoutId).getValue();
+                            if(selected !== undefined && selected !== ""){
+                                let result = await repository.getProjectHistoryForExport(selected);
+                                let blob = new Blob([new Uint8Array(result.bytes)], {type: "application/octet-stream"});
+                                let url = URL.createObjectURL(blob);
+                                let elem = document.createElement("a");
+                                elem.href = url;
+                                elem.download = result.title;
+                                document.body.appendChild(elem);
+                                elem.click();
+                                document.body.removeChild(elem);
+                            } else{
+                                messageBox.information("выберете проект (БФПО) для экспорта в файл")
+                            }
+                        } catch (error){
+                            messageBox.error(error.message);
+                        } finally{
+                            mainLayout.closeProgress();
+                        }
+                    }
                 }
             ]
         }
         this.cbxLayoutId = cbxLayoutId;
     }
 
-    show(parentLayout){
+    async show(parentLayout){
         webix.ui({
             view: "layout",
             rows: [ this.cbxLayout, this.viewLayout ]
         }, 
         parentLayout.getChildViews()[0]);
+        
+        let data = await repository.getProjectHistoryTitles();
         let cbxLayout = $$(this.cbxLayoutId);
-        repository.getProjectHistoryTitles()
-        .then(projectsData => {
-            cbxLayout.define("options", {
-                body:{
-                    template:"#module#-#title#-#version#"
-                },   
-                data:projectsData
-            });
-        })
-        .catch(error => {
-            messageBox.error(error.message);
+        cbxLayout.define("options", {
+            body:{
+                template:"#module#-#title#-#version#"
+            },   
+            data:data
         });
     }
 }

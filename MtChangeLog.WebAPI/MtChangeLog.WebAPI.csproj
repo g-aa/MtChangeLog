@@ -142,6 +142,7 @@
 
   <ItemGroup>
     <Folder Include="LogFiles\" />
+    <Folder Include="Models\" />
   </ItemGroup>
 
   <ItemGroup>

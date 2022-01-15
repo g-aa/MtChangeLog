@@ -38,6 +38,7 @@ class AnalogModuleTableLayout{
                     width:200,
                     click: async function (){
                         try{
+                            mainLayout.showProgress();
                             let module = new AnalogModule();
                             await module.defaultInitialize();
                             module.beforeEnding = async function(answer){
@@ -48,6 +49,8 @@ class AnalogModuleTableLayout{
                             win.show();
                         } catch (error){
                             messageBox.error(error.message);
+                        } finally{
+                            mainLayout.closeProgress();
                         }
                     }
                 },
@@ -58,6 +61,7 @@ class AnalogModuleTableLayout{
                     width:200,
                     click: async function (){
                         try{
+                            mainLayout.showProgress();
                             let selected = $$(tableLayputId).getSelectedItem();
                             if(selected != undefined){
                                 let module = new AnalogModule();
@@ -73,6 +77,8 @@ class AnalogModuleTableLayout{
                             }
                         } catch (error){
                             messageBox.error(error.message);
+                        } finally{
+                            mainLayout.closeProgress();
                         }
                     }
                 },
@@ -84,6 +90,7 @@ class AnalogModuleTableLayout{
                     align:"right",
                     click: async function (){
                         try{
+                            mainLayout.showProgress();
                             let selected = $$(tableLayputId).getSelectedItem();
                             if(selected != undefined){
                                 // удалить обьект на сервере:
@@ -97,6 +104,8 @@ class AnalogModuleTableLayout{
                             }
                         } catch (error){
                             messageBox.error(error.message); 
+                        } finally {
+                            mainLayout.closeProgress();
                         }
                     } 
                 }
@@ -104,14 +113,12 @@ class AnalogModuleTableLayout{
         }
     }
 
-    show(parentLayout){
+    async show(parentLayout){
         webix.ui({
             view:"layout",
             rows:[ this.buttonsLayout, this.tableLayout ]
         }, 
         parentLayout.getChildViews()[0]);
-        this.refresh().catch(error => {
-            messageBox.error(error.message);
-        });  
+        await this.refresh();
     }
 }

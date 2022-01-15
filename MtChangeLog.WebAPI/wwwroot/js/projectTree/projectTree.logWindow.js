@@ -46,6 +46,21 @@ class LogWindow{
                         
                     },
                     {
+                        view:"icon", 
+                        icon:"mdi mdi-fullscreen", 
+                        tooltip:"развернуть окно на весь экран", 
+                        click: function(){
+                            if(uiWindow.config.fullscreen){
+                                webix.fullscreen.exit();
+                                this.define({icon:"mdi mdi-fullscreen", tooltip:"развернуть окно на весь экран"});
+                            } else{
+                                webix.fullscreen.set(uiWindow);
+                                this.define({icon:"mdi mdi-fullscreen-exit", tooltip:"выйти из полноэкранного режима"});
+                            }
+                            this.refresh();
+                        }
+                    },
+                    {
                         view:"icon",
                         icon:"wxi-close",
                         id:"btn_oscWinClose",
@@ -66,7 +81,8 @@ class LogWindow{
                 id:logLayoutId,
                 scroll:true,
                 template: function(o){
-                    let res = "<b>Дата:</b><span style='white-space: pre-wrap'>\t\t\t" + o.date + "</span><br>"
+                    let res = "<b>Наименование:</b><span style='white-space: pre-wrap'>\t" + o.title + "</span><br>"
+                        + "<br><b>Дата:</b><span style='white-space: pre-wrap'>\t\t\t" + o.date + "</span><br>"
                         + "<br><b>ArmEdit:</b><span style='white-space: pre-wrap'>\t\t" + o.armEdit + "</span><br>"
                         + "<br><b>Платформа:</b><span style='white-space: pre-wrap'>\t" + o.platform + "</span><br>"
                         + "<br><b>Протоколы:</b><span style='white-space: pre-wrap'>\t\t" + o.communication + "</span><br>"
