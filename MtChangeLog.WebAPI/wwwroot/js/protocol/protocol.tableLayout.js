@@ -36,6 +36,7 @@ class ProtocolTableLayout{
                     width:200,
                     click: async function (){
                         try{
+                            mainLayout.showProgress();
                             let entity = new Protocol();
                             await entity.defaultInitialize();
                             entity.beforeEnding = async function(answer){
@@ -46,6 +47,8 @@ class ProtocolTableLayout{
                             win.show();
                         } catch (error) {
                             messageBox.error(error.message);
+                        } finally{
+                            mainLayout.closeProgress();
                         }
                     }
                 },
@@ -56,6 +59,7 @@ class ProtocolTableLayout{
                     width:200,
                     click: async function (){
                         try{
+                            mainLayout.showProgress();
                             let selected = $$(tableLayputId).getSelectedItem();
                             if(selected != undefined) {
                                 let entity = new Protocol();
@@ -71,6 +75,8 @@ class ProtocolTableLayout{
                             }
                         } catch (error){
                             messageBox.error(error.message);
+                        } finally {
+                            mainLayout.closeProgress();
                         }
                     }
                 },
@@ -82,6 +88,7 @@ class ProtocolTableLayout{
                     align:"right",
                     click: async function (){
                         try{
+                            mainLayout.showProgress();
                             let selected = $$(tableLayputId).getSelectedItem();
                             if(selected != undefined){
                                 // удалить обьект на сервере:
@@ -95,6 +102,8 @@ class ProtocolTableLayout{
                             }
                         } catch (error){
                             messageBox.error(error.message); 
+                        } finally{
+                            mainLayout.closeProgress();
                         }
                     } 
                 }
@@ -102,14 +111,12 @@ class ProtocolTableLayout{
         }
     }
 
-    show(parentLayout){
+    async show(parentLayout){
         webix.ui({
             view: "layout",
             rows: [ this.buttonsLayout, this.tableLayout ]
         }, 
         parentLayout.getChildViews()[0]);
-        this.refresh().catch(error => {
-            messageBox.error(error.message);
-        });
+        await this.refresh();
     }
 }
