@@ -41,6 +41,7 @@ class ProjectRevisionLayout{
                     width:200,
                     click: async function (){
                         try{
+                            mainLayout.showProgress();
                             let selected = $$(tableLayoutId).getSelectedItem();
                             if(selected != undefined){
                                 let revision = new ProjectRevision();
@@ -56,6 +57,8 @@ class ProjectRevisionLayout{
                             }
                         } catch (error){
                             messageBox.error(error.message);
+                        } finally{
+                            mainLayout.closeProgress();
                         }
                     }
                 },
@@ -67,6 +70,7 @@ class ProjectRevisionLayout{
                     align:"right",
                     click: async function (){
                         try{
+                            mainLayout.showProgress();
                             let selected = $$(tableLayoutId).getSelectedItem();
                             if(selected != undefined){
                                 // удалить обьект на сервере:
@@ -80,6 +84,8 @@ class ProjectRevisionLayout{
                             }
                         } catch (error){
                             messageBox.error(error.message); 
+                        } finally{
+                            mainLayout.closeProgress();
                         }
                     } 
                 }
@@ -87,14 +93,12 @@ class ProjectRevisionLayout{
         }
     }
 
-    show(parentLayout){
+    async show(parentLayout){
         webix.ui({
             view: "layout",
             rows: [ this.buttonsLayout, this.tableLayout ]
         }, 
         parentLayout.getChildViews()[0]);
-        this.refresh().catch(error => {
-            messageBox.error(error.message);
-        });
+        await this.refresh();
     }
 }
