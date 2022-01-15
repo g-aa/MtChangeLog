@@ -38,7 +38,13 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
             return result;
         }
 
-        public ProjectHistoryView GetProjectRevisionHistory(Guid guid)
+        public ProjectVersionShortView GetShortEntity(Guid guid) 
+        {
+            var result = this.GetDbProjectVersion(guid);
+            return result.ToShortView();
+        }
+
+        public ProjectRevisionHistoryView GetProjectRevisionHistory(Guid guid)
         {
             var result = this.GetDbProjectRevision(guid);
             return result.ToHistoryView();
@@ -66,9 +72,9 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
             return result;
         }
 
-        public IEnumerable<ProjectHistoryView> GetProjectVersionHistory(Guid guid) 
+        public ProjectVersionHistoryView GetProjectVersionHistory(Guid guid) 
         {
-            var result = new List<ProjectHistoryView>();
+            var result = new ProjectVersionHistoryView();
             var query = this.context.ProjectRevisions
                 .Include(pr => pr.ArmEdit)
                 .Include(pr => pr.Authors)
@@ -82,9 +88,10 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
                 .FirstOrDefault();
             if (entity != null)
             {
+                result.Title = entity.ProjectVersion.ToShortView().ToString();
                 do
                 {
-                    result.Add(entity.ToHistoryView());
+                    result.History.Add(entity.ToHistoryView());
                 } while ((entity = query.FirstOrDefault(pr => pr.Id == entity.ParentRevisionId)) != null);
             }
             return result;
@@ -100,7 +107,7 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
                 .Select(pr => pr.ToTreeView());
         }
 
-        public IEnumerable<ProjectHistoryShortView> GetNLastModifiedProjects(ushort count) 
+        public IEnumerable<ProjectRevisionHistoryShortView> GetNLastModifiedProjects(ushort count) 
         {
             var result = this.context.LastProjectRevisions
                 .OrderByDescending(e => e.Date)
@@ -109,7 +116,7 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
             return result;
         }
 
-        public IEnumerable<ProjectHistoryShortView> GetNMostChangingProjects(ushort count) 
+        public IEnumerable<ProjectRevisionHistoryShortView> GetNMostChangingProjects(ushort count) 
         {
             var result = this.context.LastProjectRevisions
                 .OrderByDescending(e => e.Revision).ThenByDescending(e => e.Date)
