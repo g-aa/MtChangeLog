@@ -120,7 +120,7 @@ class MainLayout{
         let sidebarId = "mainSidebar_id";
         let contentLayoutId = "contentLayout_id";
         let mainLayoutId = "mainLayout_id";
-        let mainLayout = {
+        let mainComponent = {
             view:"layout",
             id:mainLayoutId,
             rows: [
@@ -132,7 +132,7 @@ class MainLayout{
                         { 
                             tooltip:"свернуть / развернуть основное меню",
                             view:"icon", 
-                            icon:"mdi mdi-menu", 
+                            icon:"mdi mdi-apps", 
                             click:function(){  
                                 $$(sidebarId).toggle();
                             }
@@ -141,6 +141,29 @@ class MainLayout{
                             view:"label",
                             align:"center",
                             label:"<span style='font-size:30px;'>БМРЗ - change log</span>"
+                        },
+                        {
+                            view:"icon",
+                            icon:"mdi mdi-database-arrow-down",
+                            tooltip:"Скачать истории изменения для всех БФПО в формате *.txt",
+                            click:async function(){
+                                try{
+                                    mainLayout.showProgress();
+                                    let result = await repository.getProjectHistorysArchiveForExport();
+                                    let blob = new Blob([new Uint8Array(result.bytes)], {type: "application/zip"});
+                                    let url = URL.createObjectURL(blob);
+                                    let elem = document.createElement("a");
+                                    elem.href = url;
+                                    elem.download = result.title;
+                                    document.body.appendChild(elem);
+                                    elem.click();
+                                    document.body.removeChild(elem);
+                                } catch (error){
+                                    messageBox.error(error.message);
+                                } finally{
+                                    mainLayout.closeProgress();
+                                }
+                            }
                         },
                         { 
                             view:"icon", 
@@ -160,8 +183,9 @@ class MainLayout{
                             id:"mainSidebar_id",
                             data:mainMenuItems,
                             on:{
-                                onItemClick:function(id){
+                                onItemClick:async function(id){
                                     try {
+                                        mainLayout.showProgress();
                                         let contentLayout = $$(contentLayoutId);
                                         
                                         var result = mainMenuItems.find(function(item){
@@ -172,9 +196,11 @@ class MainLayout{
                                             messageBox.warning("Увы, функционал пока не поддерживается!");
                                             return;
                                         }
-                                        result.getLayout().show(contentLayout);
+                                        await result.getLayout().show(contentLayout);
                                     } catch(error){
                                         messageBox.error(error.message);
+                                    } finally{
+                                        mainLayout.closeProgress();
                                     }
                                 }
                             }
@@ -197,7 +223,7 @@ class MainLayout{
         // запуск webix на выполнение:
         this.show = function(){
             webix.ready(function () {
-                webix.ui(mainLayout).show();
+                webix.ui(mainComponent).show();
                 $$(sidebarId).select(mainMenuItems[0].id);   
                 $$(sidebarId).callEvent("onItemClick", [ mainMenuItems[0].id ]);
             });
