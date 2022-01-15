@@ -26,7 +26,7 @@ class ProjectHistoryLayout{
                             try {
                                 mainLayout.showProgress();
                                 let layout = $$(viewLayoutId);
-                                let dataList = await repository.getProjectVersionHistory(newValue);
+                                let result = await repository.getProjectVersionHistory(newValue);
                                 let newLayout = {
                                     view:"unitlist",
                                     id:viewLayoutId,
@@ -47,7 +47,7 @@ class ProjectHistoryLayout{
                                         height:"auto"
                                     },
                                     select:true,
-                                    data:dataList
+                                    data:result.history
                                 }
                                 webix.ui(newLayout, layout);
                             } catch (error){
@@ -70,13 +70,12 @@ class ProjectHistoryLayout{
                             mainLayout.showProgress();
                             let selected = $$(cbxLayoutId).getValue();
                             if(selected !== undefined && selected !== ""){
-                                let fileName = "ChangeLog-" + $$(cbxLayoutId).getText() + "-" + new Date().toISOString().slice(0, 10) + ".txt";
-                                let exportData = await repository.getProjectVersionForExport(selected);
-                                let blob = new Blob([exportData], {type: "application/json;charset=utf-8"});
+                                let result = await repository.getProjectHistoryForExport(selected);
+                                let blob = new Blob([new Uint8Array(result.bytes)], {type: "application/octet-stream"});
                                 let url = URL.createObjectURL(blob);
                                 let elem = document.createElement("a");
                                 elem.href = url;
-                                elem.download = fileName;
+                                elem.download = result.title;
                                 document.body.appendChild(elem);
                                 elem.click();
                                 document.body.removeChild(elem);
@@ -95,24 +94,20 @@ class ProjectHistoryLayout{
         this.cbxLayoutId = cbxLayoutId;
     }
 
-    show(parentLayout){
+    async show(parentLayout){
         webix.ui({
             view: "layout",
             rows: [ this.cbxLayout, this.viewLayout ]
         }, 
         parentLayout.getChildViews()[0]);
+        
+        let data = await repository.getProjectHistoryTitles();
         let cbxLayout = $$(this.cbxLayoutId);
-        repository.getProjectHistoryTitles()
-        .then(projectsData => {
-            cbxLayout.define("options", {
-                body:{
-                    template:"#module#-#title#-#version#"
-                },   
-                data:projectsData
-            });
-        })
-        .catch(error => {
-            messageBox.error(error.message);
+        cbxLayout.define("options", {
+            body:{
+                template:"#module#-#title#-#version#"
+            },   
+            data:data
         });
     }
 }
