@@ -31,10 +31,8 @@ class LastProjectRevisionTableLayout{
         this.refresh = refresh;
     }
 
-    show(parentLayout){
+    async show(parentLayout){
         webix.ui(this.tableLayout, parentLayout.getChildViews()[0]);
-        this.refresh().catch(error => {
-            messageBox.error(error.message);
-        });
+        await this.refresh();
     }
 }
