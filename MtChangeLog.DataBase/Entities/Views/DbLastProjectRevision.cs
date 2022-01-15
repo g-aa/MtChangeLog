@@ -34,9 +34,9 @@ namespace MtChangeLog.DataBase.Entities.Views
             };
         }
 
-        public ProjectHistoryShortView ToHistoryShortView() 
+        public ProjectRevisionHistoryShortView ToHistoryShortView() 
         {
-            return new ProjectHistoryShortView()
+            return new ProjectRevisionHistoryShortView()
             {
                 Id = this.RevisionId,
                 Date = this.Date,
