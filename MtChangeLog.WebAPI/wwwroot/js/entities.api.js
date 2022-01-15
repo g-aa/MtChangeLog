@@ -320,16 +320,21 @@ class EntitiesRepository{
     async getProjectRevisionHistory(entityId = ""){
         return await this.getEntityDetails("/api/ProjectHistory/Revision", { id:entityId });
     }
-    async getProjectVersionForExport(entityId = ""){
-        return await this.getEntityDetails("/api/ProjectHistory/Export", { id:entityId });
-    }
-
+    
     // Статистика:
     async getShortStatistics(){
         return await this.getEntitiesInfo("/api/Statistics/Short");
     }
     async getLastProjectsRevision(){
         return await this.getEntitiesInfo("/api/Statistics/LastProjectsRevision");
+    }
+
+    // Файлы:
+    async getProjectHistorysArchiveForExport(){
+        return await this.getEntitiesInfo("/api/Files/ProjectHistorysArchive");
+    }
+    async getProjectHistoryForExport(entityId = ""){
+        return await this.getEntityDetails("/api/Files/ProjectHistory", { id:entityId });
     }
 }
 
