@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using MtChangeLog.DataBase.Repositories.Interfaces;
 using MtChangeLog.DataObjects.Entities.Views;
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,12 +14,12 @@ namespace MtChangeLog.WebAPI.Controllers
     [ApiController]
     public class ProjectHistoryController : ControllerBase
     {
-        private readonly IStatisticsRepository statisticsRepository;
+        private readonly IStatisticsRepository repository;
         private readonly ILogger logger;
 
-        public ProjectHistoryController(IStatisticsRepository statisticsRepository, ILogger<ProjectHistoryController> logger)
+        public ProjectHistoryController(IStatisticsRepository repository, ILogger<ProjectHistoryController> logger)
         {
-            this.statisticsRepository = statisticsRepository;
+            this.repository = repository;
             this.logger = logger;
             this.logger.LogInformation("HTTP - ProjectHistoryController - creating");
         }
@@ -32,7 +31,7 @@ namespace MtChangeLog.WebAPI.Controllers
             try
             {
                 this.logger.LogInformation($"HTTP GET - ProjectHistoryController - all short entities");
-                var result = this.statisticsRepository.GetShortEntities();
+                var result = this.repository.GetShortEntities();
                 return this.Ok(result);
             }
             catch (Exception ex)
@@ -49,7 +48,7 @@ namespace MtChangeLog.WebAPI.Controllers
             try
             {
                 this.logger.LogInformation($"HTTP GET - ProjectHistoryController - full history by project version id = {id}");
-                var result = this.statisticsRepository.GetProjectVersionHistory(id);
+                var result = this.repository.GetProjectVersionHistory(id);
                 return this.Ok(result);
             }
             catch (Exception ex)
@@ -66,29 +65,12 @@ namespace MtChangeLog.WebAPI.Controllers
             try
             {
                 this.logger.LogInformation($"HTTP GET - StatisticsController - history by project revision id = {id}");
-                var result = this.statisticsRepository.GetProjectRevisionHistory(id);
+                var result = this.repository.GetProjectRevisionHistory(id);
                 return this.Ok(result);
             }
             catch (Exception ex)
             {
                 this.logger.LogError(ex, $"HTTP GET - StatisticsController - ");
-                return this.BadRequest(ex.Message);
-            }
-        }
-
-        // GET: api/<StatisticsController>/Export/00000000-0000-0000-0000-000000000000
-        [HttpGet("Export/{id}")]
-        public IActionResult GetProjectVersionForExport(Guid id) 
-        {
-            try
-            {
-                this.logger.LogInformation($"HTTP GET - ProjectHistoryController - get full history by project version id = {id} for export");
-                var result =  string.Join(Environment.NewLine, this.statisticsRepository.GetProjectVersionHistory(id).Select(e => e.ToText()));
-                return this.Ok(result);
-            }
-            catch (Exception ex)
-            {
-                this.logger.LogError(ex, $"HTTP GET - ProjectHistoryController - ");
                 return this.BadRequest(ex.Message);
             }
         }
