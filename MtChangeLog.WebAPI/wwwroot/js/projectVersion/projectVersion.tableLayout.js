@@ -41,6 +41,7 @@ class ProjectVersionTableLayout{
                     width:200,
                     click: async function (){
                         try{
+                            mainLayout.showProgress();
                             let prjVers = new ProjectVersion();
                             await prjVers.defaultInitialize();
                             prjVers.beforeEnding = async function(answer){
@@ -51,6 +52,8 @@ class ProjectVersionTableLayout{
                             win.show();
                         } catch (error) {
                             messageBox.error(error.message);
+                        } finally{
+                            mainLayout.closeProgress();
                         }
                     }
                 },
@@ -61,6 +64,7 @@ class ProjectVersionTableLayout{
                     width:200,
                     click: async function (){
                         try{
+                            mainLayout.showProgress();
                             let selected = $$(tableLayputId).getSelectedItem();
                             if(selected != undefined) {
                                 let prjVers = new ProjectVersion();
@@ -76,6 +80,8 @@ class ProjectVersionTableLayout{
                             }
                         } catch (error){
                             messageBox.error(error.message);
+                        } finally{
+                            mainLayout.closeProgress();
                         }
                     }
                 },
@@ -87,6 +93,7 @@ class ProjectVersionTableLayout{
                     align:"right",
                     click: async function (){
                         try{
+                            mainLayout.showProgress();
                             let selected = $$(tableLayputId).getSelectedItem();
                             if(selected != undefined){
                                 // удалить обьект на сервере:
@@ -100,6 +107,8 @@ class ProjectVersionTableLayout{
                             }
                         } catch (error){
                             messageBox.error(error.message); 
+                        } finally{
+                            mainLayout.closeProgress();
                         }
                     } 
                 },
@@ -111,6 +120,7 @@ class ProjectVersionTableLayout{
                     align:"right",
                     click: async function (){
                         try{
+                            mainLayout.showProgress();
                             let selected = $$(tableLayputId).getSelectedItem();
                             if(selected != undefined) {
                                 let revision = new ProjectRevision();
@@ -125,6 +135,8 @@ class ProjectVersionTableLayout{
                             }
                         } catch (error){
                             messageBox.error(error.message);
+                        } finally{
+                            mainLayout.closeProgress();
                         }
                     }
                 }
@@ -132,14 +144,12 @@ class ProjectVersionTableLayout{
         }
     }
 
-    show(parentLayout){
+    async show(parentLayout){
         webix.ui({
             view: "layout",
             rows: [ this.buttonsLayout, this.tableLayout ]
         }, 
         parentLayout.getChildViews()[0]);
-        this.refresh().catch(error => {
-            messageBox.error(error.message);
-        });
+        await this.refresh();
     }
 }

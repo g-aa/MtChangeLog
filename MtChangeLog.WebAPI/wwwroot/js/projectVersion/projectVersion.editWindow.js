@@ -1,9 +1,8 @@
 class ProjectEditWindow {
     constructor(editablePrjVers){
-        
         let _editablePrjVers = editablePrjVers;
-        if(_editablePrjVers == undefined || _editablePrjVers == null){
-            throw new Error("не выбран проект для работы");
+        if(!_editablePrjVers instanceof ProjectVersion){
+            throw new Error("не выбран проект (БФПО) для работы");
         }
 
         let _uiWindow;
@@ -12,6 +11,19 @@ class ProjectEditWindow {
                 _uiWindow = webix.ui(window());
                 _uiWindow.show();
             });
+        }
+
+        // запуск прогрес бара при выполнении операций:
+        let showProgress = function(){
+            _uiWindow.disable();
+            webix.extend(_uiWindow, webix.ProgressBar);
+            _uiWindow.showProgress({ type:"icon" });
+        }
+
+        // остановка прогрес бара:
+        let closeProgress = function(){
+            _uiWindow.hideProgress();
+            _uiWindow.enable();
         }
 
         let window = function (){
@@ -162,6 +174,7 @@ class ProjectEditWindow {
                             onChange: async function(newValue, oldValue, config){
                                 let combo = $$("analogModule_id");
                                 try {
+                                    showProgress();
                                     await _editablePrjVers.setPlatform(newValue);
                                     combo.define("options",{
                                         body:{
@@ -176,6 +189,7 @@ class ProjectEditWindow {
                                 }
                                 finally {
                                     combo.refresh();
+                                    closeProgress();
                                 }
                             }
                         }
@@ -233,6 +247,7 @@ class ProjectEditWindow {
                         align:"right",
                         click: async function(){
                             try{ 
+                                showProgress();
                                 // отправить:
                                 await _editablePrjVers.submit();
 
@@ -241,6 +256,7 @@ class ProjectEditWindow {
                             } catch (error){
                                 messageBox.alertWarning(error.message);
                             } finally{
+                                closeProgress();
                             }
                         }
                     }
