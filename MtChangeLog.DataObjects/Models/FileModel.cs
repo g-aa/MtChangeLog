@@ -27,11 +27,11 @@ namespace MtChangeLog.DataObjects.Models
             }
         }
 
-        public FileModel(ProjectVersionHistoryView view) : this() 
+        public FileModel(ProjectVersionHistoryView view)
         {
             if (view != null) 
             {
-                this.Title = string.IsNullOrEmpty(view.Title)? $"ChangeLog-{view.Title}.txt" : "noname";
+                this.Title = string.IsNullOrEmpty(view.Title) ? "noname" : $"ChangeLog-{view.Title}.txt";
                 this.Bytes = Encoding.UTF8.GetBytes(string.Join(Environment.NewLine, view.History.Select(e => e.ToText())));
             }
         }
