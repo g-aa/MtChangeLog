@@ -37,6 +37,10 @@ namespace MtChangeLog.DataBase.Entities.Tables
 
         public void Update(ArmEditEditable other) 
         {
+            if (this.Default)
+            {
+                throw new ArgumentException($"Default entity {this} can not by update");
+            }
             // this.Id - не обновляеться !!!
             this.DIVG = other.DIVG;
             this.Date = other.Date;
