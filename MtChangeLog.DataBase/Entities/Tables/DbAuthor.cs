@@ -35,6 +35,10 @@ namespace MtChangeLog.DataBase.Entities.Tables
 
         public void Update(AuthorEditable other) 
         {
+            if (this.Default)
+            {
+                throw new ArgumentException($"Default entity {this} can not by update");
+            }
             // this.Id - не должно обновляться !!!
             this.LastName = other.LastName;
             this.FirstName = other.FirstName;
