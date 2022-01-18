@@ -18,15 +18,21 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
             
         }
 
-        public IEnumerable<RelayAlgorithmShortView> GetShortEntities() 
+        public IQueryable<RelayAlgorithmShortView> GetShortEntities() 
         {
-            var result = this.context.RelayAlgorithms.OrderBy(e => e.ANSI).Select(e => e.ToShortView());
+            var result = this.context.RelayAlgorithms
+                .OrderBy(e => e.Group)
+                .ThenBy(e => e.Title)
+                .Select(e => e.ToShortView());
             return result;
         }
         
-        public IEnumerable<RelayAlgorithmEditable> GetTableEntities() 
+        public IQueryable<RelayAlgorithmEditable> GetTableEntities() 
         {
-            var result = this.context.RelayAlgorithms.OrderBy(e => e.ANSI).Select(e => e.ToEditable());
+            var result = this.context.RelayAlgorithms
+                .OrderBy(e => e.Group)
+                .ThenBy(e => e.Title)
+                .Select(e => e.ToEditable());
             return result;
         }
         
@@ -69,10 +75,7 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
 
         public void DeleteEntity(Guid guid) 
         {
-            throw new NotImplementedException("функционал не поддерживается");
-            //var dbAlgorithm = this.GetDbRelayAlgorithm(guid);
-            //this.context.RelayAlgorithms.Remove(dbAlgorithm);
-            //this.context.SaveChanges();
+            throw new NotImplementedException("функционал по удалению алгоритма РЗиА на данный момент не доступен");
         }
     }
 }

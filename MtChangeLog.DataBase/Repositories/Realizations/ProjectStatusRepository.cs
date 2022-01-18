@@ -18,7 +18,7 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
             
         }
 
-        public IEnumerable<ProjectStatusShortView> GetShortEntities()
+        public IQueryable<ProjectStatusShortView> GetShortEntities()
         {
             var result = this.context.ProjectStatuses
                 .OrderBy(ps => ps.Title)
@@ -26,7 +26,7 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
             return result;
         }
 
-        public IEnumerable<ProjectStatusEditable> GetTableEntities()
+        public IQueryable<ProjectStatusEditable> GetTableEntities()
         {
             var result = this.context.ProjectStatuses
                 .OrderBy(ps => ps.Title)

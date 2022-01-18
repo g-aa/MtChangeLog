@@ -11,8 +11,8 @@ namespace MtChangeLog.DataBase.Repositories.Interfaces
 {
     public interface IPlatformsRepository : ICRUD<PlatformEditable>
     {
-        IEnumerable<PlatformShortView> GetShortEntities();
-        IEnumerable<PlatformTableView> GetTableEntities();
+        IQueryable<PlatformShortView> GetShortEntities();
+        IQueryable<PlatformTableView> GetTableEntities();
         PlatformEditable GetTemplate();
     }
 }

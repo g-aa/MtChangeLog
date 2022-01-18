@@ -10,8 +10,8 @@ namespace MtChangeLog.DataBase.Repositories.Interfaces
 {
     public interface IArmEditsRepository : ICRUD<ArmEditEditable>
     {
-        IEnumerable<ArmEditShortView> GetShortEntities();
-        IEnumerable<ArmEditEditable> GetTableEntities();
+        IQueryable<ArmEditShortView> GetShortEntities();
+        IQueryable<ArmEditEditable> GetTableEntities();
         ArmEditEditable GetTemplate();
     }
 }

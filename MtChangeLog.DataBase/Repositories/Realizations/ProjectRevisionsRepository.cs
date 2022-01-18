@@ -20,7 +20,7 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
 
         }
 
-        public IEnumerable<ProjectRevisionShortView> GetShortEntities()
+        public IQueryable<ProjectRevisionShortView> GetShortEntities()
         {
             return this.context.ProjectRevisions
                 .Include(pr => pr.ProjectVersion.AnalogModule)
@@ -31,7 +31,7 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
                 .Select(pr => pr.ToShortView());
         }
 
-        public IEnumerable<ProjectRevisionTableView> GetTableEntities()
+        public IQueryable<ProjectRevisionTableView> GetTableEntities()
         {
             return this.context.ProjectRevisions
                 .Include(pr => pr.ArmEdit)

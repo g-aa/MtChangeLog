@@ -19,13 +19,13 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
 
         }
 
-        public IEnumerable<AnalogModuleShortView> GetShortEntities() 
+        public IQueryable<AnalogModuleShortView> GetShortEntities() 
         {
             var result = this.context.AnalogModules.OrderBy(e => e.Title).Select(e => e.ToShortView());
             return result;
         }
 
-        public IEnumerable<AnalogModuleTableView> GetTableEntities() 
+        public IQueryable<AnalogModuleTableView> GetTableEntities() 
         {
             var result = this.context.AnalogModules.OrderBy(e => e.Title).Select(e => e.ToTableView());
             return result;
@@ -75,7 +75,12 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
 
         public void DeleteEntity(Guid guid) 
         {
-            throw new NotImplementedException("функционал не поддерживается");
+            throw new NotImplementedException("функционал по удалению аналогового модуля на данный момент не доступен");
+            // проверить на значение по умолчанию;
+            // проверить используется ли в платформах;
+            // проверить используется ли в проекте;
+            // не удалять модуль используемый в проектах;
+            // если у платформы аналоговый модуль последний подставить в платформу значение по умолчанию;
             //DbAnalogModule dbAnalogModule = this.GetDbAnalogModule(guid);
             //if (dbAnalogModule.Default) 
             //{

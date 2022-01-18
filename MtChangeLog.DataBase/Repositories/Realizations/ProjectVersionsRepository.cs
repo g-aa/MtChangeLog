@@ -20,7 +20,7 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
             
         }
 
-        public IEnumerable<ProjectVersionShortView> GetShortEntities() 
+        public IQueryable<ProjectVersionShortView> GetShortEntities() 
         {
             var result = this.context.ProjectVersions
                 .Include(pv => pv.AnalogModule)
@@ -30,7 +30,7 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
             return result;
         }
 
-        public IEnumerable<ProjectVersionTableView> GetTableEntities() 
+        public IQueryable<ProjectVersionTableView> GetTableEntities() 
         {
             var result = this.context.ProjectVersions
                 .Include(pv => pv.AnalogModule)
@@ -70,7 +70,7 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
         {
             var dbStatus = this.GetDbProjectStatusOrDefault(entity.ProjectStatus.Id);
             var dbPlatform = this.GetDbPlatformOrDefault(entity.Platform.Id);
-            var dbAnalogModule = dbPlatform.AnalogModules.First(e => e.Id == entity.AnalogModule.Id);
+            var dbAnalogModule = dbPlatform.AnalogModules.First(e => e.Id.Equals(entity.AnalogModule.Id));
             var dbProjectVersion = new DbProjectVersion(entity)
             {
                 ProjectStatus = dbStatus,
@@ -90,14 +90,14 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
             var dbProjectVersion = this.GetDbProjectVersion(entity.Id);
             var dbStatus = this.GetDbProjectStatusOrDefault(entity.ProjectStatus.Id);
             var dbPlatform = this.GetDbPlatformOrDefault(entity.Platform.Id);
-            var dbAnalogModule = dbPlatform.AnalogModules.First(e => e.Id == entity.AnalogModule.Id);
+            var dbAnalogModule = dbPlatform.AnalogModules.First(e => e.Id.Equals(entity.AnalogModule.Id));
             dbProjectVersion.Update(entity, dbAnalogModule, dbPlatform, dbStatus);
             this.context.SaveChanges();
         }
 
         public void DeleteEntity(Guid guid)
         {
-            throw new NotImplementedException("функционал по удалению проектов на данный момент не доступен");
+            throw new NotImplementedException("функционал по удалению проекта (БФПО) на данный момент не доступен");
         }
     }
 }

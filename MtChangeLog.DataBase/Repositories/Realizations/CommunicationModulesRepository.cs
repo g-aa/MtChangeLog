@@ -20,7 +20,7 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
             
         }
 
-        public IEnumerable<CommunicationModuleShortView> GetShortEntities() 
+        public IQueryable<CommunicationModuleShortView> GetShortEntities() 
         {
             var result = this.context.CommunicationModules
                 .Where(e => e.Protocols.Any())
@@ -29,7 +29,7 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
             return result;
         }
 
-        public IEnumerable<CommunicationModuleTableView> GetTableEntities() 
+        public IQueryable<CommunicationModuleTableView> GetTableEntities() 
         {
             var result = this.context.CommunicationModules
                 .Include(e => e.Protocols)
@@ -81,9 +81,6 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
         public void DeleteEntity(Guid guid) 
         {
             throw new NotImplementedException("функционал по удалению коммуникационных модулей на данный момент не поддерживается");
-            //DbCommunication dbCommunication = this.GetDbCommunication(guid);
-            //this.context.Communications.Remove(dbCommunication);
-            //this.context.SaveChanges();
         }
     }
 }

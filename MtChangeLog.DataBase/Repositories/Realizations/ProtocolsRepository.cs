@@ -18,7 +18,7 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
             
         }
 
-        public IEnumerable<ProtocolShortView> GetShortEntities()
+        public IQueryable<ProtocolShortView> GetShortEntities()
         {
             var result = this.context.Protocols
                 .OrderBy(p => p.Title)
@@ -26,7 +26,7 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
             return result;
         }
 
-        public IEnumerable<ProtocolEditable> GetTableEntities()
+        public IQueryable<ProtocolEditable> GetTableEntities()
         {
             var result = this.context.Protocols
                 .OrderBy(p => p.Title)

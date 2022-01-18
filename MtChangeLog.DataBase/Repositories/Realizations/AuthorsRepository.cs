@@ -18,13 +18,13 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
             
         }
 
-        public IEnumerable<AuthorShortView> GetShortEntities() 
+        public IQueryable<AuthorShortView> GetShortEntities() 
         {
             var result = this.context.Authors.OrderBy(e => e.LastName).Select(e => e.ToShortView());
             return result;
         }
 
-        public IEnumerable<AuthorEditable> GetTableEntities() 
+        public IQueryable<AuthorEditable> GetTableEntities() 
         {
             var result = this.context.Authors.OrderBy(e => e.LastName).Select(e => e.ToEditable());
             return result;
@@ -62,20 +62,13 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
         public void UpdateEntity(AuthorEditable entity)
         {
             var dbAuthor = this.GetDbAuthor(entity.Id);
-            if (dbAuthor.Default)
-            {
-                throw new ArgumentException($"Default entity {entity} can not by update");
-            }
             dbAuthor.Update(entity);
             this.context.SaveChanges();
         }
 
         public void DeleteEntity(Guid guid)
         {
-            throw new NotImplementedException("функционал не поддерживается");
-            //DbAuthor dbAuthor = this.GetDbAuthor(guid);
-            //this.context.Authors.Remove(dbAuthor);
-            //this.context.SaveChanges();
+            throw new NotImplementedException("функционал по удалению автора проекта на данный момент не доступен");
         }
     }
 }

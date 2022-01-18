@@ -18,13 +18,13 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
 
         }
 
-        public IEnumerable<PlatformShortView> GetShortEntities()
+        public IQueryable<PlatformShortView> GetShortEntities()
         {
             var result = this.context.Platforms.OrderBy(e => e.Title).Select(e => e.ToShortView());
             return result;
         }
 
-        public IEnumerable<PlatformTableView> GetTableEntities() 
+        public IQueryable<PlatformTableView> GetTableEntities() 
         {
             var result = this.context.Platforms.OrderBy(e => e.Title).Select(e => e.ToTableView());
             return result;
@@ -72,10 +72,7 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
 
         public void DeleteEntity(Guid guid)
         {
-            throw new NotImplementedException("функционал не поддерживается");
-            //DbPlatform dbPlatform = this.GetDbPlatform(guid);
-            //this.context.Platforms.Remove(dbPlatform);
-            //this.context.SaveChanges();
+            throw new NotImplementedException("функционал по удалению платформы БМРЗ на данный момент не доступен");
         }
     }
 }
