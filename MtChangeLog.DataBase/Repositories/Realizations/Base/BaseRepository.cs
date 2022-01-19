@@ -7,9 +7,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MtChangeLog.DataBase.Repositories.Realizations
+namespace MtChangeLog.DataBase.Repositories.Realizations.Base
 {
-    public abstract class BaseRepository
+    public abstract partial class BaseRepository
     {
         protected readonly ApplicationContext context;
 
