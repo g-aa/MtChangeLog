@@ -24,9 +24,10 @@ namespace MtChangeLog.DataBase.Entities.Tables
         {
             this.Id = Guid.NewGuid();
             this.ProjectRevisions = new HashSet<DbProjectRevision>();
+            this.Default = false;
         }
 
-        public DbAuthor(AuthorEditable other) : base()
+        public DbAuthor(AuthorEditable other) : this()
         {
             this.FirstName = other.FirstName;
             this.LastName = other.LastName;

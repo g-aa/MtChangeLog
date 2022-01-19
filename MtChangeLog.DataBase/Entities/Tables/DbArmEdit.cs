@@ -21,13 +21,14 @@ namespace MtChangeLog.DataBase.Entities.Tables
         public ICollection<DbProjectRevision> ProjectRevisions { get; set; }
         #endregion
 
-        public DbArmEdit() : base() 
+        public DbArmEdit() 
         {
             this.Id = Guid.NewGuid();
             this.ProjectRevisions = new HashSet<DbProjectRevision>();
+            this.Default = false;
         }
 
-        public DbArmEdit(ArmEditEditable other) : base()
+        public DbArmEdit(ArmEditEditable other) : this()
         {
             this.DIVG = other.DIVG;
             this.Version = other.Version;

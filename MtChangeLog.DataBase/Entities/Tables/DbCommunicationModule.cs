@@ -25,10 +25,11 @@ namespace MtChangeLog.DataBase.Entities.Tables
         {
             this.Id = Guid.NewGuid();
             this.Protocols = new HashSet<DbProtocol>();
-            this.ProjectRevisions = new HashSet<DbProjectRevision>();    
+            this.ProjectRevisions = new HashSet<DbProjectRevision>();
+            this.Default = false;
         }
 
-        public DbCommunicationModule(CommunicationModuleEditable editable) : base()
+        public DbCommunicationModule(CommunicationModuleEditable editable) : this()
         {
             this.Title = editable.Title;
             this.Description = editable.Description;
