@@ -10,8 +10,8 @@ namespace MtChangeLog.DataBase.Repositories.Interfaces
 {
     public interface IProtocolsRepository : ICRUD<ProtocolEditable>
     {
-        IEnumerable<ProtocolShortView> GetShortEntities();
-        IEnumerable<ProtocolEditable> GetTableEntities();
+        IQueryable<ProtocolShortView> GetShortEntities();
+        IQueryable<ProtocolEditable> GetTableEntities();
         ProtocolEditable GetTemplate();
     }
 }

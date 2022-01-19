@@ -24,9 +24,10 @@ namespace MtChangeLog.DataBase.Entities.Tables
         {
             this.Id = Guid.NewGuid();
             this.CommunicationModules = new HashSet<DbCommunicationModule>();
+            this.Default = false;
         }
 
-        public DbProtocol(ProtocolEditable other) 
+        public DbProtocol(ProtocolEditable other) : this()
         {
             this.Title = other.Title;
             this.Description = other.Description;

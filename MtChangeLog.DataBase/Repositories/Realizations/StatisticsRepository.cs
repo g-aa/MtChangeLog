@@ -2,6 +2,7 @@
 using MtChangeLog.DataBase.Contexts;
 using MtChangeLog.DataBase.Entities;
 using MtChangeLog.DataBase.Repositories.Interfaces;
+using MtChangeLog.DataBase.Repositories.Realizations.Base;
 using MtChangeLog.DataObjects.Entities.Views.Shorts;
 using MtChangeLog.DataObjects.Entities.Views.Statistics;
 using System;
@@ -50,24 +51,26 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
             return result.ToHistoryView();
         }
 
-        public IEnumerable<string> GetProjectTitles() 
+        public IQueryable<string> GetProjectTitles() 
         {
-            var result = this.context.ProjectVersions.Select(pv => pv.Title).Distinct().OrderBy(s => s);
+            var result = this.context.ProjectVersions
+                .Select(e => e.Title).Distinct()
+                .OrderBy(e => e);
             return result;
         }
 
-        public IEnumerable<ProjectVersionShortView> GetShortEntities() 
+        public IQueryable<ProjectVersionShortView> GetShortEntities() 
         {
             var result = this.context.LastProjectRevisions
-                .OrderBy(pr => pr.AnalogModule).ThenBy(pr => pr.Title).ThenBy(pr => pr.Version)
+                .OrderBy(e => e.AnalogModule).ThenBy(e => e.Title).ThenBy(e => e.Version)
                 .Select(e => e.ToProjectVersionShortView());
             return result;
         }
 
-        public IEnumerable<LastProjectRevisionView> GetLastProjectRevisions() 
+        public IQueryable<LastProjectRevisionView> GetLastProjectRevisions() 
         {
             var result = this.context.LastProjectRevisions
-                .OrderBy(pr => pr.Title).ThenBy(pr => pr.AnalogModule).ThenBy(pr => pr.Version)
+                .OrderBy(e => e.Title).ThenBy(e => e.AnalogModule).ThenBy(e => e.Version)
                 .Select(e => e.ToView());
             return result;
         }
@@ -97,17 +100,18 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
             return result;
         }
 
-        public IEnumerable<ProjectRevisionTreeView> GetTreeEntities(string projectTitle) 
+        public IQueryable<ProjectRevisionTreeView> GetTreeEntities(string projectTitle) 
         {
-            return this.context.ProjectRevisions
+            var result = this.context.ProjectRevisions
                 .Include(pr => pr.ArmEdit)
                 .Include(pr => pr.ProjectVersion).ThenInclude(pv => pv.AnalogModule)
                 .Include(pr => pr.ProjectVersion).ThenInclude(pv => pv.Platform)
                 .Where(pr => pr.ProjectVersion.Title == projectTitle)
                 .Select(pr => pr.ToTreeView());
+            return result;
         }
 
-        public IEnumerable<ProjectRevisionHistoryShortView> GetNLastModifiedProjects(ushort count) 
+        public IQueryable<ProjectRevisionHistoryShortView> GetNLastModifiedProjects(ushort count) 
         {
             var result = this.context.LastProjectRevisions
                 .OrderByDescending(e => e.Date)
@@ -116,7 +120,7 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
             return result;
         }
 
-        public IEnumerable<ProjectRevisionHistoryShortView> GetNMostChangingProjects(ushort count) 
+        public IQueryable<ProjectRevisionHistoryShortView> GetNMostChangingProjects(ushort count) 
         {
             var result = this.context.LastProjectRevisions
                 .OrderByDescending(e => e.Revision).ThenByDescending(e => e.Date)

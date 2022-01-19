@@ -10,8 +10,8 @@ namespace MtChangeLog.DataBase.Repositories.Interfaces
 {
     public interface IProjectStatusRepository : ICRUD<ProjectStatusEditable>
     {
-        IEnumerable<ProjectStatusShortView> GetShortEntities();
-        IEnumerable<ProjectStatusEditable> GetTableEntities();
+        IQueryable<ProjectStatusShortView> GetShortEntities();
+        IQueryable<ProjectStatusEditable> GetTableEntities();
         ProjectStatusEditable GetTemplate();
     }
 }

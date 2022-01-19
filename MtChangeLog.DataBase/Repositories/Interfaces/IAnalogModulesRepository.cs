@@ -11,8 +11,8 @@ namespace MtChangeLog.DataBase.Repositories.Interfaces
 {
     public interface IAnalogModulesRepository : ICRUD<AnalogModuleEditable>
     {
-        IEnumerable<AnalogModuleShortView> GetShortEntities();
-        IEnumerable<AnalogModuleTableView> GetTableEntities();
+        IQueryable<AnalogModuleShortView> GetShortEntities();
+        IQueryable<AnalogModuleTableView> GetTableEntities();
         AnalogModuleEditable GetTemplate();
     }
 }

@@ -1,6 +1,7 @@
 ﻿using MtChangeLog.DataBase.Contexts;
 using MtChangeLog.DataBase.Entities.Tables;
 using MtChangeLog.DataBase.Repositories.Interfaces;
+using MtChangeLog.DataBase.Repositories.Realizations.Base;
 using MtChangeLog.DataObjects.Entities.Editable;
 using MtChangeLog.DataObjects.Entities.Views.Shorts;
 using System;
@@ -18,13 +19,13 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
             
         }
 
-        public IEnumerable<ArmEditShortView> GetShortEntities() 
+        public IQueryable<ArmEditShortView> GetShortEntities() 
         {
             var result = this.context.ArmEdits.OrderBy(e => e.Version).Select(e => e.ToShortView());
             return result;
         }
 
-        public IEnumerable<ArmEditEditable> GetTableEntities() 
+        public IQueryable<ArmEditEditable> GetTableEntities() 
         {
             var result = this.context.ArmEdits.OrderBy(e => e.Version).Select(e => e.ToEditable());
             return result;
@@ -52,7 +53,7 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
         public void AddEntity(ArmEditEditable entity)
         {
             var dbArmEdit = new DbArmEdit(entity);
-            if (this.context.ArmEdits.FirstOrDefault(e => e.Equals(dbArmEdit)) != null)
+            if(this.SearchInDataBase(dbArmEdit) != null)
             {
                 throw new ArgumentException($"ArmEdit {entity} is contained in database");
             }
@@ -63,20 +64,13 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
         public void UpdateEntity(ArmEditEditable entity)
         {
             DbArmEdit dbArmEdit = this.GetDbArmEdit(entity.Id);
-            if (dbArmEdit.Default)
-            {
-                throw new ArgumentException($"Default entity {entity} can not by update");
-            }
             dbArmEdit.Update(entity);
             this.context.SaveChanges();
         }
 
         public void DeleteEntity(Guid guid)
         {
-            throw new NotImplementedException("функционал не поддерживается");
-            //DbArmEdit dbArmEdit = this.GetDbArmEdit(guid);
-            //this.context.ArmEdits.Remove(dbArmEdit);
-            //this.context.SaveChanges();
+            throw new NotImplementedException("функционал по удалению ArmEdit на данный момент не доступен");
         }
     }
 }

@@ -15,12 +15,12 @@ namespace MtChangeLog.DataBase.Repositories.Interfaces
         /// получить перечень наименований проектов
         /// </summary>
         /// <returns></returns>
-        IEnumerable<string> GetProjectTitles();
+        IQueryable<string> GetProjectTitles();
         /// <summary>
         /// получить перечень версий проектов у которые имеют редакции
         /// </summary>
         /// <returns></returns>
-        IEnumerable<ProjectVersionShortView> GetShortEntities();
+        IQueryable<ProjectVersionShortView> GetShortEntities();
         /// <summary>
         /// получить краткое представление версии проекта
         /// </summary>
@@ -31,13 +31,13 @@ namespace MtChangeLog.DataBase.Repositories.Interfaces
         /// получить перечень последних редакций проектов (БФПО)
         /// </summary>
         /// <returns></returns>
-        IEnumerable<LastProjectRevisionView> GetLastProjectRevisions();
+        IQueryable<LastProjectRevisionView> GetLastProjectRevisions();
         /// <summary>
         /// получить полное дерево проектов (БФПО) с конкретным наименованием
         /// </summary>
         /// <param name="projectTitle">project version title</param>
         /// <returns></returns>
-        IEnumerable<ProjectRevisionTreeView> GetTreeEntities(string projectTitle);
+        IQueryable<ProjectRevisionTreeView> GetTreeEntities(string projectTitle);
         /// <summary>
         /// получить полную историю конкретного проекта (БФПО)
         /// </summary>
@@ -55,12 +55,12 @@ namespace MtChangeLog.DataBase.Repositories.Interfaces
         /// </summary>
         /// <param name="n">количество элементов в выборке</param>
         /// <returns></returns>
-        IEnumerable<ProjectRevisionHistoryShortView> GetNLastModifiedProjects(ushort count);
+        IQueryable<ProjectRevisionHistoryShortView> GetNLastModifiedProjects(ushort count);
         /// <summary>
         /// получить n-часто редактируемых проектов
         /// </summary>
         /// <param name="n">количество элементов в выборке</param>
         /// <returns></returns>
-        IEnumerable<ProjectRevisionHistoryShortView> GetNMostChangingProjects(ushort count);
+        IQueryable<ProjectRevisionHistoryShortView> GetNMostChangingProjects(ushort count);
     }
 }

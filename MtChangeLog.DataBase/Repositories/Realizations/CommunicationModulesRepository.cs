@@ -2,6 +2,7 @@
 using MtChangeLog.DataBase.Contexts;
 using MtChangeLog.DataBase.Entities.Tables;
 using MtChangeLog.DataBase.Repositories.Interfaces;
+using MtChangeLog.DataBase.Repositories.Realizations.Base;
 using MtChangeLog.DataObjects.Entities.Editable;
 using MtChangeLog.DataObjects.Entities.Views.Shorts;
 using MtChangeLog.DataObjects.Entities.Views.Tables;
@@ -20,7 +21,7 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
             
         }
 
-        public IEnumerable<CommunicationModuleShortView> GetShortEntities() 
+        public IQueryable<CommunicationModuleShortView> GetShortEntities() 
         {
             var result = this.context.CommunicationModules
                 .Where(e => e.Protocols.Any())
@@ -29,7 +30,7 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
             return result;
         }
 
-        public IEnumerable<CommunicationModuleTableView> GetTableEntities() 
+        public IQueryable<CommunicationModuleTableView> GetTableEntities() 
         {
             var result = this.context.CommunicationModules
                 .Include(e => e.Protocols)
@@ -63,7 +64,7 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
             {
                 Protocols = this.GetDbProtocolsOrDefault(entity.Protocols.Select(e => e.Id))
             };
-            if (this.context.CommunicationModules.FirstOrDefault(e => e.Equals(dbCommunication)) != null) 
+            if (this.SearchInDataBase(dbCommunication) != null) 
             {
                 throw new ArgumentException($"CommunicationModule {entity} is contained in database");
             }
@@ -81,9 +82,6 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
         public void DeleteEntity(Guid guid) 
         {
             throw new NotImplementedException("функционал по удалению коммуникационных модулей на данный момент не поддерживается");
-            //DbCommunication dbCommunication = this.GetDbCommunication(guid);
-            //this.context.Communications.Remove(dbCommunication);
-            //this.context.SaveChanges();
         }
     }
 }

@@ -10,8 +10,8 @@ namespace MtChangeLog.DataBase.Repositories.Interfaces
 {
     public interface IAuthorsRepository : ICRUD<AuthorEditable>
     {
-        IEnumerable<AuthorShortView> GetShortEntities();
-        IEnumerable<AuthorEditable> GetTableEntities();
+        IQueryable<AuthorShortView> GetShortEntities();
+        IQueryable<AuthorEditable> GetTableEntities();
         AuthorEditable GetTemplate();
     }
 }

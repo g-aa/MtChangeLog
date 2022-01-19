@@ -27,7 +27,7 @@ namespace MtChangeLog.DataBase.Entities.Tables
             this.ProjectRevisions = new HashSet<DbProjectRevision>();
         }
 
-        public DbRelayAlgorithm(RelayAlgorithmEditable other) : base()
+        public DbRelayAlgorithm(RelayAlgorithmEditable other) : this()
         {
             this.Group = other.Group;
             this.Title= other.Title;

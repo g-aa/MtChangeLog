@@ -29,9 +29,10 @@ namespace MtChangeLog.DataBase.Entities.Tables
             this.Id = Guid.NewGuid();
             this.Projects = new HashSet<DbProjectVersion>();
             this.Platforms = new HashSet<DbPlatform>();
+            this.Default = false;
         }
 
-        public DbAnalogModule(AnalogModuleEditable other) : base()
+        public DbAnalogModule(AnalogModuleEditable other) : this()
         {
             this.DIVG = other.DIVG;
             this.Title = other.Title;

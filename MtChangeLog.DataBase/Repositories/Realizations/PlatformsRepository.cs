@@ -1,6 +1,7 @@
 ﻿using MtChangeLog.DataBase.Contexts;
 using MtChangeLog.DataBase.Entities.Tables;
 using MtChangeLog.DataBase.Repositories.Interfaces;
+using MtChangeLog.DataBase.Repositories.Realizations.Base;
 using MtChangeLog.DataObjects.Entities.Editable;
 using MtChangeLog.DataObjects.Entities.Views.Shorts;
 using MtChangeLog.DataObjects.Entities.Views.Tables;
@@ -18,13 +19,13 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
 
         }
 
-        public IEnumerable<PlatformShortView> GetShortEntities()
+        public IQueryable<PlatformShortView> GetShortEntities()
         {
             var result = this.context.Platforms.OrderBy(e => e.Title).Select(e => e.ToShortView());
             return result;
         }
 
-        public IEnumerable<PlatformTableView> GetTableEntities() 
+        public IQueryable<PlatformTableView> GetTableEntities() 
         {
             var result = this.context.Platforms.OrderBy(e => e.Title).Select(e => e.ToTableView());
             return result;
@@ -55,7 +56,7 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
             {
                 AnalogModules = this.GetDbAnalogModulesOrDefault(entity.AnalogModules.Select(module => module.Id))
             };
-            if (this.context.Platforms.FirstOrDefault(platform => platform.Equals(dbPlatform)) != null)
+            if (this.SearchInDataBase(dbPlatform) != null)
             {
                 throw new ArgumentException($"Platform {entity} is contained in the database");
             }
@@ -72,10 +73,7 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
 
         public void DeleteEntity(Guid guid)
         {
-            throw new NotImplementedException("функционал не поддерживается");
-            //DbPlatform dbPlatform = this.GetDbPlatform(guid);
-            //this.context.Platforms.Remove(dbPlatform);
-            //this.context.SaveChanges();
+            throw new NotImplementedException("функционал по удалению платформы БМРЗ на данный момент не доступен");
         }
     }
 }

@@ -11,8 +11,8 @@ namespace MtChangeLog.DataBase.Repositories.Interfaces
 {
     public interface ICommunicationModulesRepository : ICRUD<CommunicationModuleEditable>
     {
-        IEnumerable<CommunicationModuleShortView> GetShortEntities();
-        IEnumerable<CommunicationModuleTableView> GetTableEntities();
+        IQueryable<CommunicationModuleShortView> GetShortEntities();
+        IQueryable<CommunicationModuleTableView> GetTableEntities();
         CommunicationModuleEditable GetTemplate();
     }
 }

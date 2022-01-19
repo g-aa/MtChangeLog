@@ -10,8 +10,8 @@ namespace MtChangeLog.DataBase.Repositories.Interfaces
 {
     public interface IRelayAlgorithmsRepository : ICRUD<RelayAlgorithmEditable>
     {
-        IEnumerable<RelayAlgorithmShortView> GetShortEntities();
-        IEnumerable<RelayAlgorithmEditable> GetTableEntities();
+        IQueryable<RelayAlgorithmShortView> GetShortEntities();
+        IQueryable<RelayAlgorithmEditable> GetTableEntities();
         RelayAlgorithmEditable GetTemplate();
     }
 }
