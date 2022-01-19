@@ -1,6 +1,7 @@
 ﻿using MtChangeLog.DataBase.Contexts;
 using MtChangeLog.DataBase.Entities.Tables;
 using MtChangeLog.DataBase.Repositories.Interfaces;
+using MtChangeLog.DataBase.Repositories.Realizations.Base;
 using MtChangeLog.DataObjects.Entities.Editable;
 using MtChangeLog.DataObjects.Entities.Views.Shorts;
 using System;
@@ -52,7 +53,7 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
         public void AddEntity(ArmEditEditable entity)
         {
             var dbArmEdit = new DbArmEdit(entity);
-            if (this.context.ArmEdits.FirstOrDefault(e => e.Equals(dbArmEdit)) != null)
+            if(this.SearchInDataBase(dbArmEdit) != null)
             {
                 throw new ArgumentException($"ArmEdit {entity} is contained in database");
             }

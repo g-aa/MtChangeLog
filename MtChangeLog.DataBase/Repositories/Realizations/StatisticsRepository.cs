@@ -2,6 +2,7 @@
 using MtChangeLog.DataBase.Contexts;
 using MtChangeLog.DataBase.Entities;
 using MtChangeLog.DataBase.Repositories.Interfaces;
+using MtChangeLog.DataBase.Repositories.Realizations.Base;
 using MtChangeLog.DataObjects.Entities.Views.Shorts;
 using MtChangeLog.DataObjects.Entities.Views.Statistics;
 using System;

@@ -1,6 +1,7 @@
 ﻿using MtChangeLog.DataBase.Contexts;
 using MtChangeLog.DataBase.Entities.Tables;
 using MtChangeLog.DataBase.Repositories.Interfaces;
+using MtChangeLog.DataBase.Repositories.Realizations.Base;
 using MtChangeLog.DataObjects.Entities.Editable;
 using MtChangeLog.DataObjects.Entities.Views.Shorts;
 using MtChangeLog.DataObjects.Entities.Views.Tables;
@@ -58,7 +59,7 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
             {
                 Platforms = this.GetDbPlatformsOrDefault(entity.Platforms.Select(platform => platform.Id))
             };
-            if (this.context.AnalogModules.FirstOrDefault(module => module.Equals(dbModule)) != null) 
+            if (this.SearchInDataBase(dbModule) != null) 
             {
                 throw new ArgumentException($"AnalogModule {entity} is contained in database");
             }

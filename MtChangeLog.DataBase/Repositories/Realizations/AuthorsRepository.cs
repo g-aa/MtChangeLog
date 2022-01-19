@@ -1,6 +1,7 @@
 ﻿using MtChangeLog.DataBase.Contexts;
 using MtChangeLog.DataBase.Entities.Tables;
 using MtChangeLog.DataBase.Repositories.Interfaces;
+using MtChangeLog.DataBase.Repositories.Realizations.Base;
 using MtChangeLog.DataObjects.Entities.Editable;
 using MtChangeLog.DataObjects.Entities.Views.Shorts;
 using System;
@@ -51,7 +52,7 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
         public void AddEntity(AuthorEditable entity)
         {
             var dbAuthor = new DbAuthor(entity);
-            if (this.context.Authors.FirstOrDefault(e => e.Equals(dbAuthor)) != null)
+            if (this.SearchInDataBase(dbAuthor) != null)
             {
                 throw new ArgumentException($"Author {entity} is contained in database");
             }

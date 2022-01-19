@@ -1,6 +1,7 @@
 ﻿using MtChangeLog.DataBase.Contexts;
 using MtChangeLog.DataBase.Entities.Tables;
 using MtChangeLog.DataBase.Repositories.Interfaces;
+using MtChangeLog.DataBase.Repositories.Realizations.Base;
 using MtChangeLog.DataObjects.Entities.Editable;
 using MtChangeLog.DataObjects.Entities.Views.Shorts;
 using System;
@@ -58,7 +59,7 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
         public void AddEntity(RelayAlgorithmEditable entity)
         {
             var dbAlgorithm = new DbRelayAlgorithm(entity);
-            if (this.context.RelayAlgorithms.FirstOrDefault(e => e.Equals(dbAlgorithm)) != null) 
+            if (this.SearchInDataBase(dbAlgorithm) != null) 
             {
                 throw new ArgumentException($"Relay algorithm {entity} is contained in database");
             }

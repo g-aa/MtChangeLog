@@ -2,6 +2,7 @@
 using MtChangeLog.DataBase.Contexts;
 using MtChangeLog.DataBase.Entities.Tables;
 using MtChangeLog.DataBase.Repositories.Interfaces;
+using MtChangeLog.DataBase.Repositories.Realizations.Base;
 using MtChangeLog.DataObjects.Entities.Editable;
 using MtChangeLog.DataObjects.Entities.Views.Shorts;
 using MtChangeLog.DataObjects.Entities.Views.Tables;
@@ -77,7 +78,7 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
                 Platform = dbPlatform,
                 AnalogModule = dbAnalogModule
             };
-            if (this.context.ProjectVersions.FirstOrDefault(p => p.Equals(dbProjectVersion)) != null)
+            if (this.SearchInDataBase(dbProjectVersion) != null)
             {
                 throw new ArgumentException($"The project version {entity} is contained in the database");
             }

@@ -1,6 +1,7 @@
 ﻿using MtChangeLog.DataBase.Contexts;
 using MtChangeLog.DataBase.Entities.Tables;
 using MtChangeLog.DataBase.Repositories.Interfaces;
+using MtChangeLog.DataBase.Repositories.Realizations.Base;
 using MtChangeLog.DataObjects.Entities.Editable;
 using MtChangeLog.DataObjects.Entities.Views.Shorts;
 using System;
@@ -54,7 +55,7 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
         public void AddEntity(ProjectStatusEditable entity)
         {
             var dbProjectStatus = new DbProjectStatus(entity);
-            if (this.context.ProjectStatuses.FirstOrDefault(ps => ps.Equals(dbProjectStatus)) != null) 
+            if (this.SearchInDataBase(dbProjectStatus) != null) 
             {
                 throw new ArgumentException($"The project status {entity} is contained in the database");   
             }

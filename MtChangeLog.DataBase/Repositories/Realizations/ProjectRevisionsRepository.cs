@@ -2,6 +2,7 @@
 using MtChangeLog.DataBase.Contexts;
 using MtChangeLog.DataBase.Entities.Tables;
 using MtChangeLog.DataBase.Repositories.Interfaces;
+using MtChangeLog.DataBase.Repositories.Realizations.Base;
 using MtChangeLog.DataObjects.Entities.Editable;
 using MtChangeLog.DataObjects.Entities.Views.Shorts;
 using MtChangeLog.DataObjects.Entities.Views.Tables;
@@ -84,7 +85,7 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
                 CommunicationModule = this.GetDbCommunicationOrDefault(entity.CommunicationModule.Id),
                 RelayAlgorithms = this.GetDbRelayAlgorithms(entity.RelayAlgorithms.Select(ra => ra.Id)),
             };
-            if (this.context.ProjectRevisions.Include(pr=>pr.ProjectVersion).AsParallel().FirstOrDefault(pr => pr.Equals(dbProjectRevision)) != null) 
+            if(this.SearchInDataBase(dbProjectRevision) != null)
             {
                 throw new ArgumentException($"The revision {entity} is contained in the database");
             }

@@ -1,6 +1,7 @@
 ﻿using MtChangeLog.DataBase.Contexts;
 using MtChangeLog.DataBase.Entities.Tables;
 using MtChangeLog.DataBase.Repositories.Interfaces;
+using MtChangeLog.DataBase.Repositories.Realizations.Base;
 using MtChangeLog.DataObjects.Entities.Editable;
 using MtChangeLog.DataObjects.Entities.Views.Shorts;
 using System;
@@ -59,7 +60,7 @@ namespace MtChangeLog.DataBase.Repositories.Realizations
             {
                 CommunicationModules = this.GetDbCommunicationModulesOrDefault(entity.CommunicationModules.Select(e => e.Id))
             };
-            if (this.context.Protocols.FirstOrDefault(p => p.Equals(dbProtocol)) != null) 
+            if (this.SearchInDataBase(dbProtocol) != null) 
             {
                 throw new ArgumentException($"The protocol {entity} is contained in the database");
             }
