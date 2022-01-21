@@ -69,6 +69,7 @@ class ProjectRevisionEditWindow {
             return result;
         };
 
+        let dateFormat = "%Y-%m-%d %H:%i:%s";
         let windowLayout = function () {
             let lWidth = 230; // label width
             let dHeight = 300; // description height
@@ -151,13 +152,19 @@ class ProjectRevisionEditWindow {
                         label:'Дата редакции:',
                         labelAlign:"right",
                         labelWidth:lWidth,
-                        timepicker:false,
-                        format:"%Y-%m-%d",
+                        timepicker:true,
+                        editable:true,
+                        format:dateFormat,
                         value:_editableObj.getDate(),
                         on:{
                             onChange: function(newValue, oldValue, config){
                                 try {
-                                    _editableObj.setDate(newValue);
+                                    if(!(newValue instanceof Date)){
+                                        throw new Error("введенный параметр не является датой и временем");
+                                    }
+                                    let format = webix.Date.dateToStr(dateFormat);
+                                    let strDate = format(newValue);
+                                    _editableObj.setDate(strDate);
                                 } catch (error) {
                                     messageBox.alertWarning(error.message);
                                 }
