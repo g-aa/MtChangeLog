@@ -14,6 +14,6 @@ namespace MtChangeLog.DataObjects.Entities.Views.Statistics
         public string Revision { get; set; }
         public string Platform { get; set; }
         public string ArmEdit { get; set; }
-        public string Date { get; set; }
+        public DateTime Date { get; set; }
     }
 }
