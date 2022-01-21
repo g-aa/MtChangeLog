@@ -58,7 +58,8 @@ class HomeLayout{
                                     id:mostChangedLayoutId,    
                                     select:true,
                                     template:function(o){
-                                        let result = "<b>Дата:</b><span style='white-space: pre-wrap'> " + o.date + "\t</span>"
+                                        let format = webix.Date.dateToStr("%Y-%m-%d");
+                                        let result = "<b>Дата:</b><span style='white-space: pre-wrap'> " + format(new Date(o.date)) + "\t</span>"
                                             + "<b>БФПО:</b><span style='white-space: pre-wrap'> " + o.title + "</span>"; 
                                         return result;
                                     },
@@ -89,7 +90,10 @@ class HomeLayout{
                         }
                     },
                     columns:[
-                        { id:"date",        width:250,  header:["Дата релиза:"] },
+                        { id:"date",        width:150, template:function(obj){ 
+                                let format = webix.Date.dateToStr("%Y-%m-%d");
+                                return format(new Date(obj.date)); 
+                            }, header:["Дата релиза:"] },
                         { id:"title",       width:350,  header:["10 недавно измененных БФПО:"] },
                         { id:"platform",    width:150,  header:["Платформа:"] },
                         { fillspace:true }
