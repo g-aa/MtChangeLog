@@ -14,7 +14,10 @@ class ProjectRevisionLayout{
                 { id:"title",      adjust:true, header:["Наименование:", { content:"multiSelectFilter" }] },
                 { id:"version",    width:100,   header:["Версия:", { content:"multiSelectFilter" }] },
                 { id:"revision",   width:100,   header:["Ревизия:", { content:"multiSelectFilter" }] },
-                { id:"date",       adjust:true, header:["Дата:", ""] },
+                { id:"date",       adjust:true, template:function(obj){ 
+                        let format = webix.Date.dateToStr("%Y-%m-%d");
+                        return format(new Date(obj.date)); 
+                    },header:["Дата:", ""] },
                 { id:"armEdit",    width:170,   header:["ArmEdit:", { content:"multiSelectFilter" }] },
                 { id:"reason",     adjust:true, header:["Причина:", ""] },
                 { fillspace:true }

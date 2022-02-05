@@ -124,14 +124,8 @@ class ProjectRevision{
         return this.editable.date;
     }
 
-    setDate(newDate = new Date()){
-        function pad(number){
-            if (number < 10){
-              return '0' + number;
-            }
-            return number;
-        }
-        this.editable.date =  newDate.getFullYear() + '-' + pad(newDate.getMonth() + 1) + '-' + pad(newDate.getDate()) + " 00:00:00";
+    setDate(newDate = ""){
+        this.editable.date =  newDate;
     }
 
     getAllParentRevisions(){

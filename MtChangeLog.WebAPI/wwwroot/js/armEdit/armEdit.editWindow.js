@@ -69,6 +69,7 @@ class ArmEditWindow {
             return result;
         };
 
+        let dateFormat = "%Y-%m-%d";
         let windowLayout = function () {
             let lWidth = 160;
             let result = {
@@ -119,12 +120,18 @@ class ArmEditWindow {
                         labelAlign:"right",
                         labelWidth:lWidth,
                         timepicker:false,
-                        format:"%Y-%m-%d",
+                        editable:true,
+                        format:dateFormat,
                         value:_editableObj.getDate(),
                         on:{
                             onChange: async function(newValue, oldValue, config){
                                 try{
-                                    _editableObj.setDate(newValue);
+                                    if(!(newValue instanceof Date)){
+                                        throw new Error("введенный параметр не является датой и временем");
+                                    }
+                                    let format = webix.Date.dateToStr(dateFormat);
+                                    let strDate = format(newValue);
+                                    _editableObj.setDate(strDate);
                                 } catch (error){
                                     messageBox.warning(error.message);
                                 }

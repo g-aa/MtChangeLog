@@ -12,7 +12,10 @@ class ArmEditTableLayout{
                 //{ id:"id",          adjust:true,    header:["GUID:", ""] },
                 { id:"divg",        width:200,      header:["ДИВГ:", { content:"multiSelectFilter" }] },
                 { id:"version",     width:200,      header:["Версия:", { content:"multiSelectFilter" }] },
-                { id:"date",        width:250,      header:["Дата релиза:", { content:"multiSelectFilter" }] },
+                { id:"date",        adjust:true,    template:function(obj){ 
+                        let format = webix.Date.dateToStr("%Y-%m-%d");
+                        return format(new Date(obj.date)); 
+                    }, header:["Дата релиза:", { content:"multiSelectFilter" }] },
                 { id:"description", adjust:true,    header:["Описание:", ""] },
                 { fillspace:true }
             ],

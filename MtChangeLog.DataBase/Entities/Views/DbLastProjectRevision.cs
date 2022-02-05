@@ -30,7 +30,7 @@ namespace MtChangeLog.DataBase.Entities.Views
                 Revision = this.Revision,
                 Platform = this.Platform,
                 ArmEdit = this.ArmEdit,
-                Date = this.Date.ToString("yyyy-MM-dd")
+                Date = this.Date
             };
         }
 
