@@ -7,8 +7,15 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\MtChangeLog.DataBase\MtChangeLog.DataBase.csproj" />
-    <ProjectReference Include="..\MtChangeLog.DataObjects\MtChangeLog.DataObjects.csproj" />
+    <Compile Remove="Models\**" />
+    <Content Remove="Models\**" />
+    <EmbeddedResource Remove="Models\**" />
+    <None Remove="Models\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MtChangeLog.Repositories\MtChangeLog.Repositories.csproj" />
+    <ProjectReference Include="..\MtChangeLog.TransferObjects\MtChangeLog.TransferObjects.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -142,7 +149,6 @@
 
   <ItemGroup>
     <Folder Include="LogFiles\" />
-    <Folder Include="Models\" />
   </ItemGroup>
 
   <ItemGroup>

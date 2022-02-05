@@ -1,10 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-
-using MtChangeLog.DataBase.Repositories.Interfaces;
-using MtChangeLog.DataObjects.Entities.Editable;
-using MtChangeLog.DataObjects.Entities.Views;
-
+using MtChangeLog.Abstractions.Repositories;
+using MtChangeLog.TransferObjects.Editable;
 using System;
 using System.Collections.Generic;
 using System.Linq;

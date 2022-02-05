@@ -1,7 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using MtChangeLog.DataBase.Repositories.Interfaces;
+using MtChangeLog.Abstractions.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,7 +29,7 @@ namespace MtChangeLog.WebAPI.Controllers
             try
             {
                 this.logger.LogInformation($"HTTP GET - StatisticsController - project short statistics");
-                var result = this.repository.GetShortStatistics();
+                var result = this.repository.GetStatistics();
                 return this.Ok(result);
             }
             catch (Exception ex)
