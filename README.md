@@ -9,6 +9,7 @@
 ## Схема базы данных:<br>
 Схема БД приложения БМРЗ - change log (PostgreSQL).<br>
 <p align="center"><img src="https://github.com/g-aa/MtChangeLog/blob/develop/Screenshots/databaseSchema.PNG" width="65%" /></p>
+
 ## Поддерживаемый функционал:<br>
 1. **toolbar:**<br>
     - Реализован функционал, позволяющий скачать архив в формате zip истории изменения всех проектов (БФПО) хранящихся на сервере.<br> 
