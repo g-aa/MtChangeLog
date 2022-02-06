@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using MtChangeLog.DataBase.Repositories.Interfaces;
-using MtChangeLog.DataObjects.Models;
+using MtChangeLog.Abstractions.Repositories;
+using MtChangeLog.TransferObjects.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -18,10 +18,10 @@ namespace MtChangeLog.WebAPI.Controllers
     [ApiController]
     public class FilesController : ControllerBase
     {
-        private readonly IStatisticsRepository repository;
+        private readonly IProjectHistoriesRepository repository;
         private readonly ILogger logger;
 
-        public FilesController(IStatisticsRepository repository, ILogger<FilesController> logger) 
+        public FilesController(IProjectHistoriesRepository repository, ILogger<FilesController> logger) 
         {
             this.repository = repository;
             this.logger = logger;
@@ -50,7 +50,7 @@ namespace MtChangeLog.WebAPI.Controllers
             try
             {
                 FileModel result = null;
-                var projects = this.repository.GetShortEntities();
+                var projects = this.repository.GetShortEntities().ToList();
                 using (MemoryStream outStream = new MemoryStream()) 
                 {
                     using (ZipArchive archive = new ZipArchive(outStream, ZipArchiveMode.Create, true)) 

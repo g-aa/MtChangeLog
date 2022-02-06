@@ -7,10 +7,11 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
-using MtChangeLog.DataBase.Contexts;
-using MtChangeLog.DataBase.Repositories.Interfaces;
-using MtChangeLog.DataBase.Repositories.Realizations;
+using MtChangeLog.Abstractions.Repositories;
+using MtChangeLog.Context.Realizations;
+using MtChangeLog.Repositories.Realizations;
 using MtChangeLog.WebAPI.Converters;
+using MtChangeLog.WebAPI.Extensions;
 using MtChangeLog.WebAPI.Loggers;
 using System;
 using System.Collections.Generic;
@@ -32,6 +33,7 @@ namespace MtChangeLog.WebAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            //services.AddDbContext<IContext, ApplicationContext>(options =>
             services.AddDbContext<ApplicationContext>(options =>
             {
                 switch (this.Configuration["SqlProvider"].ToLower())
@@ -53,8 +55,10 @@ namespace MtChangeLog.WebAPI
             services.AddTransient<IAuthorsRepository, AuthorsRepository>();
             services.AddTransient<ICommunicationModulesRepository, CommunicationModulesRepository>();
             services.AddTransient<IPlatformsRepository, PlatformsRepository>();
+            services.AddTransient<IProjectHistoriesRepository, ProjectHistoriesRepository>();
             services.AddTransient<IProjectRevisionsRepository, ProjectRevisionsRepository>();
             services.AddTransient<IProjectStatusRepository, ProjectStatusRepository>();
+            services.AddTransient<IProjectTreesRepository, ProjectTreesRepository>();
             services.AddTransient<IProjectVersionsRepository, ProjectVersionsRepository>();
             services.AddTransient<IProtocolsRepository, ProtocolsRepository>();
             services.AddTransient<IRelayAlgorithmsRepository, RelayAlgorithmsRepository>();
@@ -75,7 +79,7 @@ namespace MtChangeLog.WebAPI
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
         {
             loggerFactory.AddFile();
-            
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -94,6 +98,8 @@ namespace MtChangeLog.WebAPI
             {
                 endpoints.MapControllers();
             });
+
+            app.UseInitializeDbContext();
         }
     }
 }

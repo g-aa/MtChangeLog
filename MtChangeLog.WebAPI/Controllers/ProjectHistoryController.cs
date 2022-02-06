@@ -1,8 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using MtChangeLog.DataBase.Repositories.Interfaces;
-using MtChangeLog.DataObjects.Entities.Views;
+using MtChangeLog.Abstractions.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,10 +12,10 @@ namespace MtChangeLog.WebAPI.Controllers
     [ApiController]
     public class ProjectHistoryController : ControllerBase
     {
-        private readonly IStatisticsRepository repository;
+        private readonly IProjectHistoriesRepository repository;
         private readonly ILogger logger;
 
-        public ProjectHistoryController(IStatisticsRepository repository, ILogger<ProjectHistoryController> logger)
+        public ProjectHistoryController(IProjectHistoriesRepository repository, ILogger<ProjectHistoryController> logger)
         {
             this.repository = repository;
             this.logger = logger;

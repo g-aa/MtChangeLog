@@ -7,6 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Controllers\**" />
+    <EmbeddedResource Remove="Controllers\**" />
+    <None Remove="Controllers\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.9.4" />
     <PackageReference Include="Moq" Version="4.16.1" />
     <PackageReference Include="xunit" Version="2.4.1" />
@@ -21,13 +27,15 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\MtChangeLog.DataBase\MtChangeLog.DataBase.csproj" />
-    <ProjectReference Include="..\MtChangeLog.DataObjects\MtChangeLog.DataObjects.csproj" />
+    <ProjectReference Include="..\MtChangeLog.Repositories\MtChangeLog.Repositories.csproj" />
+    <ProjectReference Include="..\MtChangeLog.TransferObjects\MtChangeLog.TransferObjects.csproj" />
     <ProjectReference Include="..\MtChangeLog.WebAPI\MtChangeLog.WebAPI.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
+    <None Update="Test.db">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

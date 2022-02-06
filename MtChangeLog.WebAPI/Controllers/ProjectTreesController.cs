@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using MtChangeLog.DataBase.Repositories.Interfaces;
-
+using MtChangeLog.Abstractions.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,10 +14,10 @@ namespace MtChangeLog.WebAPI.Controllers
     [ApiController]
     public class ProjectTreesController : ControllerBase
     {
-        private readonly IStatisticsRepository repository;
+        private readonly IProjectTreesRepository repository;
         private readonly ILogger logger;
 
-        public ProjectTreesController(IStatisticsRepository repository, ILogger<ProjectRevisionsController> logger) 
+        public ProjectTreesController(IProjectTreesRepository repository, ILogger<ProjectRevisionsController> logger) 
         {
             this.repository = repository;
             this.logger = logger;
