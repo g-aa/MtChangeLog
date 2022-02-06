@@ -32,4 +32,10 @@
     <ProjectReference Include="..\MtChangeLog.WebAPI\MtChangeLog.WebAPI.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Test.db">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

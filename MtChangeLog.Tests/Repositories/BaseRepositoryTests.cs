@@ -5,16 +5,17 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace MtChangeLog.Tests.Repositories
 {
-    public abstract class BaseRepositorTests
+    public abstract class BaseRepositoryTests
     {
         protected ApplicationContext context;
 
-        public BaseRepositorTests() 
+        public BaseRepositoryTests() 
         {
             var builder = new ConfigurationBuilder();
 
@@ -28,7 +29,7 @@ namespace MtChangeLog.Tests.Repositories
             var config = builder.Build();
 
             // получаем строку подключения:
-            string sConnection = config.GetConnectionString("SqLiteDbConnection");
+            string sConnection = config.GetConnectionString("TestDbConnection");
             var optionsBuilder = new DbContextOptionsBuilder<ApplicationContext>();
 
             this.context = new ApplicationContext(optionsBuilder.UseSqlite(sConnection).Options);
