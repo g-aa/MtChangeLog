@@ -12,7 +12,7 @@ namespace MtChangeLog.TransferObjects.Views.Statistics
         public string ArmEdit { get; set; }
         public int ProjectCount { get; set; }
         public Dictionary<string, int> ProjectDistributions { get; set; }
+        public IEnumerable<AuthorContributionView> AuthorContributions { get; set; }
         public IEnumerable<ProjectRevisionHistoryShortView> LastModifiedProjects { get; set; }
-        public IEnumerable<ProjectRevisionHistoryShortView> MostChangingProjects { get; set; }
     }
 }

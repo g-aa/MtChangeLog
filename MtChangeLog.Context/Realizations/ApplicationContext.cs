@@ -33,6 +33,7 @@ namespace MtChangeLog.Context.Realizations
 
         #region Views
         public DbSet<LastProjectRevision> LastProjectRevisions { get; set; }
+        public DbSet<AuthorContribution> AuthorContributions { get; set; }
         #endregion
 
         public ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options)
@@ -57,6 +58,7 @@ namespace MtChangeLog.Context.Realizations
                 modelBuilder.HasDefaultSchema("MT");
             }
 
+            // tables:
             new AnalogModuleConfiguration().Configure(modelBuilder.Entity<AnalogModule>());
             new ArmEditConfiguration().Configure(modelBuilder.Entity<ArmEdit>());
             new AuthorConfiguration().Configure(modelBuilder.Entity<Author>());
@@ -67,7 +69,10 @@ namespace MtChangeLog.Context.Realizations
             new ProjectVersionConfiguration().Configure(modelBuilder.Entity<ProjectVersion>());
             new ProjectStatusConfiguration().Configure(modelBuilder.Entity<ProjectStatus>());
             new ProjectRevisionConfiguration().Configure(modelBuilder.Entity<ProjectRevision>());
+            
+            // views:
             new LastProjectRevisionConfiguration().Configure(modelBuilder.Entity<LastProjectRevision>());
+            new AuthorContributionConfiguration().Configure(modelBuilder.Entity<AuthorContribution>());
 
             base.OnModelCreating(modelBuilder);
         }

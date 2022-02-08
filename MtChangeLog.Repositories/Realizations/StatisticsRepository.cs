@@ -45,15 +45,15 @@ namespace MtChangeLog.Repositories.Realizations
                 .OrderByDescending(e => e.Version)
                 .First().Version;
             var lastModifiedProjects = this.GetNLastModifiedProjects(count).ToArray();
-            var mostChangingProjects = this.GetNMostChangingProjects(count).ToArray();
+            var contributions = this.context.AuthorContributions.Select(e => e.ToView()).ToArray();
             var result = new StatisticsView()
             {
                 Date = DateTime.Now,
                 ArmEdit = sArmEdit,
                 ProjectCount = distributions.Sum(e => e.Value),
                 ProjectDistributions = distributions,
-                LastModifiedProjects = lastModifiedProjects,
-                MostChangingProjects = mostChangingProjects
+                AuthorContributions = contributions,
+                LastModifiedProjects = lastModifiedProjects
             };
             return result;
         }
