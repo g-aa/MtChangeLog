@@ -76,8 +76,9 @@ namespace MtChangeLog.Repositories.Realizations
             var lastRevision = this.context.ProjectRevisions
                 .Include(e => e.CommunicationModule)
                 .Include(e => e.Authors)
+                .Include(e => e.RelayAlgorithms)
                 .Where(e => e.ProjectVersionId == guid)
-                .OrderByDescending(e => e.Reason)
+                .OrderByDescending(e => e.Revision)
                 .FirstOrDefault();
             var armEdit = this.context.ArmEdits
                 .OrderByDescending(e => e.Version)
@@ -138,7 +139,7 @@ namespace MtChangeLog.Repositories.Realizations
                 CommunicationModule = dbCommunication,
                 RelayAlgorithms = dbRelayAlgorithms,
             };
-            if(this.context.ProjectRevisions.IsContained(dbProjectRevision))
+            if(this.context.ProjectRevisions.Include(e => e.ProjectVersion).IsContained(dbProjectRevision))
             {
                 throw new ArgumentException($"Сущность \"{entity}\" уже содержится в БД");
             }
