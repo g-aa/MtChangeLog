@@ -15,6 +15,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MtChangeLog.Repositories\MtChangeLog.Repositories.csproj" />
+    <ProjectReference Include="..\MtChangeLog.Services\MtChangeLog.Services.csproj" />
     <ProjectReference Include="..\MtChangeLog.TransferObjects\MtChangeLog.TransferObjects.csproj" />
   </ItemGroup>
 

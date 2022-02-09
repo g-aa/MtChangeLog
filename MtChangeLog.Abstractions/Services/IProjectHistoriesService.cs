@@ -6,9 +6,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MtChangeLog.Abstractions.Repositories
+namespace MtChangeLog.Abstractions.Services
 {
-    public interface IProjectHistoriesRepository
+    public interface IProjectHistoriesService
     {
         /// <summary>
         /// получить перечень проектов (БФПО) у которых имеютя редакции

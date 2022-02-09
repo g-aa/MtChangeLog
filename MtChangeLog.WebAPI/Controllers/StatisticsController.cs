@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using MtChangeLog.Abstractions.Repositories;
+using MtChangeLog.Abstractions.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,12 +13,12 @@ namespace MtChangeLog.WebAPI.Controllers
     [ApiController]
     public class StatisticsController : ControllerBase
     {
-        private readonly IStatisticsRepository repository;
+        private readonly IStatisticsService service;
         private readonly ILogger logger;
 
-        public StatisticsController(IStatisticsRepository repository, ILogger<StatisticsController> logger) 
+        public StatisticsController(IStatisticsService service, ILogger<StatisticsController> logger) 
         {
-            this.repository = repository;
+            this.service = service;
             this.logger = logger;
             this.logger.LogInformation("HTTP - StatisticsController - creating");
         }
@@ -29,7 +30,7 @@ namespace MtChangeLog.WebAPI.Controllers
             try
             {
                 this.logger.LogInformation($"HTTP GET - StatisticsController - project short statistics");
-                var result = this.repository.GetStatistics();
+                var result = this.service.GetStatistics();
                 return this.Ok(result);
             }
             catch (Exception ex)
@@ -46,7 +47,7 @@ namespace MtChangeLog.WebAPI.Controllers
             try
             {
                 this.logger.LogInformation($"HTTP GET - StatisticsController - last projects revision");
-                var result = this.repository.GetLastProjectRevisions();
+                var result = this.service.GetLastProjectRevisions();
                 return this.Ok(result);
             }
             catch (Exception ex)
@@ -63,7 +64,7 @@ namespace MtChangeLog.WebAPI.Controllers
             try
             {
                 this.logger.LogInformation($"HTTP GET - StatisticsController - author project contributions");
-                var result = this.repository.GetAuthorProjectContributions();
+                var result = this.service.GetAuthorProjectContributions();
                 return this.Ok(result);
             }
             catch (Exception ex)

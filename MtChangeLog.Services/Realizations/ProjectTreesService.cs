@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using MtChangeLog.Abstractions.Repositories;
+using MtChangeLog.Abstractions.Services;
 using MtChangeLog.Context.Realizations;
 using MtChangeLog.TransferObjects.Views.Statistics;
 using System;
@@ -8,13 +8,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MtChangeLog.Repositories.Realizations
+namespace MtChangeLog.Services.Realizations
 {
-    public class ProjectTreesRepository : IProjectTreesRepository
+    public class ProjectTreesService : IProjectTreesService
     {
         private readonly ApplicationContext context;
         
-        public ProjectTreesRepository(ApplicationContext context) 
+        public ProjectTreesService(ApplicationContext context) 
         {
             this.context = context;
         }

@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MtChangeLog.Abstractions.Extensions;
-using MtChangeLog.Abstractions.Repositories;
+using MtChangeLog.Abstractions.Services;
 using MtChangeLog.Context.Realizations;
 using MtChangeLog.Entities.Tables;
 using MtChangeLog.TransferObjects.Views.Shorts;
@@ -11,13 +11,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MtChangeLog.Repositories.Realizations
+namespace MtChangeLog.Services.Realizations
 {
-    public class ProjectHistoriesRepository : IProjectHistoriesRepository
+    public class ProjectHistoriesService : IProjectHistoriesService
     {
         public readonly ApplicationContext context;
 
-        public ProjectHistoriesRepository(ApplicationContext context) 
+        public ProjectHistoriesService(ApplicationContext context) 
         {
             this.context = context;
         }
