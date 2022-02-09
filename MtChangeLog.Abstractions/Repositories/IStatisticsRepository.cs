@@ -38,5 +38,8 @@ namespace MtChangeLog.Abstractions.Repositories
         /// <param name="n">количество элементов в выборке</param>
         /// <returns></returns>
         IQueryable<ProjectRevisionHistoryShortView> GetNMostChangingProjects(ushort count);
+
+        IQueryable<AuthorContributionView> GetAuthorContributions();
+        IQueryable<AuthorProjectContributionView> GetAuthorProjectContributions();
     }
 }

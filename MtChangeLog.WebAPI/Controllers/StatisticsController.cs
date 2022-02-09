@@ -55,5 +55,22 @@ namespace MtChangeLog.WebAPI.Controllers
                 return this.BadRequest(ex.Message);
             }
         }
+
+        // GET: api/<StatisticsController>/AuthorProjectContributions
+        [HttpGet("AuthorProjectContributions")]
+        public IActionResult GetAuthorProjectContributions() 
+        {
+            try
+            {
+                this.logger.LogInformation($"HTTP GET - StatisticsController - author project contributions");
+                var result = this.repository.GetAuthorProjectContributions();
+                return this.Ok(result);
+            }
+            catch (Exception ex)
+            {
+                this.logger.LogError(ex, $"HTTP GET - StatisticsController - ");
+                return this.BadRequest(ex.Message);
+            }
+        }
     }
 }

@@ -105,5 +105,51 @@ namespace MtChangeLog.Context.Configurations.Default
                 ORDER BY ""Contribution"" DESC");
             }
         }
+
+        private static void CreateAuthorProjectContribution(ApplicationContext context) 
+        {
+            if (context.Database.IsSqlite()) 
+            {
+                context.Database.ExecuteSqlRaw(
+                $@"CREATE VIEW ""AuthorProjectContribution"" AS
+                SELECT  athr.""LastName"" || ' ' || athr.""FirstName"" AS ""Author"",
+                        am.""Title"" AS ""AnalogModule"",
+                        pv.""Title"" AS ""ProjectTitle"",
+                        pv.""Version"" AS ""ProjectVersion"",
+                        count(pv.""Id"") AS ""Contribution""
+                FROM ""Author"" athr
+                JOIN ""ProjectRevisionAuthor"" pra
+                ON athr.""Id"" = pra.""AuthorsId""
+                JOIN ""ProjectRevision"" pr
+                ON pr.""Id"" = pra.""ProjectRevisionsId""
+                JOIN ""ProjectVersion"" pv
+                ON pv.""Id"" = pr.""ProjectVersionId""
+                JOIN ""AnalogModule"" am
+                ON am.""Id"" = pv.""AnalogModuleId""
+                GROUP BY athr.""LastName"", athr.""FirstName"", am.""Title"", pv.""Title"", pv.""Version""
+                ORDER BY ""Author"" ASC, ""ProjectTitle"" ASC, ""AnalogModule"" ASC, ""ProjectVersion"" ASC");
+            }
+            if (context.Database.IsNpgsql()) 
+            {
+                context.Database.ExecuteSqlRaw(
+                $@"CREATE OR REPLACE VIEW ""MT"".""AuthorProjectContribution"" AS
+                SELECT  CONCAT(athr.""LastName"", ' ', athr.""FirstName"") AS ""Author"",
+                        am.""Title"" AS ""AnalogModule"",
+                        pv.""Title"" AS ""ProjectTitle"",
+                        pv.""Version"" AS ""ProjectVersion"",
+                        count(pv.""Id"") AS ""Contribution""
+                FROM ""MT"".""Author"" athr
+                JOIN ""MT"".""ProjectRevisionAuthor"" pra
+                ON athr.""Id"" = pra.""AuthorsId""
+                JOIN ""MT"".""ProjectRevision"" pr
+                ON pr.""Id"" = pra.""ProjectRevisionsId""
+                JOIN ""MT"".""ProjectVersion"" pv
+                ON pv.""Id"" = pr.""ProjectVersionId""
+                JOIN ""MT"".""AnalogModule"" am
+                ON am.""Id"" = pv.""AnalogModuleId""
+                GROUP BY athr.""LastName"", athr.""FirstName"", am.""Title"", pv.""Title"", pv.""Version""
+                ORDER BY ""Author"" ASC, ""ProjectTitle"" ASC, ""AnalogModule"" ASC, ""ProjectVersion"" ASC");
+            }
+        }
     }
 }

@@ -34,6 +34,7 @@ namespace MtChangeLog.Context.Realizations
         #region Views
         public DbSet<LastProjectRevision> LastProjectRevisions { get; set; }
         public DbSet<AuthorContribution> AuthorContributions { get; set; }
+        public DbSet<AuthorProjectContribution> AuthorProjectContributions { get; set; }
         #endregion
 
         public ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options)
@@ -73,6 +74,7 @@ namespace MtChangeLog.Context.Realizations
             // views:
             new LastProjectRevisionConfiguration().Configure(modelBuilder.Entity<LastProjectRevision>());
             new AuthorContributionConfiguration().Configure(modelBuilder.Entity<AuthorContribution>());
+            new AuthorProjectContributionConfiguration().Configure(modelBuilder.Entity<AuthorProjectContribution>());
 
             base.OnModelCreating(modelBuilder);
         }

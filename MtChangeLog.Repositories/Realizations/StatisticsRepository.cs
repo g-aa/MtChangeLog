@@ -45,7 +45,7 @@ namespace MtChangeLog.Repositories.Realizations
                 .OrderByDescending(e => e.Version)
                 .First().Version;
             var lastModifiedProjects = this.GetNLastModifiedProjects(count).ToArray();
-            var contributions = this.context.AuthorContributions.Select(e => e.ToView()).ToArray();
+            var contributions = this.GetAuthorContributions().ToArray();
             var result = new StatisticsView()
             {
                 Date = DateTime.Now,
@@ -87,6 +87,20 @@ namespace MtChangeLog.Repositories.Realizations
                 .ThenByDescending(e => e.Date)
                 .Take(count)
                 .Select(e => e.ToHistoryShortView());
+            return result;
+        }
+
+        public IQueryable<AuthorContributionView> GetAuthorContributions()
+        {
+            var result = this.context.AuthorContributions
+                .Select(e => e.ToView());
+            return result;
+        }
+
+        public IQueryable<AuthorProjectContributionView> GetAuthorProjectContributions()
+        {
+            var result = this.context.AuthorProjectContributions
+                .Select(e => e.ToView());
             return result;
         }
     }
