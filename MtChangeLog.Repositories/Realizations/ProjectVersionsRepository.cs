@@ -101,7 +101,7 @@ namespace MtChangeLog.Repositories.Realizations
                 Platform = dbPlatform,
                 AnalogModule = dbAnalogModule
             };
-            if (this.context.ProjectVersions.IsContained(dbProjectVersion))
+            if (this.context.ProjectVersions.Include(e => e.AnalogModule).IsContained(dbProjectVersion))
             {
                 throw new ArgumentException($"Сущность \"{entity}\" уже содержится в БД");
             }
