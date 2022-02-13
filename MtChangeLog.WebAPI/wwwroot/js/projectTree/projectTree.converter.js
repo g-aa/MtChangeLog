@@ -5,13 +5,13 @@ function getDataAndLinksForTree(projectData){
     
     let startPoint = { x:20, y:20 };
     let dPoint = { x:20, y:20 };
-	let blokSize = { width:200, height:130 };
+	let blokSize = { width:170, height:110 };
 			
     //
     let projectTypes = [];  // для определения числа столбцов
     let projectDates = []; // для определения числа строк
     projectData.forEach(function(item, index, array){
-        let temp = item.module + "-" + item.title + "-" + item.version;
+        let temp = item.prefix + "-" + item.title + "-" + item.version;
         
         if(!projectTypes.includes(temp)){
             projectTypes.push(temp);
@@ -34,8 +34,8 @@ function getDataAndLinksForTree(projectData){
         let value = "";
         
         // project full name:
-        if(item.module != null){
-            value += "ПО: <b>" + item.module;
+        if(item.prefix != null){
+            value += "<b>" + item.prefix;
         }
         if(item.title != null){
             value += "-" + item.title;
@@ -58,10 +58,10 @@ function getDataAndLinksForTree(projectData){
         }
 
         if(item.platform != null){
-            value += "<br>Платформа: <b>" + item.platform + "</b>";
+            value += "<br><b>" + item.platform + "</b>";
         }
 
-        let vIdx = projectTypes.indexOf((item.module + "-" + item.title + "-" + item.version));
+        let vIdx = projectTypes.indexOf((item.prefix + "-" + item.title + "-" + item.version));
         let dIdx = projectDates.indexOf(Date.parse(item.date));
 
         result.data.push({

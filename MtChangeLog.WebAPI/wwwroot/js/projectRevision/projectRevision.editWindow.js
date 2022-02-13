@@ -87,7 +87,7 @@ class ProjectRevisionEditWindow {
                         value:_editableObj.getParentRevision(),
                         options:{
                             body:{
-                                template:"#module#-#title#-#version#_#revision#"
+                                template:"#prefix#-#title#-#version#_#revision#"
                             },   
                             data:_editableObj.getAllParentRevisions()
                         },
@@ -111,7 +111,7 @@ class ProjectRevisionEditWindow {
                         value:_editableObj.getProjectVersion(),
                         options:{
                             body:{
-                                template:"#module#-#title#-#version#"
+                                template:"#prefix#-#title#-#version#"
                             },   
                             data:_editableObj.getAllProjectVersions()
                         },

@@ -11,7 +11,7 @@ class ProjectVersionTableLayout{
             columns:[
                 //{ id:"id",          adjust:true, header:["GUID:", ""] },
                 { id:"divg",        adjust:true, header:["ДИВГ:", ""] },
-                { id:"module",      width:150, header:["Аналоговый модуль:", { content:"multiSelectFilter" }] },
+                { id:"prefix",      width:150, header:["Префикс:", { content:"multiSelectFilter" }] },
                 { id:"title",       width:150, header:["Наименование:", { content:"multiSelectFilter" }] },
                 { id:"version",     width:150, header:["Версия:", { content:"multiSelectFilter" }] },
                 { id:"status",      width:150, header:["Статус:", { content:"multiSelectFilter" }] },

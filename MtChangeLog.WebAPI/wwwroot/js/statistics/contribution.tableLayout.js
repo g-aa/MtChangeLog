@@ -10,7 +10,7 @@ class ContributionTableLayout{
             scroll:"xy",
             columns:[
                 { id:"author",          width:250,   minWidth:150,   header:["Автор:", { content:"multiSelectFilter" }] },
-                { id:"analogModule",    width:170,   header:["Аналоговый модуль:", { content:"multiSelectFilter" }] },
+                { id:"projectPrefix",    width:170,   header:["Аналоговый модуль:", { content:"multiSelectFilter" }] },
                 { id:"projectTitle",    width:170,   header:["Наименование проекта:", { content:"multiSelectFilter" }] },
                 { id:"projectVersion",  width:170,   header:["Версия проекта:", { content:"multiSelectFilter" }] },
                 { id:"contribution",    width:170,   header:["Влад:", { content:"multiSelectFilter" }] },
