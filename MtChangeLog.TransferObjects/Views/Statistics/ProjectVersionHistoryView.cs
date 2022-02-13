@@ -8,8 +8,12 @@ namespace MtChangeLog.TransferObjects.Views.Statistics
 {
     public class ProjectVersionHistoryView
     {
+        /// <summary>
+        /// наименование проекта, комбинация: "ProjectVersion.Prefix"-"ProjectVersion.Title"-"ProjectVersion.Version"
+        /// </summary>
         public string Title { get; set; }
         public ICollection<ProjectRevisionHistoryView> History { get; private set; }
+        
         public ProjectVersionHistoryView() 
         {
             this.Title = "БМРЗ";

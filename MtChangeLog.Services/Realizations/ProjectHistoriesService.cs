@@ -25,7 +25,7 @@ namespace MtChangeLog.Services.Realizations
         public IQueryable<ProjectVersionShortView> GetShortEntities()
         {
             var result = this.context.LastProjectRevisions
-                .OrderBy(e => e.AnalogModule)
+                .OrderBy(e => e.Prefix)
                 .ThenBy(e => e.Title)
                 .ThenBy(e => e.Version)
                 .Select(e => e.ToProjectVersionShortView());

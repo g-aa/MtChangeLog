@@ -63,7 +63,7 @@ namespace MtChangeLog.Services.Realizations
             var result = this.context.LastProjectRevisions
                 .AsNoTracking()
                 .OrderBy(e => e.Title)
-                .ThenBy(e => e.AnalogModule)
+                .ThenBy(e => e.Prefix)
                 .ThenBy(e => e.Version)
                 .Select(e => e.ToView());
             return result;

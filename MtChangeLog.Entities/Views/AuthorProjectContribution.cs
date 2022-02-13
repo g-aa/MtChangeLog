@@ -11,7 +11,7 @@ namespace MtChangeLog.Entities.Views
     {
         public string Author { get; set; }
         public int Contribution { get; set; }
-        public string AnalogModule { get; set; }
+        public string ProjectPrefix { get; set; }
         public string ProjectTitle { get; set; }
         public string ProjectVersion { get; set; }
 
@@ -21,7 +21,7 @@ namespace MtChangeLog.Entities.Views
             {
                 Author = this.Author,
                 Contribution = this.Contribution,
-                AnalogModule = this.AnalogModule,
+                ProjectPrefix = this.ProjectPrefix,
                 ProjectTitle = this.ProjectTitle,
                 ProjectVersion = this.ProjectVersion
             };

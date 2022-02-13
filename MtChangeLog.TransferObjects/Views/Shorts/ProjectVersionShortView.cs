@@ -11,9 +11,9 @@ namespace MtChangeLog.TransferObjects.Views.Shorts
     {
         public Guid Id { get; set; }
 
-        [Required(ErrorMessage = "Наименование аналогово модуля обязательный параметр для заполнения")]
-        [RegularExpression("^БМРЗ-[0-9]{3}$", ErrorMessage = "Наименование аналогово модуля должено иметь следующий вид БМРЗ-xxx, где x - число [0-9]", MatchTimeoutInMilliseconds = 1000)]
-        public string Module { get; set; }
+        [Required(AllowEmptyStrings =true, ErrorMessage = "Префикс проекта, псевдоним аналогового модуля обязательный параметр для заполнения")]
+        [RegularExpression("^(БФПО(-[0-9]{3})?)?$", ErrorMessage = "Префикс проекта, псевдоним аналогового модуля должено иметь следующий вид БФПО-xxx, где x - [0-9]", MatchTimeoutInMilliseconds = 1000)]
+        public string Prefix { get; set; }
 
         [StringLength(16, MinimumLength = 2, ErrorMessage = "Наименование проекта должно содержать не больше {1} и не менее {2} символов")]
         public string Title { get; set; }
@@ -24,7 +24,7 @@ namespace MtChangeLog.TransferObjects.Views.Shorts
 
         public override string ToString()
         {
-            return $"{this.Module}-{this.Title}-{this.Version}";
+            return $"{this.Prefix}-{this.Title}-{this.Version}";
         }
     }
 }

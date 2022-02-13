@@ -16,11 +16,15 @@ namespace MtChangeLog.Context.Configurations.Tables
             builder.ToTable("ProjectVersion");
             builder.HasComment("Таблица с перечнем проектов блоков БМРЗ-100/120/150/160");
             builder.HasIndex(e => e.DIVG).HasDatabaseName("IX_ProjectVersion_DIVG").IsUnique();
-            builder.HasIndex(e => new { e.AnalogModuleId, e.Title, e.Version }).HasDatabaseName("IX_ProjectVersion_Version").IsUnique();
+            builder.HasIndex(e => new { e.Prefix, e.Title, e.Version }).HasDatabaseName("IX_ProjectVersion_Version").IsUnique();
 
             builder.Property(e => e.DIVG)
                 .HasMaxLength(13)
                 .IsFixedLength()
+                .IsRequired();
+
+            builder.Property(e => e.Prefix)
+                .HasMaxLength(10)
                 .IsRequired();
 
             builder.Property(e => e.Title)

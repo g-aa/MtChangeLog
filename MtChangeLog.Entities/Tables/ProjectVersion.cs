@@ -18,6 +18,10 @@ namespace MtChangeLog.Entities.Tables
         [RegularExpression("^ДИВГ.[0-9]{5}-[0-9]{2}$", ErrorMessage = "Децимальный номер должен иметь следующий вид ДИВГ.xxxxx-xx, где x - число [0-9]", MatchTimeoutInMilliseconds = 1000)]
         public string DIVG { get; set; }
 
+        [Required(ErrorMessage = "Префикс проекта, псевдоним аналогового модуля обязательный параметр для заполнения")]
+        [RegularExpression("^БФПО(-[0-9]{3})?$", ErrorMessage = "Префикс проекта, псевдоним аналогового модуля должено иметь следующий вид БФПО-xxx, где x - [0-9]", MatchTimeoutInMilliseconds = 1000)]
+        public string Prefix { get; set; }
+
         [StringLength(16, MinimumLength = 2, ErrorMessage = "Наименование проекта должно содержать не больше {1} и не менее {2} символов")]
         public string Title { get; set; }
 
@@ -60,13 +64,14 @@ namespace MtChangeLog.Entities.Tables
         {
             return (ProjectVersion e) => e.Id == this.Id 
             || e.DIVG == this.DIVG 
-            || e.AnalogModule.Title == this.AnalogModule.Title && e.Title == this.Title && e.Version == this.Version;
+            || e.Prefix == this.Prefix && e.Title == this.Title && e.Version == this.Version;
         }
 
         public void Update(ProjectVersionEditable other, AnalogModule module, Platform platform, ProjectStatus status) 
         {
             // this.Id - не обновляется !!!
             this.DIVG = other.DIVG;
+            this.Prefix = other.Prefix != string.Empty ? other.Prefix : module.Title.Replace("БМРЗ", "БФПО");
             this.Title = other.Title;
             this.Version = other.Version;
             this.Description = other.Description;
@@ -78,14 +83,12 @@ namespace MtChangeLog.Entities.Tables
 
         public ProjectVersionShortView ToShortView() 
         {
-            var title = "краткому представлению";
-            this.CheckAnalogModule(title);
             var result = new ProjectVersionShortView()
             {
                 Id = this.Id,
+                Prefix = this.Prefix,
                 Title = this.Title,
-                Version = this.Version,
-                Module = this.AnalogModule.Title
+                Version = this.Version
             };
             return result;
         }
@@ -99,6 +102,7 @@ namespace MtChangeLog.Entities.Tables
             {
                 Id = this.Id,
                 DIVG = this.DIVG,
+                Prefix = this.Prefix,
                 Title = this.Title,
                 Status = this.ProjectStatus.Title,
                 Version = this.Version,
@@ -119,6 +123,7 @@ namespace MtChangeLog.Entities.Tables
             {
                 Id = this.Id,
                 DIVG = this.DIVG,
+                Prefix = this.Prefix,
                 Title = this.Title,
                 ProjectStatus = this.ProjectStatus.ToShortView(),
                 Version = this.Version,
@@ -131,7 +136,7 @@ namespace MtChangeLog.Entities.Tables
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(this.DIVG, this.Title, this.Version);
+            return HashCode.Combine(this.DIVG, this.Prefix, this.Title, this.Version);
         }
         
         public override string ToString()
@@ -140,7 +145,7 @@ namespace MtChangeLog.Entities.Tables
             {
                 return $"ID = {this.Id}";   
             }
-            return $"{this.DIVG}, {this.Title}_{this.Version}";
+            return $"{this.DIVG}, {this.Prefix}-{this.Title}_{this.Version}";
         }
 
         private void CheckAnalogModule(string title)

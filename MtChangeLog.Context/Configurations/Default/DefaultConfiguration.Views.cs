@@ -22,9 +22,9 @@ namespace MtChangeLog.Context.Configurations.Default
                 FROM ""ProjectRevision"" pr
                 GROUP BY pr.""ProjectVersionId""
                 )
-                SELECT  pr.""ProjectVersionId"" AS ""VersionId"",
-		                pr.""Id"" AS ""RevisionId"",
-		                am.""Title"" AS ""AnalogModule"",
+                SELECT  pr.""ProjectVersionId"" AS ""ProjectVersionId"",
+		                pr.""Id"" AS ""ProjectRevisionId"",
+		                pv.""Prefix"" AS ""Prefix"",
 		                pv.""Title"" AS ""Title"",
 		                pv.""Version"" AS ""Version"",
 		                pr.""Revision"",
@@ -39,8 +39,6 @@ namespace MtChangeLog.Context.Configurations.Default
                 ON arm.""Id"" = pr.""ArmEditId""
                 JOIN ""ProjectVersion"" pv
                 ON pv.""Id"" = pr.""ProjectVersionId""
-                JOIN ""AnalogModule"" am
-                ON am.""Id"" = pv.""AnalogModuleId""
                 JOIN ""Platform"" pl
                 ON pv.""PlatformId"" = pl.""Id""");
             }
@@ -54,9 +52,9 @@ namespace MtChangeLog.Context.Configurations.Default
                 FROM ""MT"".""ProjectRevision"" pr
                 GROUP BY pr.""ProjectVersionId""
                 )
-                SELECT  pr.""ProjectVersionId"" AS ""VersionId"",
-                        pr.""Id"" AS ""RevisionId"",
-                        am.""Title"" AS ""AnalogModule"",
+                SELECT  pr.""ProjectVersionId"" AS ""ProjectVersionId"",
+                        pr.""Id"" AS ""ProjectRevisionId"",
+                        pv.""Prefix"" AS ""Prefix"",
                         pv.""Title"" AS ""Title"",
                         pv.""Version"" AS ""Version"",
                         pr.""Revision"",
@@ -71,8 +69,6 @@ namespace MtChangeLog.Context.Configurations.Default
                 ON arm.""Id"" = pr.""ArmEditId""
                 JOIN ""MT"".""ProjectVersion"" pv
                 ON pv.""Id"" = pr.""ProjectVersionId""
-                JOIN ""MT"".""AnalogModule"" am
-                ON am.""Id"" = pv.""AnalogModuleId""
                 JOIN ""MT"".""Platform"" pl
                 ON pv.""PlatformId"" = pl.""Id""");
             }
@@ -113,7 +109,7 @@ namespace MtChangeLog.Context.Configurations.Default
                 context.Database.ExecuteSqlRaw(
                 $@"CREATE VIEW ""AuthorProjectContribution"" AS
                 SELECT  athr.""LastName"" || ' ' || athr.""FirstName"" AS ""Author"",
-                        am.""Title"" AS ""AnalogModule"",
+                        pv.""Prefix"" AS ""ProjectPrefix"",
                         pv.""Title"" AS ""ProjectTitle"",
                         pv.""Version"" AS ""ProjectVersion"",
                         count(pv.""Id"") AS ""Contribution""
@@ -124,17 +120,15 @@ namespace MtChangeLog.Context.Configurations.Default
                 ON pr.""Id"" = pra.""ProjectRevisionsId""
                 JOIN ""ProjectVersion"" pv
                 ON pv.""Id"" = pr.""ProjectVersionId""
-                JOIN ""AnalogModule"" am
-                ON am.""Id"" = pv.""AnalogModuleId""
-                GROUP BY athr.""LastName"", athr.""FirstName"", am.""Title"", pv.""Title"", pv.""Version""
-                ORDER BY ""Author"" ASC, ""ProjectTitle"" ASC, ""AnalogModule"" ASC, ""ProjectVersion"" ASC");
+                GROUP BY athr.""LastName"", athr.""FirstName"", pv.""Prefix"", pv.""Title"", pv.""Version""
+                ORDER BY ""Author"" ASC, ""ProjectTitle"" ASC, ""ProjectPrefix"" ASC, ""ProjectVersion"" ASC");
             }
             if (context.Database.IsNpgsql()) 
             {
                 context.Database.ExecuteSqlRaw(
                 $@"CREATE OR REPLACE VIEW ""MT"".""AuthorProjectContribution"" AS
                 SELECT  CONCAT(athr.""LastName"", ' ', athr.""FirstName"") AS ""Author"",
-                        am.""Title"" AS ""AnalogModule"",
+                        pv.""Prefix"" AS ""ProjectPrefix"",
                         pv.""Title"" AS ""ProjectTitle"",
                         pv.""Version"" AS ""ProjectVersion"",
                         count(pv.""Id"") AS ""Contribution""
@@ -145,10 +139,8 @@ namespace MtChangeLog.Context.Configurations.Default
                 ON pr.""Id"" = pra.""ProjectRevisionsId""
                 JOIN ""MT"".""ProjectVersion"" pv
                 ON pv.""Id"" = pr.""ProjectVersionId""
-                JOIN ""MT"".""AnalogModule"" am
-                ON am.""Id"" = pv.""AnalogModuleId""
-                GROUP BY athr.""LastName"", athr.""FirstName"", am.""Title"", pv.""Title"", pv.""Version""
-                ORDER BY ""Author"" ASC, ""ProjectTitle"" ASC, ""AnalogModule"" ASC, ""ProjectVersion"" ASC");
+                GROUP BY athr.""LastName"", athr.""FirstName"", pv.""Prefix"", pv.""Title"", pv.""Version""
+                ORDER BY ""Author"" ASC, ""ProjectTitle"" ASC, ""ProjectPrefix"" ASC, ""ProjectVersion"" ASC");
             }
         }
     }

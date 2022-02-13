@@ -6,15 +6,8 @@ using System.Threading.Tasks;
 
 namespace MtChangeLog.TransferObjects.Views.Statistics
 {
-    public class ProjectRevisionHistoryView
+    public class ProjectRevisionHistoryView : ProjectRevisionHistoryShortView
     {
-        /// <summary>
-        /// наименование проекта, комбинация: "AnalogModule.Title"-"Project.Title"-"Version"_"Revision"
-        /// </summary>
-        public string Title {get;set;}
-        public DateTime Date { get; set; }
-        public string Platform { get; set; }
-
         public string ArmEdit { get; set; }
         public string Communication { get; set; }
         
@@ -33,7 +26,6 @@ namespace MtChangeLog.TransferObjects.Views.Statistics
         public string ToText() 
         {
             StringBuilder sb = new StringBuilder();
-
             sb.AppendLine(new string('=', 100))
                 .Append("Разработка ПрО:\t\t").Append(this.Title)
                 .Append(" от ").Append(this.Date.ToString("yyyy-MM-dd"))
@@ -44,7 +36,6 @@ namespace MtChangeLog.TransferObjects.Views.Statistics
                 .Append("Алгоритмы:\t\t").AppendLine(string.Join(", ",this.RelayAlgorithms)).AppendLine()
                 .Append("Причина изменения:\t").AppendLine(this.Reason).AppendLine()
                 .AppendLine(this.Description);
-
             return sb.ToString();
         }
     }
