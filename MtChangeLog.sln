@@ -17,7 +17,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MtChangeLog.Abstractions", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MtChangeLog.Entities", "MtChangeLog.Entities\MtChangeLog.Entities.csproj", "{54955AE9-38D6-42C0-BA5E-AE327FB3E5A4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MtChangeLog.Services", "MtChangeLog.Services\MtChangeLog.Services.csproj", "{206C87A3-9EFD-4B52-9E2B-93530C88E1AE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MtChangeLog.Services", "MtChangeLog.Services\MtChangeLog.Services.csproj", "{206C87A3-9EFD-4B52-9E2B-93530C88E1AE}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MtChangeLog.Entities.Builders", "MtChangeLog.Entities.Builders\MtChangeLog.Entities.Builders.csproj", "{15BB9412-3EE4-4AC9-A27F-4F6CA1C8AF1C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -57,6 +59,10 @@ Global
 		{206C87A3-9EFD-4B52-9E2B-93530C88E1AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{206C87A3-9EFD-4B52-9E2B-93530C88E1AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{206C87A3-9EFD-4B52-9E2B-93530C88E1AE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{15BB9412-3EE4-4AC9-A27F-4F6CA1C8AF1C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{15BB9412-3EE4-4AC9-A27F-4F6CA1C8AF1C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{15BB9412-3EE4-4AC9-A27F-4F6CA1C8AF1C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{15BB9412-3EE4-4AC9-A27F-4F6CA1C8AF1C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
