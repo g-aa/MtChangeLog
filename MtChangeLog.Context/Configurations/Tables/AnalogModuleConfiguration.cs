@@ -29,7 +29,7 @@ namespace MtChangeLog.Context.Configurations.Tables
                 .IsRequired();
 
             builder.Property(e => e.Title)
-                .HasMaxLength(8)
+                .HasMaxLength(10)
                 .IsFixedLength()
                 .IsRequired();
 
