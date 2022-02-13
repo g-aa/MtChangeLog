@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MtChangeLog.Abstractions.Extensions;
-using MtChangeLog.Abstractions.Repositories;
+using MtChangeLog.Abstractions.Services;
 using MtChangeLog.Context.Realizations;
 using MtChangeLog.TransferObjects.Editable;
 using MtChangeLog.TransferObjects.Views.Shorts;
@@ -11,13 +11,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MtChangeLog.Repositories.Realizations
+namespace MtChangeLog.Services.Realizations
 {
-    public class StatisticsRepository : IStatisticsRepository
+    public class StatisticsService : IStatisticsService
     {
         private readonly ApplicationContext context;
         
-        public StatisticsRepository(ApplicationContext context)
+        public StatisticsService(ApplicationContext context)
         {
             this.context = context;
         }
@@ -45,15 +45,15 @@ namespace MtChangeLog.Repositories.Realizations
                 .OrderByDescending(e => e.Version)
                 .First().Version;
             var lastModifiedProjects = this.GetNLastModifiedProjects(count).ToArray();
-            var mostChangingProjects = this.GetNMostChangingProjects(count).ToArray();
+            var contributions = this.GetAuthorContributions().ToArray();
             var result = new StatisticsView()
             {
                 Date = DateTime.Now,
                 ArmEdit = sArmEdit,
                 ProjectCount = distributions.Sum(e => e.Value),
                 ProjectDistributions = distributions,
-                LastModifiedProjects = lastModifiedProjects,
-                MostChangingProjects = mostChangingProjects
+                AuthorContributions = contributions,
+                LastModifiedProjects = lastModifiedProjects
             };
             return result;
         }
@@ -63,7 +63,7 @@ namespace MtChangeLog.Repositories.Realizations
             var result = this.context.LastProjectRevisions
                 .AsNoTracking()
                 .OrderBy(e => e.Title)
-                .ThenBy(e => e.AnalogModule)
+                .ThenBy(e => e.Prefix)
                 .ThenBy(e => e.Version)
                 .Select(e => e.ToView());
             return result;
@@ -87,6 +87,20 @@ namespace MtChangeLog.Repositories.Realizations
                 .ThenByDescending(e => e.Date)
                 .Take(count)
                 .Select(e => e.ToHistoryShortView());
+            return result;
+        }
+
+        public IQueryable<AuthorContributionView> GetAuthorContributions()
+        {
+            var result = this.context.AuthorContributions
+                .Select(e => e.ToView());
+            return result;
+        }
+
+        public IQueryable<AuthorProjectContributionView> GetAuthorProjectContributions()
+        {
+            var result = this.context.AuthorProjectContributions
+                .Select(e => e.ToView());
             return result;
         }
     }

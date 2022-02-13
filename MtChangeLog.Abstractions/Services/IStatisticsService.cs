@@ -7,9 +7,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MtChangeLog.Abstractions.Repositories
+namespace MtChangeLog.Abstractions.Services
 {
-    public interface IStatisticsRepository
+    public interface IStatisticsService
     {
         /// <summary>
         /// получить актуальный ArmEdit
@@ -29,14 +29,24 @@ namespace MtChangeLog.Abstractions.Repositories
         /// <summary>
         /// получить выборку в количестве n-штук последних измененных проектов
         /// </summary>
-        /// <param name="n">количество элементов в выборке</param>
+        /// <param name="count">количество элементов в выборке</param>
         /// <returns></returns>
         IQueryable<ProjectRevisionHistoryShortView> GetNLastModifiedProjects(ushort count);
         /// <summary>
         /// получить n-часто редактируемых проектов
         /// </summary>
-        /// <param name="n">количество элементов в выборке</param>
+        /// <param name="count">количество элементов в выборке</param>
         /// <returns></returns>
         IQueryable<ProjectRevisionHistoryShortView> GetNMostChangingProjects(ushort count);
+        /// <summary>
+        /// получить краткую статистику по вкладам авторов в проекты (БФПО)
+        /// </summary>
+        /// <returns></returns>
+        IQueryable<AuthorContributionView> GetAuthorContributions();
+        /// <summary>
+        /// получить статистику по вкладам авторов в отдельные проекты (БФПО) 
+        /// </summary>
+        /// <returns></returns>
+        IQueryable<AuthorProjectContributionView> GetAuthorProjectContributions();
     }
 }

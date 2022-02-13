@@ -28,7 +28,6 @@ namespace MtChangeLog.Repositories.Realizations
             var result = this.context.ProjectVersions
                 .AsNoTracking()
                 .Include(e => e.AnalogModule)
-                //.Distinct()
                 .OrderBy(e => e.AnalogModule.Title).ThenBy(e => e.Title).ThenBy(e =>e.Version)
                 .Select(e => e.ToShortView());
             return result;
@@ -64,6 +63,7 @@ namespace MtChangeLog.Repositories.Realizations
             {
                 Id = Guid.Empty,
                 DIVG = "ДИВГ.00000-00",
+                Prefix = "БФПО",
                 Title = "ПЛК",
                 Version = "00",
                 Description = "введите описание проекта",
@@ -99,9 +99,10 @@ namespace MtChangeLog.Repositories.Realizations
             {
                 ProjectStatus = dbStatus,
                 Platform = dbPlatform,
-                AnalogModule = dbAnalogModule
+                AnalogModule = dbAnalogModule,
+                Prefix = entity.Prefix != string.Empty ? entity.Prefix : dbAnalogModule.Title.Replace("БМРЗ", "БФПО")
             };
-            if (this.context.ProjectVersions.IsContained(dbProjectVersion))
+            if (this.context.ProjectVersions.Include(e => e.AnalogModule).IsContained(dbProjectVersion))
             {
                 throw new ArgumentException($"Сущность \"{entity}\" уже содержится в БД");
             }

@@ -14,7 +14,11 @@ namespace MtChangeLog.Context.Configurations.Default
             if (context.Database.EnsureCreated())
             {
                 DefaultConfiguration.CreateDefaultEntities(context);
-                DefaultConfiguration.CreateViews(context);
+
+                DefaultConfiguration.CreateLastProjectsRevisionView(context);
+                DefaultConfiguration.CreateAuthorContributionView(context);
+                DefaultConfiguration.CreateAuthorProjectContribution(context);
+
                 context.SaveChanges();
             }
         }

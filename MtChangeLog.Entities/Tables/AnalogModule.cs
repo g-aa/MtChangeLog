@@ -20,7 +20,7 @@ namespace MtChangeLog.Entities.Tables
         public string DIVG { get; set; }
 
         [Required(ErrorMessage = "Наименование аналогово модуля обязательный параметр для заполнения")]
-        [RegularExpression("^БМРЗ-[0-9]{3}$", ErrorMessage = "Наименование аналогово модуля должено иметь следующий вид БМРЗ-xxx, где x - число [0-9]", MatchTimeoutInMilliseconds = 1000)]
+        [RegularExpression("^БМРЗ-[0-9 A-Z А-Я]{2,4}$", ErrorMessage = "Наименование аналогово модуля должено иметь следующий вид БМРЗ-xxxx, где x - [0-9 A-Z А-Я]", MatchTimeoutInMilliseconds = 1000)]
         public string Title { get; set; }
 
         [Required(ErrorMessage = "Номинальный ток аналогового модуля обязательный параметр для заполнения")]

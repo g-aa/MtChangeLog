@@ -91,7 +91,7 @@ namespace MtChangeLog.Entities.Tables
             var result = new ProjectRevisionShortView()
             {
                 Id = this.Id,
-                Module = this.ProjectVersion.AnalogModule.Title,
+                Prefix = this.ProjectVersion.Prefix,
                 Title = this.ProjectVersion.Title,
                 Version = this.ProjectVersion.Version,
                 Revision = this.Revision
@@ -108,7 +108,7 @@ namespace MtChangeLog.Entities.Tables
             var result = new ProjectRevisionTableView()
             {
                 Id = this.Id,
-                Module = this.ProjectVersion.AnalogModule.Title,
+                Prefix = this.ProjectVersion.Prefix,
                 Title = this.ProjectVersion.Title,
                 Version = this.ProjectVersion.Version,
                 Revision = this.Revision,
@@ -154,7 +154,7 @@ namespace MtChangeLog.Entities.Tables
             {
                 Id = this.Id,
                 ParentId = this.ParentRevisionId,
-                Module = this.ProjectVersion.AnalogModule.Title,
+                Prefix = this.ProjectVersion.Prefix,
                 Title = this.ProjectVersion.Title,
                 Version = this.ProjectVersion.Version,
                 Revision = this.Revision,
@@ -175,7 +175,7 @@ namespace MtChangeLog.Entities.Tables
             {
                 Id = this.Id,
                 Date = this.Date,
-                Title = $"{this.ProjectVersion.AnalogModule.Title}-{this.ProjectVersion.Title}-{this.ProjectVersion.Version}_{this.Revision}",
+                Title = $"{this.ProjectVersion.Prefix}-{this.ProjectVersion.Title}-{this.ProjectVersion.Version}_{this.Revision}",
                 Platform = this.ProjectVersion.Platform.Title
             };
             return result;
@@ -191,6 +191,7 @@ namespace MtChangeLog.Entities.Tables
             this.CheckAnalogModule(title);
             var result = new ProjectRevisionHistoryView()
             {
+                Id = this.Id,
                 ArmEdit = this.ArmEdit.Version,
                 Authors = this.Authors.Select(a => $"{a.FirstName} {a.LastName}"),
                 RelayAlgorithms = this.RelayAlgorithms.Select(ra => ra.Title),
@@ -199,7 +200,7 @@ namespace MtChangeLog.Entities.Tables
                 Description = this.Description,
                 Platform = this.ProjectVersion.Platform.Title,
                 Reason = this.Reason,
-                Title = $"{this.ProjectVersion.AnalogModule.Title}-{this.ProjectVersion.Title}-{this.ProjectVersion.Version}_{this.Revision}"
+                Title = $"{this.ProjectVersion.Prefix}-{this.ProjectVersion.Title}-{this.ProjectVersion.Version}_{this.Revision}"
             };
             return result;
         }

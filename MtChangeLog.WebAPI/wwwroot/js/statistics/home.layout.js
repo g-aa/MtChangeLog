@@ -1,7 +1,7 @@
 class HomeLayout{
     constructor(){
         let statisticsLayoutId = "statisticsLayout_id";
-        let mostChangedLayoutId = "mostChangedLayout_id";
+        let authorContributionLayoutId = "authorContributionLayout_id";
         let lastChangedLayoutId = "lastChangedLayout_id";
         this.viewlayout = {
             view:"layout",
@@ -51,20 +51,21 @@ class HomeLayout{
                                 { 
                                     view:"template", 
                                     type:"header", 
-                                    template:"10 часто редактируемых БФПО:" 
+                                    template:"Вклады авторов в БФПО (краткий обзор):" 
                                 }, 
                                 {
-                                    view:"list",
-                                    id:mostChangedLayoutId,    
-                                    select:true,
-                                    template:function(o){
-                                        let format = webix.Date.dateToStr("%Y-%m-%d");
-                                        let result = "<b>Дата:</b><span style='white-space: pre-wrap'> " + format(new Date(o.date)) + "\t</span>"
-                                            + "<b>БФПО:</b><span style='white-space: pre-wrap'> " + o.title + "</span>"; 
-                                        return result;
-                                    },
+                                    view:"datatable",
+                                    id:authorContributionLayoutId, 
+                                    adjust:true,
+                                    resizeColumn:true,
+                                    scroll:"xy",
+                                    columns:[
+                                        { id:"author",          width:350,  header:["Автор:"] },
+                                        { id:"contribution",    width:150,  header:["Вклад:"] },
+                                        { fillspace:true }
+                                    ],
                                     data:[]
-                                } 
+                                }  
                             ] 
                         }
                     ]
@@ -103,7 +104,7 @@ class HomeLayout{
             ]
         };
         this.statisticsLayoutId = statisticsLayoutId;
-        this.mostChangedLayoutId = mostChangedLayoutId;
+        this.authorContributionLayoutId = authorContributionLayoutId;
         this.lastChangedLayoutId = lastChangedLayoutId;
     }
     async show(parentLayout){
@@ -113,11 +114,11 @@ class HomeLayout{
         let statlayout = $$(this.statisticsLayoutId);
         statlayout.setValues(data, true);
 
-        let mostLayout = $$(this.mostChangedLayoutId);
-        mostLayout.define("data", data.mostChangingProjects);
-
         let lastLayout = $$(this.lastChangedLayoutId);
         lastLayout.parse(data.lastModifiedProjects);
+
+        let contributionLayout = $$(this.authorContributionLayoutId);
+        contributionLayout.parse(data.authorContributions);
         lastLayout.refresh();
     }
 }

@@ -55,6 +55,14 @@ class ProjectVersion{
         this.editable.divg = newDivg;
     }
 
+    getPrefix(){
+        return this.editable.prefix;
+    }
+
+    setPrefix(newPrefix = ""){
+        this.editable.prefix = newPrefix;
+    }
+
     getTitle(){
         return this.editable.title;
     }

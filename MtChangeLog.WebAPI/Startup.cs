@@ -8,8 +8,10 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using MtChangeLog.Abstractions.Repositories;
+using MtChangeLog.Abstractions.Services;
 using MtChangeLog.Context.Realizations;
 using MtChangeLog.Repositories.Realizations;
+using MtChangeLog.Services.Realizations;
 using MtChangeLog.WebAPI.Converters;
 using MtChangeLog.WebAPI.Extensions;
 using MtChangeLog.WebAPI.Loggers;
@@ -55,14 +57,15 @@ namespace MtChangeLog.WebAPI
             services.AddTransient<IAuthorsRepository, AuthorsRepository>();
             services.AddTransient<ICommunicationModulesRepository, CommunicationModulesRepository>();
             services.AddTransient<IPlatformsRepository, PlatformsRepository>();
-            services.AddTransient<IProjectHistoriesRepository, ProjectHistoriesRepository>();
             services.AddTransient<IProjectRevisionsRepository, ProjectRevisionsRepository>();
             services.AddTransient<IProjectStatusRepository, ProjectStatusRepository>();
-            services.AddTransient<IProjectTreesRepository, ProjectTreesRepository>();
             services.AddTransient<IProjectVersionsRepository, ProjectVersionsRepository>();
             services.AddTransient<IProtocolsRepository, ProtocolsRepository>();
             services.AddTransient<IRelayAlgorithmsRepository, RelayAlgorithmsRepository>();
-            services.AddTransient<IStatisticsRepository, StatisticsRepository>();
+            
+            services.AddTransient<IProjectHistoriesService, ProjectHistoriesService>();
+            services.AddTransient<IProjectTreesService, ProjectTreesService>();
+            services.AddTransient<IStatisticsService, StatisticsService>();
 
             services.AddControllers().AddJsonOptions(configure => 
             {

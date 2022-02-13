@@ -328,6 +328,9 @@ class EntitiesRepository{
     async getLastProjectsRevision(){
         return await this.getEntitiesInfo("/api/Statistics/LastProjectsRevision");
     }
+    async getAuthorProjectContributions(){
+        return await this.getEntitiesInfo("/api/Statistics/AuthorProjectContributions");
+    }
 
     // Файлы:
     async getProjectHistorysArchiveForExport(){

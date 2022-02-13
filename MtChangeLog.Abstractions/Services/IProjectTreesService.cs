@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MtChangeLog.Abstractions.Repositories
+namespace MtChangeLog.Abstractions.Services
 {
-    public interface IProjectTreesRepository
+    public interface IProjectTreesService
     {
         /// <summary>
         /// получить перечень наименований проектов (БФПО)

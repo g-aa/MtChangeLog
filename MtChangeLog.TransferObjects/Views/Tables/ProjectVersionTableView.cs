@@ -10,6 +10,7 @@ namespace MtChangeLog.TransferObjects.Views.Tables
     {
         public Guid Id { get; set; }
         public string DIVG { get; set; }
+        public string Prefix { get; set; }
         public string Title { get; set; }
         public string Version { get; set; }
         public string Status { get; set; }

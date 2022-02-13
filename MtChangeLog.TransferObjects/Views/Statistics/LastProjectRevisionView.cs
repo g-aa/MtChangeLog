@@ -8,7 +8,7 @@ namespace MtChangeLog.TransferObjects.Views.Statistics
 {
     public class LastProjectRevisionView
     {
-        public string Module { get; set; }
+        public string Prefix { get; set; }
         public string Title { get; set; }
         public string Version { get; set; }
         public string Revision { get; set; }

@@ -10,9 +10,9 @@ namespace MtChangeLog.Entities.Views
 {
     public class LastProjectRevision
     {
-        public Guid VersionId { get; set; }
-        public Guid RevisionId { get; set; }
-        public string AnalogModule { get; set; }
+        public Guid ProjectVersionId { get; set; }
+        public Guid ProjectRevisionId { get; set; }
+        public string Prefix { get; set; }
         public string Title { get; set; }
         public string Version { get; set; }
         public string Revision { get; set; }
@@ -24,7 +24,7 @@ namespace MtChangeLog.Entities.Views
         {
             var result = new LastProjectRevisionView()
             {
-                Module = this.AnalogModule,
+                Prefix = this.Prefix,
                 Title = this.Title,
                 Version = this.Version,
                 Revision = this.Revision,
@@ -39,10 +39,10 @@ namespace MtChangeLog.Entities.Views
         {
             var result = new ProjectRevisionHistoryShortView()
             {
-                Id = this.RevisionId,
+                Id = this.ProjectRevisionId,
                 Date = this.Date,
                 Platform = this.Platform,
-                Title = $"{this.AnalogModule}-{this.Title}-{this.Version}_{this.Revision}"
+                Title = $"{this.Prefix}-{this.Title}-{this.Version}_{this.Revision}"
             };
             return result;
         }
@@ -51,8 +51,8 @@ namespace MtChangeLog.Entities.Views
         {
             var result = new ProjectVersionShortView()
             {
-                Id = this.VersionId,
-                Module = this.AnalogModule,
+                Id = this.ProjectVersionId,
+                Prefix = this.Prefix,
                 Title = this.Title,
                 Version = this.Version
             };
@@ -61,7 +61,7 @@ namespace MtChangeLog.Entities.Views
 
         public override string ToString()
         {
-            return $"{this.AnalogModule}-{this.Title}-{this.Version}_{this.Revision}";
+            return $"{this.Prefix}-{this.Title}-{this.Version}_{this.Revision}";
         }
     }
 }

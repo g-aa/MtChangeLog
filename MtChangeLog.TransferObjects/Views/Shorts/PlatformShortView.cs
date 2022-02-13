@@ -12,7 +12,7 @@ namespace MtChangeLog.TransferObjects.Views.Shorts
         public Guid Id { get; set; }
 
         [Required(ErrorMessage = "Наименование платформы БМРЗ параметр обязательный для заполнения")]
-        [RegularExpression("^БМРЗ-[0-9]{3}[A-Z А-Я]{0,2}$", ErrorMessage = "Наименование платформы должено иметь следующий вид БМРЗ-XXXyy, где XXX - число [0-9], y - символы [A-Z А-Я] (не обязательны)", MatchTimeoutInMilliseconds = 1000)]
+        [RegularExpression("^БМРЗ-[0-9 A-Z А-Я]{2,5}$", ErrorMessage = "Наименование платформы должено иметь следующий вид БМРЗ-xxxxx, где x - [0-9 A-Z А-Я]", MatchTimeoutInMilliseconds = 1000)]
         public string Title { get; set; }
         public override string ToString()
         {

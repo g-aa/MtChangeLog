@@ -10,7 +10,7 @@ namespace MtChangeLog.TransferObjects.Views.Statistics
     {
         public Guid Id { get; set; }
         /// <summary>
-        /// наименование проекта, комбинация: "AnalogModule.Title"-"Project.Title"-"Version"_"Revision"
+        /// наименование проекта, комбинация: "ProjectVersion.Prefix"-"ProjectVersion.Title"-"ProjectVersion.Version"_"ProjectRevision.Revision"
         /// </summary>
         public string Title { get; set; }
         public DateTime Date { get; set; }

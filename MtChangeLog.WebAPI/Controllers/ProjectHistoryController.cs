@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using MtChangeLog.Abstractions.Repositories;
+using MtChangeLog.Abstractions.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,12 +13,12 @@ namespace MtChangeLog.WebAPI.Controllers
     [ApiController]
     public class ProjectHistoryController : ControllerBase
     {
-        private readonly IProjectHistoriesRepository repository;
+        private readonly IProjectHistoriesService service;
         private readonly ILogger logger;
 
-        public ProjectHistoryController(IProjectHistoriesRepository repository, ILogger<ProjectHistoryController> logger)
+        public ProjectHistoryController(IProjectHistoriesService service, ILogger<ProjectHistoryController> logger)
         {
-            this.repository = repository;
+            this.service = service;
             this.logger = logger;
             this.logger.LogInformation("HTTP - ProjectHistoryController - creating");
         }
@@ -29,7 +30,7 @@ namespace MtChangeLog.WebAPI.Controllers
             try
             {
                 this.logger.LogInformation($"HTTP GET - ProjectHistoryController - all short entities");
-                var result = this.repository.GetShortEntities();
+                var result = this.service.GetShortEntities();
                 return this.Ok(result);
             }
             catch (Exception ex)
@@ -46,7 +47,7 @@ namespace MtChangeLog.WebAPI.Controllers
             try
             {
                 this.logger.LogInformation($"HTTP GET - ProjectHistoryController - full history by project version id = {id}");
-                var result = this.repository.GetProjectVersionHistory(id);
+                var result = this.service.GetProjectVersionHistory(id);
                 return this.Ok(result);
             }
             catch (Exception ex)
@@ -63,7 +64,7 @@ namespace MtChangeLog.WebAPI.Controllers
             try
             {
                 this.logger.LogInformation($"HTTP GET - StatisticsController - history by project revision id = {id}");
-                var result = this.repository.GetProjectRevisionHistory(id);
+                var result = this.service.GetProjectRevisionHistory(id);
                 return this.Ok(result);
             }
             catch (Exception ex)

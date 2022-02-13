@@ -19,6 +19,14 @@ class MainLayout{
                 }
             },
             {
+                id:"contributionItem_id",
+                icon:"mdi mdi-account-details",
+                value:"Вклад авторов в БФПО",
+                getLayout:function(){
+                    return new ContributionTableLayout();
+                }
+            },
+            {
                 id:"prjHistoryMenuItem_id",
                 icon:"mdi mdi-format-list-text",
                 value:"история изменений БФПО",

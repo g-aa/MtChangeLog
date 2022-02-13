@@ -46,7 +46,7 @@ namespace MtChangeLog.TransferObjects.Editable
 
         public override string ToString()
         {
-            return $"{this.ProjectVersion.Module}-{this.ProjectVersion.Version}_{this.Revision}, дата изменения: {this.Date}";
+            return $"{this.ProjectVersion.Prefix}-{this.ProjectVersion.Version}_{this.Revision}, дата изменения: {this.Date}";
         }
     }
 }

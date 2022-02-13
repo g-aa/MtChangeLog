@@ -96,6 +96,25 @@ class ProjectEditWindow {
                     },
                     { 
                         view:"text", 
+                        label:"Префикс:", 
+                        labelAlign:"right",
+                        labelWidth:lWidth, 
+                        value:_editablePrjVers.getPrefix(),
+                        attributes:{
+                            maxlength:16
+                        }, 
+                        on:{
+                            onChange: async function(newValue, oldValue, config){
+                                try{
+                                    _editablePrjVers.setPrefix(newValue);
+                                } catch (error){
+                                    messageBox.warning(error.message);
+                                }
+                            }
+                        }
+                    },
+                    { 
+                        view:"text", 
                         label:"Наименование:", 
                         labelAlign:"right",
                         labelWidth:lWidth, 

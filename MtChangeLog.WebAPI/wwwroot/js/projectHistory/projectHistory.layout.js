@@ -105,7 +105,7 @@ class ProjectHistoryLayout{
         let cbxLayout = $$(this.cbxLayoutId);
         cbxLayout.define("options", {
             body:{
-                template:"#module#-#title#-#version#"
+                template:"#prefix#-#title#-#version#"
             },   
             data:data
         });

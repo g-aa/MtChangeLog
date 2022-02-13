@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using MtChangeLog.Abstractions.Repositories;
+using MtChangeLog.Abstractions.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,12 +15,12 @@ namespace MtChangeLog.WebAPI.Controllers
     [ApiController]
     public class ProjectTreesController : ControllerBase
     {
-        private readonly IProjectTreesRepository repository;
+        private readonly IProjectTreesService service;
         private readonly ILogger logger;
 
-        public ProjectTreesController(IProjectTreesRepository repository, ILogger<ProjectRevisionsController> logger) 
+        public ProjectTreesController(IProjectTreesService service, ILogger<ProjectRevisionsController> logger) 
         {
-            this.repository = repository;
+            this.service = service;
             this.logger = logger;
             this.logger.LogInformation("HTTP - ProjectTreesController - creating");
         }
@@ -31,7 +32,7 @@ namespace MtChangeLog.WebAPI.Controllers
             try
             {
                 this.logger.LogInformation($"HTTP GET - ProjectTreesController - projects titles");
-                var result = this.repository.GetProjectTitles();
+                var result = this.service.GetProjectTitles();
                 return this.Ok(result);
             }
             catch (Exception ex)
@@ -48,7 +49,7 @@ namespace MtChangeLog.WebAPI.Controllers
             try
             {
                 this.logger.LogInformation($"HTTP GET - ProjectTreesController - {title} projects trees");
-                var result = this.repository.GetTreeEntities(title);
+                var result = this.service.GetTreeEntities(title);
                 return this.Ok(result);
             }
             catch (Exception ex)

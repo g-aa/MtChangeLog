@@ -10,7 +10,7 @@ class ProjectRevisionLayout{
             scroll:"xy",
             columns:[
                 //{ id:"id",         adjust:true,       header:["GUID:", ""] },
-                { id:"module",     width:150,   minWidth:150,   header:["Аналоговый модуль:", { content:"multiSelectFilter" }] },
+                { id:"prefix",     width:150,   minWidth:150,   header:["Префикс:", { content:"multiSelectFilter" }] },
                 { id:"title",      adjust:true, header:["Наименование:", { content:"multiSelectFilter" }] },
                 { id:"version",    width:100,   header:["Версия:", { content:"multiSelectFilter" }] },
                 { id:"revision",   width:100,   header:["Ревизия:", { content:"multiSelectFilter" }] },

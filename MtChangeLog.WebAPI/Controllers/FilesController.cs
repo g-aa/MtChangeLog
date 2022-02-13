@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using MtChangeLog.Abstractions.Repositories;
+using MtChangeLog.Abstractions.Services;
 using MtChangeLog.TransferObjects.Models;
 using System;
 using System.Collections.Generic;
@@ -18,12 +18,12 @@ namespace MtChangeLog.WebAPI.Controllers
     [ApiController]
     public class FilesController : ControllerBase
     {
-        private readonly IProjectHistoriesRepository repository;
+        private readonly IProjectHistoriesService service;
         private readonly ILogger logger;
 
-        public FilesController(IProjectHistoriesRepository repository, ILogger<FilesController> logger) 
+        public FilesController(IProjectHistoriesService service, ILogger<FilesController> logger) 
         {
-            this.repository = repository;
+            this.service = service;
             this.logger = logger;
         }
 
@@ -34,7 +34,7 @@ namespace MtChangeLog.WebAPI.Controllers
             try
             {
                 this.logger.LogInformation($"HTTP GET - FilesController - export to file full history by project version id = {id}");
-                var result = this.repository.GetProjectVersionHistory(id);
+                var result = this.service.GetProjectVersionHistory(id);
                 return this.Ok(new FileModel(result));
             }
             catch (Exception ex)
@@ -50,14 +50,14 @@ namespace MtChangeLog.WebAPI.Controllers
             try
             {
                 FileModel result = null;
-                var projects = this.repository.GetShortEntities().ToList();
+                var projects = this.service.GetShortEntities().ToList();
                 using (MemoryStream outStream = new MemoryStream()) 
                 {
                     using (ZipArchive archive = new ZipArchive(outStream, ZipArchiveMode.Create, true)) 
                     {
                         foreach (var project in projects)
                         {
-                            var projectFile = new FileModel(this.repository.GetProjectVersionHistory(project.Id));
+                            var projectFile = new FileModel(this.service.GetProjectVersionHistory(project.Id));
                             ZipArchiveEntry entry = archive.CreateEntry(projectFile.Title);
                             using (var entryStream = entry.Open()) 
                             {
