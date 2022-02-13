@@ -117,7 +117,7 @@ namespace MtChangeLog.Repositories.Realizations
         public void AddEntity(ProjectRevisionEditable entity)
         {
             var dbParentRevision = this.context.ProjectRevisions
-                .SearchOrNull(entity.ParentRevision.Id);
+                .SearchOrNull(entity.ParentRevision != null ? entity.ParentRevision.Id : Guid.Empty);
             var dbProjectVersion = this.context.ProjectVersions
                 .Search(entity.ProjectVersion.Id);
             var dbArmEdit = this.context.ArmEdits
