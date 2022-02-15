@@ -1,5 +1,4 @@
-﻿using MtChangeLog.TransferObjects.Views.Statistics;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,15 +10,5 @@ namespace MtChangeLog.Entities.Views
     {
         public string Author { get; set; }
         public int Contribution { get; set; }
-
-        public AuthorContributionView ToView() 
-        {
-            var result = new AuthorContributionView()
-            {
-                Author = this.Author,
-                Contribution = this.Contribution
-            };
-            return result;
-        }
     }
 }
