@@ -2,6 +2,8 @@
 using MtChangeLog.Abstractions.Extensions;
 using MtChangeLog.Abstractions.Repositories;
 using MtChangeLog.Context.Realizations;
+using MtChangeLog.Entities.Builders.Tables;
+using MtChangeLog.Entities.Extensions.Tables;
 using MtChangeLog.Entities.Tables;
 using MtChangeLog.TransferObjects.Editable;
 using MtChangeLog.TransferObjects.Views.Shorts;
@@ -64,7 +66,10 @@ namespace MtChangeLog.Repositories.Realizations
 
         public void AddEntity(ArmEditEditable entity)
         {
-            var dbArmEdit = new ArmEdit(entity);
+            var dbArmEdit = ArmEditBuilder
+                .GetBuilder()
+                .SetAttributes(entity)
+                .Build();
             if(this.context.ArmEdits.IsContained(dbArmEdit))
             {
                 throw new ArgumentException($"Сущность \"{entity}\" уже содержится в БД");
@@ -77,7 +82,13 @@ namespace MtChangeLog.Repositories.Realizations
         {
             var dbArmEdit = this.context.ArmEdits
                 .Search(entity.Id);
-            dbArmEdit.Update(entity);
+            if (dbArmEdit.Default)
+            {
+                throw new ArgumentException($"Сущность по умолчанию \"{entity}\" не может быть обновлена");
+            }
+            dbArmEdit.GetBuilder()
+                .SetAttributes(entity)
+                .Build();
             this.context.SaveChanges();
         }
 

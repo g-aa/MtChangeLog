@@ -2,6 +2,8 @@
 using MtChangeLog.Abstractions.Extensions;
 using MtChangeLog.Abstractions.Repositories;
 using MtChangeLog.Context.Realizations;
+using MtChangeLog.Entities.Builders.Tables;
+using MtChangeLog.Entities.Extensions.Tables;
 using MtChangeLog.Entities.Tables;
 using MtChangeLog.TransferObjects.Editable;
 using MtChangeLog.TransferObjects.Views.Shorts;
@@ -72,29 +74,34 @@ namespace MtChangeLog.Repositories.Realizations
         public void AddEntity(CommunicationModuleEditable entity) 
         {
             var dbProtocols = this.context.Protocols
-                .SearchManyOrDefault(entity.Protocols.Select(e => e.Id))
-                .ToHashSet();
-            var dbCommunication = new CommunicationModule(entity)
-            {
-                Protocols = dbProtocols
-            };
-            if (this.context.CommunicationModules.IsContained(dbCommunication)) 
+                .SearchManyOrDefault(entity.Protocols.Select(e => e.Id));
+            var dbModule = CommunicationModuleBuilder.GetBuilder()
+                .SetAttributes(entity)
+                .SetProtocols(dbProtocols)
+                .Build();
+            if (this.context.CommunicationModules.IsContained(dbModule)) 
             {
                 throw new ArgumentException($"Сущность \"{entity}\" уже содержится в БД");
             }
-            this.context.CommunicationModules.Add(dbCommunication);
+            this.context.CommunicationModules.Add(dbModule);
             this.context.SaveChanges();
         }
 
         public void UpdateEntity(CommunicationModuleEditable entity) 
         {
-            var dbCommunication = this.context.CommunicationModules
+            var dbModule = this.context.CommunicationModules
                 .Include(e => e.Protocols)
                 .Search(entity.Id);
+            if (dbModule.Default)
+            {
+                throw new ArgumentException($"Сущность по умолчанию \"{entity}\" не может быть обновлена");
+            }
             var dbProtocols = this.context.Protocols
-                .SearchManyOrDefault(entity.Protocols.Select(e => e.Id))
-                .ToHashSet();
-            dbCommunication.Update(entity, dbProtocols);
+                .SearchManyOrDefault(entity.Protocols.Select(e => e.Id));
+            dbModule.GetBuilder()
+                .SetAttributes(entity)
+                .SetProtocols(dbProtocols)
+                .Build();
             this.context.SaveChanges();
         }
 

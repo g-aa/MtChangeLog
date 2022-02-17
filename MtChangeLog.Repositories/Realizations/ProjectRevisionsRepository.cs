@@ -2,6 +2,8 @@
 using MtChangeLog.Abstractions.Extensions;
 using MtChangeLog.Abstractions.Repositories;
 using MtChangeLog.Context.Realizations;
+using MtChangeLog.Entities.Builders.Tables;
+using MtChangeLog.Entities.Extensions.Tables;
 using MtChangeLog.Entities.Tables;
 using MtChangeLog.TransferObjects.Editable;
 using MtChangeLog.TransferObjects.Views.Shorts;
@@ -116,29 +118,27 @@ namespace MtChangeLog.Repositories.Realizations
 
         public void AddEntity(ProjectRevisionEditable entity)
         {
-            var dbParentRevision = this.context.ProjectRevisions
+            var dbParent = this.context.ProjectRevisions
                 .SearchOrNull(entity.ParentRevision != null ? entity.ParentRevision.Id : Guid.Empty);
             var dbProjectVersion = this.context.ProjectVersions
                 .Search(entity.ProjectVersion.Id);
             var dbArmEdit = this.context.ArmEdits
                 .SearchOrDefault(entity.ArmEdit.Id);
             var dbAuthors = this.context.Authors
-                .SearchManyOrDefault(entity.Authors.Select(e => e.Id))
-                .ToHashSet();
-            var dbCommunication = this.context.CommunicationModules
+                .SearchManyOrDefault(entity.Authors.Select(e => e.Id));
+            var dbModule = this.context.CommunicationModules
                 .Search(entity.CommunicationModule.Id);
-            var dbRelayAlgorithms = this.context.RelayAlgorithms
-                .SearchManyOrDefault(entity.RelayAlgorithms.Select(e => e.Id))
-                .ToHashSet();
-            var dbProjectRevision = new ProjectRevision(entity)
-            {
-                ParentRevision = dbParentRevision,
-                ProjectVersion = dbProjectVersion,
-                ArmEdit = dbArmEdit,
-                Authors = dbAuthors,
-                CommunicationModule = dbCommunication,
-                RelayAlgorithms = dbRelayAlgorithms,
-            };
+            var dbAlgorithms = this.context.RelayAlgorithms
+                .SearchManyOrDefault(entity.RelayAlgorithms.Select(e => e.Id));
+            var dbProjectRevision = ProjectRevisionBuilder.GetBuilder()
+                .SetAttributes(entity)
+                .SetParentRevision(dbParent)
+                .SetProjectVersion(dbProjectVersion)
+                .SetArmEdit(dbArmEdit)
+                .SetAuthors(dbAuthors)
+                .SetCommunication(dbModule)
+                .SetAlgorithms(dbAlgorithms)
+                .Build();
             if(this.context.ProjectRevisions.Include(e => e.ProjectVersion).IsContained(dbProjectRevision))
             {
                 throw new ArgumentException($"Сущность \"{entity}\" уже содержится в БД");
@@ -149,26 +149,29 @@ namespace MtChangeLog.Repositories.Realizations
 
         public void UpdateEntity(ProjectRevisionEditable entity)
         {
-            var dbProjectRevision = this.context.ProjectRevisions
-                .Include(e => e.ArmEdit)
-                .Include(e => e.Authors)
-                .Include(e => e.CommunicationModule)
-                .Include(e => e.ParentRevision)
-                .Include(e => e.RelayAlgorithms)
-                .Search(entity.Id);
             var dbArmEdit = this.context.ArmEdits
                 .SearchOrDefault(entity.ArmEdit.Id);
             var dbAuthors = this.context.Authors
-                .SearchManyOrDefault(entity.Authors.Select(e => e.Id))
-                .ToHashSet();
-            var dbCommunication = this.context.CommunicationModules
+                .SearchManyOrDefault(entity.Authors.Select(e => e.Id));
+            var dbModule = this.context.CommunicationModules
                 .Search(entity.CommunicationModule.Id);
             var dbParent = this.context.ProjectRevisions
                .SearchOrNull(entity.ParentRevision.Id);
             var dbAlgorithms = this.context.RelayAlgorithms
-                .SearchManyOrDefault(entity.RelayAlgorithms.Select(e => e.Id))
-                .ToHashSet();
-            dbProjectRevision.Update(entity, dbArmEdit, dbCommunication, dbAuthors, dbAlgorithms, dbParent);
+                .SearchManyOrDefault(entity.RelayAlgorithms.Select(e => e.Id));
+            var dbProjectRevision = this.context.ProjectRevisions
+                .Include(e => e.ProjectVersion)
+                .Include(e => e.Authors)
+                .Include(e => e.RelayAlgorithms)
+                .Search(entity.Id)
+                .GetBuilder()
+                .SetAttributes(entity)
+                .SetArmEdit(dbArmEdit)
+                .SetCommunication(dbModule)
+                .SetAuthors(dbAuthors)
+                .SetAlgorithms(dbAlgorithms)
+                .SetParentRevision(dbParent)
+                .Build();
             this.context.SaveChanges();
         }
 

@@ -2,6 +2,8 @@
 using MtChangeLog.Abstractions.Extensions;
 using MtChangeLog.Abstractions.Repositories;
 using MtChangeLog.Context.Realizations;
+using MtChangeLog.Entities.Builders.Tables;
+using MtChangeLog.Entities.Extensions.Tables;
 using MtChangeLog.Entities.Tables;
 using MtChangeLog.TransferObjects.Editable;
 using MtChangeLog.TransferObjects.Views.Shorts;
@@ -68,13 +70,12 @@ namespace MtChangeLog.Repositories.Realizations
 
         public void AddEntity(ProtocolEditable entity)
         {
-            var dbCommunicationModules = this.context.CommunicationModules
-                .SearchManyOrDefault(entity.CommunicationModules.Select(e => e.Id))
-                .ToHashSet();
-            var dbProtocol = new Protocol(entity) 
-            {
-                CommunicationModules = dbCommunicationModules
-            };
+            var dbModules = this.context.CommunicationModules
+                .SearchManyOrDefault(entity.CommunicationModules.Select(e => e.Id));
+            var dbProtocol = ProtocolBuilder.GetBuilder()
+                .SetAttributes(entity)
+                .SetModules(dbModules)
+                .Build();
             if (this.context.Protocols.IsContained(dbProtocol)) 
             {
                 throw new ArgumentException($"Сущность \"{entity}\" уже содержится в БД");
@@ -86,12 +87,17 @@ namespace MtChangeLog.Repositories.Realizations
         public void UpdateEntity(ProtocolEditable entity)
         {
             var dbProtocol = this.context.Protocols
-                .Include(e => e.CommunicationModules)
                 .Search(entity.Id);
-            var dbCommunications = this.context.CommunicationModules
-                .SearchManyOrDefault(entity.CommunicationModules.Select(e => e.Id))
-                .ToHashSet();
-            dbProtocol.Update(entity, dbCommunications);
+            if (dbProtocol.Default)
+            {
+                throw new ArgumentException($"Сущность по умолчанию \"{entity}\" не может быть обновлена");
+            }
+            var dbModules = this.context.CommunicationModules
+                .SearchManyOrDefault(entity.CommunicationModules.Select(e => e.Id));
+            dbProtocol.GetBuilder()
+                .SetAttributes(entity)
+                .SetModules(dbModules)
+                .Build();
             this.context.SaveChanges();
         }
 
