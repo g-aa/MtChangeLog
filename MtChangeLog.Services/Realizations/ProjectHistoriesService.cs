@@ -2,6 +2,8 @@
 using MtChangeLog.Abstractions.Extensions;
 using MtChangeLog.Abstractions.Services;
 using MtChangeLog.Context.Realizations;
+using MtChangeLog.Entities.Extensions.Tables;
+using MtChangeLog.Entities.Extensions.Views;
 using MtChangeLog.Entities.Tables;
 using MtChangeLog.TransferObjects.Views.Shorts;
 using MtChangeLog.TransferObjects.Views.Statistics;

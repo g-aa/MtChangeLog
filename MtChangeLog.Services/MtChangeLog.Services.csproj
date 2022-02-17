@@ -6,6 +6,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MtChangeLog.Context\MtChangeLog.Context.csproj" />
+    <ProjectReference Include="..\MtChangeLog.Entities.Builders\MtChangeLog.Entities.Builders.csproj" />
+    <ProjectReference Include="..\MtChangeLog.Repositories\MtChangeLog.Repositories.csproj" />
   </ItemGroup>
 
 </Project>
