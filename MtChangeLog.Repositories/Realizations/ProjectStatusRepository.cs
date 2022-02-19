@@ -91,7 +91,19 @@ namespace MtChangeLog.Repositories.Realizations
 
         public void DeleteEntity(Guid guid)
         {
-            throw new NotImplementedException("функционал по удалению статусов проектов (БФПО) на данный момент не доступен");
+            var dbRemovable = this.context.ProjectStatuses
+                .Include(e => e.ProjectVersions)
+                .Search(guid);
+            if (dbRemovable.Default)
+            {
+                throw new ArgumentException($"Сущность по умолчанию \"{dbRemovable}\" нельзя удалить из БД");
+            }
+            if (dbRemovable.ProjectVersions.Any())
+            {
+                throw new ArgumentException($"Сущность \"{dbRemovable}\" используется в проектах (БФПО) и неможет быть удалена из БД");
+            }
+            this.context.ProjectStatuses.Remove(dbRemovable);
+            this.context.SaveChanges();
         }
     }
 }

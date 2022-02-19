@@ -95,7 +95,19 @@ namespace MtChangeLog.Repositories.Realizations
 
         public void DeleteEntity(Guid guid) 
         {
-            throw new NotImplementedException("функционал по удалению алгоритма РЗиА на данный момент не доступен");
+            var dbRemovable = this.context.RelayAlgorithms
+                .Include(e => e.ProjectRevisions)
+                .Search(guid);
+            if (dbRemovable.Default)
+            {
+                throw new ArgumentException($"Сущность по умолчанию \"{dbRemovable}\" нельзя удалить из БД");
+            }
+            if (dbRemovable.ProjectRevisions.Any())
+            {
+                throw new ArgumentException($"Сущность \"{dbRemovable}\" используется в редакциях БФПО и неможет быть удалена из БД");
+            }
+            this.context.RelayAlgorithms.Remove(dbRemovable);
+            this.context.SaveChanges();
         }
     }
 }

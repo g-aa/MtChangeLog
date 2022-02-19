@@ -103,7 +103,28 @@ namespace MtChangeLog.Repositories.Realizations
 
         public void DeleteEntity(Guid guid)
         {
-            throw new NotImplementedException("функционал по удалению протоколов инф. обмена на данный момент не доступен");
+            var dbRemovable = this.context.Protocols
+                .Include(e => e.CommunicationModules).ThenInclude(e => e.Protocols)
+                .AsSingleQuery()
+                .Search(guid);
+            if (dbRemovable.Default)
+            {
+                throw new ArgumentException($"Сущность по умолчанию \"{dbRemovable}\" не может быть удалена из БД");
+            }
+            if (dbRemovable.CommunicationModules.Any()) 
+            {
+                var defProtocol = this.context.Protocols.First(e => e.Default);
+                foreach (var dbModule in dbRemovable.CommunicationModules)
+                {
+                    dbModule.Protocols.Remove(dbRemovable);
+                    if (!dbModule.Protocols.Any())
+                    {
+                        dbModule.Protocols.Add(defProtocol);
+                    }
+                }
+            }
+            this.context.Protocols.Remove(dbRemovable);
+            this.context.SaveChanges();
         }
     }
 }

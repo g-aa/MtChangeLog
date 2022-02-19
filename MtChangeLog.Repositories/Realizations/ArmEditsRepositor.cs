@@ -94,19 +94,18 @@ namespace MtChangeLog.Repositories.Realizations
 
         public void DeleteEntity(Guid guid)
         {
-            //throw new NotImplementedException("функционал по удалению ArmEdit на данный момент не доступен");
-            var dbArmEdit = this.context.ArmEdits
+            var dbRemovable = this.context.ArmEdits
                 .Include(e => e.ProjectRevisions)
                 .Search(guid);
-            if (dbArmEdit.Default) 
+            if (dbRemovable.Default) 
             {
-                throw new ArgumentException($"Сущность по умолчанию \"{dbArmEdit}\" нельзя удалить из БД");
+                throw new ArgumentException($"Сущность по умолчанию \"{dbRemovable}\" нельзя удалить из БД");
             }
-            if (dbArmEdit.ProjectRevisions.Any()) 
+            if (dbRemovable.ProjectRevisions.Any()) 
             {
-                throw new ArgumentException($"Сущность \"{dbArmEdit}\" используется в редакциях БФПО и неможет быть удалена из БД");    
+                throw new ArgumentException($"Сущность \"{dbRemovable}\" используется в редакциях БФПО и неможет быть удалена из БД");    
             }
-            this.context.ArmEdits.Remove(dbArmEdit);
+            this.context.ArmEdits.Remove(dbRemovable);
             this.context.SaveChanges();
         }
     }

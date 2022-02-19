@@ -133,7 +133,10 @@ namespace MtChangeLog.Repositories.Realizations
 
         public void DeleteEntity(Guid guid)
         {
-            throw new NotImplementedException("функционал по удалению проекта (БФПО) на данный момент не доступен");
+            var dbRemovable = this.context.ProjectVersions
+                .Search(guid);
+            this.context.ProjectVersions.Remove(dbRemovable);
+            this.context.SaveChanges();
         }
     }
 }

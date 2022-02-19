@@ -108,19 +108,33 @@ namespace MtChangeLog.Repositories.Realizations
 
         public void DeleteEntity(Guid guid) 
         {
-            var dbAnalogModule = this.context.AnalogModules
-                .Include(e => e.Platforms)
+            var dbRemovable = this.context.AnalogModules
+                .Include(e => e.Projects)
+                .Include(e => e.Platforms).ThenInclude(e => e.AnalogModules)
+                .AsSingleQuery()
                 .Search(guid);
-            if (dbAnalogModule.Default) 
+            if (dbRemovable.Default) 
             {
-                throw new ArgumentException($"Сущность по умолчанию не может быть удалена");
+                throw new ArgumentException($"Сущность по умолчанию \"{dbRemovable}\" не может быть удалена из БД");
             }
-            throw new NotImplementedException("функционал по удалению аналогового модуля на данный момент не доступен");
-            // проверить на значение по умолчанию;
-            // проверить используется ли в платформах;
-            // проверить используется ли в проекте;
-            // не удалять модуль используемый в проектах;
-            // если у платформы аналоговый модуль последний подставить в платформу значение по умолчанию;
+            if (dbRemovable.Projects.Any()) 
+            {
+                throw new ArgumentException($"Сущность \"{dbRemovable}\" используемая в проектах не может быть удалена из БД");
+            }
+            if (dbRemovable.Platforms.Any()) 
+            {
+                var defModule = this.context.AnalogModules.First(e => e.Default);
+                foreach (var dbPlatform in dbRemovable.Platforms)
+                {
+                    dbPlatform.AnalogModules.Remove(dbRemovable);
+                    if (!dbPlatform.AnalogModules.Any()) 
+                    {
+                        dbPlatform.AnalogModules.Add(defModule);
+                    }
+                }
+            }
+            this.context.AnalogModules.Remove(dbRemovable);
+            this.context.SaveChanges();
         }
     }
 }

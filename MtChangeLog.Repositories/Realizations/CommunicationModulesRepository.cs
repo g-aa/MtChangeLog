@@ -107,7 +107,34 @@ namespace MtChangeLog.Repositories.Realizations
 
         public void DeleteEntity(Guid guid) 
         {
-            throw new NotImplementedException("функционал по удалению коммуникационных модулей на данный момент не поддерживается");
+            var dbRemovable = this.context.CommunicationModules
+                .Include(e => e.ProjectRevisions)
+                .Include(e => e.Protocols).ThenInclude(e => e.CommunicationModules)
+                .AsSingleQuery()
+                .Search(guid);
+            if (dbRemovable.Default)
+            {
+                throw new ArgumentException($"Сущность по умолчанию \"{dbRemovable}\" не может быть удалена из БД");
+            }
+            if (dbRemovable.ProjectRevisions.Any()) 
+            {
+                throw new ArgumentException($"Сущность \"{dbRemovable}\" используемая в редакциях БФПО не может быть удалена из БД");
+
+            }
+            if (dbRemovable.Protocols.Any()) 
+            {
+                var defModule = this.context.CommunicationModules.First(e => e.Default);
+                foreach (var dbProtocols in dbRemovable.Protocols)
+                {
+                    dbProtocols.CommunicationModules.Remove(dbRemovable);
+                    if (!dbProtocols.CommunicationModules.Any()) 
+                    {
+                        dbProtocols.CommunicationModules.Add(defModule);
+                    }
+                }
+            }
+            this.context.CommunicationModules.Remove(dbRemovable);
+            this.context.SaveChanges();
         }
     }
 }

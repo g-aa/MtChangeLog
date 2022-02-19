@@ -106,14 +106,33 @@ namespace MtChangeLog.Repositories.Realizations
 
         public void DeleteEntity(Guid guid)
         {
-            var dbPlatform = this.context.Platforms
-                .Include(e => e.AnalogModules)
+            var dbRemovable = this.context.Platforms
+                .Include(e => e.Projects)
+                .Include(e => e.AnalogModules).ThenInclude(e => e.Platforms)
+                .AsSingleQuery()
                 .Search(guid);
-            if (dbPlatform.Default) 
+            if (dbRemovable.Default) 
             {
-                throw new ArgumentException($"Сущность по умолчанию не может быть удалена");
+                throw new ArgumentException($"Сущность по умолчанию \"{dbRemovable}\" не может быть удалена из БД");
             }
-            throw new NotImplementedException("функционал по удалению платформы БМРЗ на данный момент не доступен");
+            if (dbRemovable.Projects.Any())
+            {
+                throw new ArgumentException($"Сущность \"{dbRemovable}\" используемая в проектах не может быть удалена из БД");
+            }
+            if (dbRemovable.AnalogModules.Any()) 
+            {
+                var defPlatform = this.context.Platforms.First(e => e.Default);
+                foreach (var dbModule in dbRemovable.AnalogModules)
+                {
+                    dbModule.Platforms.Remove(dbRemovable);
+                    if (!dbModule.Platforms.Any()) 
+                    {
+                        dbModule.Platforms.Add(defPlatform);
+                    }
+                }
+            }
+            this.context.Platforms.Remove(dbRemovable);
+            this.context.SaveChanges();
         }
     }
 }
