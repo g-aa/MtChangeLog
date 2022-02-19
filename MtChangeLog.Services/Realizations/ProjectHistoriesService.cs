@@ -66,10 +66,11 @@ namespace MtChangeLog.Services.Realizations
                 .AsNoTracking()
                 .Include(e => e.ArmEdit)
                 .Include(e => e.Authors)
-                .Include(e => e.CommunicationModule.Protocols)
                 .Include(e => e.ProjectVersion.AnalogModule)
                 .Include(e => e.ProjectVersion.Platform)
-                .Include(e => e.RelayAlgorithms);
+                .Include(e => e.CommunicationModule.Protocols)
+                .Include(e => e.RelayAlgorithms)
+                .AsSingleQuery();
             return query;
         }
     }
