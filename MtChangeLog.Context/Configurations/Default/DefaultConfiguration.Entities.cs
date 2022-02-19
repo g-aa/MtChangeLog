@@ -84,17 +84,80 @@ namespace MtChangeLog.Context.Configurations.Default
             };
             context.ProjectStatuses.Add(projectStatus);
 
-            var relayAlgorithm = new RelayAlgorithm()
+            var relayAlgorithms = new RelayAlgorithm[]
             {
-                Id = Guid.Parse("D2D7B8D8-6AEF-4D1C-A56D-99117B7040D6"),
-                Group = "МТ",
-                ANSI = "-//-",
-                Title = "Самодиагностика БМРЗ",
-                LogicalNode = "-//-",
-                Description = "алгоритм по умолчанию",
-                Default = true
+                new RelayAlgorithm()
+                {
+                    Id = Guid.Parse("D2D7B8D8-6AEF-4D1C-A56D-99117B7040D6"),
+                    Group = "МТ",
+                    ANSI = "-//-",
+                    Title = "Самодиагностика БМРЗ",
+                    LogicalNode = "-//-",
+                    Description = "алгоритм по умолчанию",
+                    Default = true
+                },
+                new RelayAlgorithm()
+                {
+                    Id = Guid.Parse("5CFC833D-EFCA-40AA-8652-E7CC9B51610F"),
+                    Group = "МТ",
+                    ANSI = "-//-",
+                    Title = "Вызов",
+                    LogicalNode = "-//-",
+                    Description = "алгоритм по умолчанию, вызывная сигнализация",
+                    Default = true
+                },
+                new RelayAlgorithm()
+                {
+                    Id = Guid.Parse("6417F76B-F1C7-4BFF-A550-5A0863F84B06"),
+                    Group = "МТ",
+                    ANSI = "-//-",
+                    Title = "Осциллограф",
+                    LogicalNode = "-//-",
+                    Description = "алгоритм по умолчанию",
+                    Default = true
+                },
+                new RelayAlgorithm()
+                {
+                    Id = Guid.Parse("3942C6E4-7BE6-4B45-9897-20C655D5FE22"),
+                    Group = "МТ",
+                    ANSI = "-//-",
+                    Title = "Векторная диаграмма",
+                    LogicalNode = "-//-",
+                    Description = "алгоритм по умолчанию",
+                    Default = true
+                },
+                new RelayAlgorithm()
+                {
+                    Id = Guid.Parse("71416188-61BE-42FC-9142-4DC5D26CDFE4"),
+                    Group = "МТ",
+                    ANSI = "-//-",
+                    Title = "Диагностика по пос. сост.",
+                    LogicalNode = "-//-",
+                    Description = "алгоритм по умолчанию, алгоритм диагностики аналогового модуля по постоянной составляющей сигнала",
+                    Default = true
+                },
+                new RelayAlgorithm()
+                {
+                    Id = Guid.Parse("31BCC150-731F-4109-81D0-42F837D2929D"),
+                    Group = "МТ",
+                    ANSI = "-//-",
+                    Title = "Фазировка",
+                    LogicalNode = "-//-",
+                    Description = "алгоритм по умолчанию, алгоритм диагностики аналогового модуля по постоянной составляющей сигнала",
+                    Default = true
+                },
+                new RelayAlgorithm()
+                {
+                    Id = Guid.Parse("E655F180-FAC1-47CC-A4E6-A72AA3C3D754"),
+                    Group = "МТ",
+                    ANSI = "-//-",
+                    Title = "Пгр. смены уставок",
+                    LogicalNode = "-//-",
+                    Description = "алгоритм по умолчанию, алгоритм смены программы уставок",
+                    Default = true
+                }
             };
-            context.RelayAlgorithms.Add(relayAlgorithm);            
+            context.RelayAlgorithms.AddRange(relayAlgorithms);            
         }
     }
 }
