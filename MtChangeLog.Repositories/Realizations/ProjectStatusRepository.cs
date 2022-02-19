@@ -2,6 +2,8 @@
 using MtChangeLog.Abstractions.Extensions;
 using MtChangeLog.Abstractions.Repositories;
 using MtChangeLog.Context.Realizations;
+using MtChangeLog.Entities.Builders.Tables;
+using MtChangeLog.Entities.Extensions.Tables;
 using MtChangeLog.Entities.Tables;
 using MtChangeLog.TransferObjects.Editable;
 using MtChangeLog.TransferObjects.Views.Shorts;
@@ -62,7 +64,9 @@ namespace MtChangeLog.Repositories.Realizations
 
         public void AddEntity(ProjectStatusEditable entity)
         {
-            var dbProjectStatus = new ProjectStatus(entity);
+            var dbProjectStatus = ProjectStatusBuilder.GetBuilder()
+                .SetAttributes(entity)
+                .Build();
             if (this.context.ProjectStatuses.IsContained(dbProjectStatus)) 
             {
                 throw new ArgumentException($"Сущность \"{entity}\" уже содержится в БД");   
@@ -75,13 +79,31 @@ namespace MtChangeLog.Repositories.Realizations
         {
             var dbProjectStatus = this.context.ProjectStatuses
                 .Search(entity.Id);
-            dbProjectStatus.Update(entity);
+            if (dbProjectStatus.Default)
+            {
+                throw new ArgumentException($"Сущность по умолчанию \"{entity}\" не может быть обновлена");
+            }
+            dbProjectStatus.GetBuilder()
+                .SetAttributes(entity)
+                .Build();
             this.context.SaveChanges();
         }
 
         public void DeleteEntity(Guid guid)
         {
-            throw new NotImplementedException("функционал по удалению статусов проектов (БФПО) на данный момент не доступен");
+            var dbRemovable = this.context.ProjectStatuses
+                .Include(e => e.ProjectVersions)
+                .Search(guid);
+            if (dbRemovable.Default)
+            {
+                throw new ArgumentException($"Сущность по умолчанию \"{dbRemovable}\" нельзя удалить из БД");
+            }
+            if (dbRemovable.ProjectVersions.Any())
+            {
+                throw new ArgumentException($"Сущность \"{dbRemovable}\" используется в проектах (БФПО) и неможет быть удалена из БД");
+            }
+            this.context.ProjectStatuses.Remove(dbRemovable);
+            this.context.SaveChanges();
         }
     }
 }

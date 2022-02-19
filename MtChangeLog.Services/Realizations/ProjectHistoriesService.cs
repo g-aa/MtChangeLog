@@ -2,6 +2,8 @@
 using MtChangeLog.Abstractions.Extensions;
 using MtChangeLog.Abstractions.Services;
 using MtChangeLog.Context.Realizations;
+using MtChangeLog.Entities.Extensions.Tables;
+using MtChangeLog.Entities.Extensions.Views;
 using MtChangeLog.Entities.Tables;
 using MtChangeLog.TransferObjects.Views.Shorts;
 using MtChangeLog.TransferObjects.Views.Statistics;
@@ -64,10 +66,11 @@ namespace MtChangeLog.Services.Realizations
                 .AsNoTracking()
                 .Include(e => e.ArmEdit)
                 .Include(e => e.Authors)
-                .Include(e => e.CommunicationModule.Protocols)
                 .Include(e => e.ProjectVersion.AnalogModule)
                 .Include(e => e.ProjectVersion.Platform)
-                .Include(e => e.RelayAlgorithms);
+                .Include(e => e.CommunicationModule.Protocols)
+                .Include(e => e.RelayAlgorithms)
+                .AsSingleQuery();
             return query;
         }
     }

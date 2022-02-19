@@ -2,6 +2,8 @@
 using MtChangeLog.Abstractions.Extensions;
 using MtChangeLog.Abstractions.Repositories;
 using MtChangeLog.Context.Realizations;
+using MtChangeLog.Entities.Builders.Tables;
+using MtChangeLog.Entities.Extensions.Tables;
 using MtChangeLog.Entities.Tables;
 using MtChangeLog.TransferObjects.Editable;
 using MtChangeLog.TransferObjects.Views.Shorts;
@@ -64,7 +66,10 @@ namespace MtChangeLog.Repositories.Realizations
 
         public void AddEntity(ArmEditEditable entity)
         {
-            var dbArmEdit = new ArmEdit(entity);
+            var dbArmEdit = ArmEditBuilder
+                .GetBuilder()
+                .SetAttributes(entity)
+                .Build();
             if(this.context.ArmEdits.IsContained(dbArmEdit))
             {
                 throw new ArgumentException($"Сущность \"{entity}\" уже содержится в БД");
@@ -77,25 +82,30 @@ namespace MtChangeLog.Repositories.Realizations
         {
             var dbArmEdit = this.context.ArmEdits
                 .Search(entity.Id);
-            dbArmEdit.Update(entity);
+            if (dbArmEdit.Default)
+            {
+                throw new ArgumentException($"Сущность по умолчанию \"{entity}\" не может быть обновлена");
+            }
+            dbArmEdit.GetBuilder()
+                .SetAttributes(entity)
+                .Build();
             this.context.SaveChanges();
         }
 
         public void DeleteEntity(Guid guid)
         {
-            //throw new NotImplementedException("функционал по удалению ArmEdit на данный момент не доступен");
-            var dbArmEdit = this.context.ArmEdits
+            var dbRemovable = this.context.ArmEdits
                 .Include(e => e.ProjectRevisions)
                 .Search(guid);
-            if (dbArmEdit.Default) 
+            if (dbRemovable.Default) 
             {
-                throw new ArgumentException($"Сущность по умолчанию \"{dbArmEdit}\" нельзя удалить из БД");
+                throw new ArgumentException($"Сущность по умолчанию \"{dbRemovable}\" нельзя удалить из БД");
             }
-            if (dbArmEdit.ProjectRevisions.Any()) 
+            if (dbRemovable.ProjectRevisions.Any()) 
             {
-                throw new ArgumentException($"Сущность \"{dbArmEdit}\" используется в редакциях БФПО и неможет быть удалена из БД");    
+                throw new ArgumentException($"Сущность \"{dbRemovable}\" используется в редакциях БФПО и неможет быть удалена из БД");    
             }
-            this.context.ArmEdits.Remove(dbArmEdit);
+            this.context.ArmEdits.Remove(dbRemovable);
             this.context.SaveChanges();
         }
     }

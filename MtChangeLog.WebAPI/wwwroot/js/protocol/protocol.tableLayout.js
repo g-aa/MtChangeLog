@@ -92,7 +92,7 @@ class ProtocolTableLayout{
                             let selected = $$(tableLayputId).getSelectedItem();
                             if(selected != undefined){
                                 // удалить обьект на сервере:
-                                let answer = await repository.deleteProjectStatus(selected);
+                                let answer = await repository.deleteProtocol(selected);
                     
                                 // удалить обьект в UI части:
                                 $$(tableLayputId).remove(selected.id);
