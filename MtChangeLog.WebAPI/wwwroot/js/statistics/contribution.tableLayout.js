@@ -13,7 +13,7 @@ class ContributionTableLayout{
                 { id:"projectPrefix",    width:170,   header:["Аналоговый модуль:", { content:"multiSelectFilter" }] },
                 { id:"projectTitle",    width:170,   header:["Наименование проекта:", { content:"multiSelectFilter" }] },
                 { id:"projectVersion",  width:170,   header:["Версия проекта:", { content:"multiSelectFilter" }] },
-                { id:"contribution",    width:170,   header:["Влад:", { content:"multiSelectFilter" }] },
+                { id:"contribution",    width:170,   header:["Вклад:", { content:"multiSelectFilter" }] },
                 { fillspace:true }
             ],
             data:[]

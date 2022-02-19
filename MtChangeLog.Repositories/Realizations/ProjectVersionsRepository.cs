@@ -2,6 +2,8 @@
 using MtChangeLog.Abstractions.Extensions;
 using MtChangeLog.Abstractions.Repositories;
 using MtChangeLog.Context.Realizations;
+using MtChangeLog.Entities.Builders.Tables;
+using MtChangeLog.Entities.Extensions.Tables;
 using MtChangeLog.Entities.Tables;
 using MtChangeLog.TransferObjects.Editable;
 using MtChangeLog.TransferObjects.Views.Shorts;
@@ -95,14 +97,13 @@ namespace MtChangeLog.Repositories.Realizations
                 .SearchOrDefault(entity.Platform.Id);
             var dbAnalogModule = dbPlatform.AnalogModules
                 .Search(entity.AnalogModule.Id);
-            var dbProjectVersion = new ProjectVersion(entity)
-            {
-                ProjectStatus = dbStatus,
-                Platform = dbPlatform,
-                AnalogModule = dbAnalogModule,
-                Prefix = entity.Prefix != string.Empty ? entity.Prefix : dbAnalogModule.Title.Replace("БМРЗ", "БФПО")
-            };
-            if (this.context.ProjectVersions.Include(e => e.AnalogModule).IsContained(dbProjectVersion))
+            var dbProjectVersion = ProjectVersionBuilder.GetBuilder()
+                .SetAttributes(entity)
+                .SetProjectStatus(dbStatus)
+                .SetPlatform(dbPlatform)
+                .SetAnalogModule(dbAnalogModule)
+                .Build();
+            if (this.context.ProjectVersions.IsContained(dbProjectVersion))
             {
                 throw new ArgumentException($"Сущность \"{entity}\" уже содержится в БД");
             }
@@ -112,11 +113,6 @@ namespace MtChangeLog.Repositories.Realizations
 
         public void UpdateEntity(ProjectVersionEditable entity)
         {
-            var dbProjectVersion = this.context.ProjectVersions
-                .Include(e => e.AnalogModule)
-                .Include(e => e.Platform)
-                .Include(e => e.ProjectStatus)
-                .Search(entity.Id);
             var dbStatus = this.context.ProjectStatuses
                .SearchOrDefault(entity.ProjectStatus.Id);
             var dbPlatform = this.context.Platforms
@@ -124,13 +120,23 @@ namespace MtChangeLog.Repositories.Realizations
                 .SearchOrDefault(entity.Platform.Id);
             var dbAnalogModule = dbPlatform.AnalogModules
                 .Search(entity.AnalogModule.Id);
-            dbProjectVersion.Update(entity, dbAnalogModule, dbPlatform, dbStatus);
+            var dbProjectVersion = this.context.ProjectVersions
+                .Search(entity.Id)
+                .GetBuilder()
+                .SetAttributes(entity)
+                .SetProjectStatus(dbStatus)
+                .SetPlatform(dbPlatform)
+                .SetAnalogModule(dbAnalogModule)
+                .Build();
             this.context.SaveChanges();
         }
 
         public void DeleteEntity(Guid guid)
         {
-            throw new NotImplementedException("функционал по удалению проекта (БФПО) на данный момент не доступен");
+            var dbRemovable = this.context.ProjectVersions
+                .Search(guid);
+            this.context.ProjectVersions.Remove(dbRemovable);
+            this.context.SaveChanges();
         }
     }
 }

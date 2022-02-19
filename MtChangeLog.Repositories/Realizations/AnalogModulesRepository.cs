@@ -2,6 +2,8 @@
 using MtChangeLog.Abstractions.Extensions;
 using MtChangeLog.Abstractions.Repositories;
 using MtChangeLog.Context.Realizations;
+using MtChangeLog.Entities.Builders.Tables;
+using MtChangeLog.Entities.Extensions.Tables;
 using MtChangeLog.Entities.Tables;
 using MtChangeLog.TransferObjects.Editable;
 using MtChangeLog.TransferObjects.Views.Shorts;
@@ -72,12 +74,11 @@ namespace MtChangeLog.Repositories.Realizations
         public void AddEntity(AnalogModuleEditable entity) 
         {
             var dbPlatforms = this.context.Platforms
-                .SearchManyOrDefault(entity.Platforms.Select(e => e.Id))
-                .ToHashSet();
-            var dbAnalogModule = new AnalogModule(entity)
-            {
-                Platforms = dbPlatforms
-            };
+                .SearchManyOrDefault(entity.Platforms.Select(e => e.Id));
+            var dbAnalogModule = AnalogModuleBuilder.GetBuilder()
+                .SetAttributes(entity)
+                .SetPlatforms(dbPlatforms)
+                .Build();
             if (this.context.AnalogModules.IsContained(dbAnalogModule)) 
             {
                 throw new ArgumentException($"Сущность \"{entity}\" уже содержится в БД");
@@ -90,30 +91,50 @@ namespace MtChangeLog.Repositories.Realizations
         {
             var dbAnalogModule = this.context.AnalogModules
                 .Include(e => e.Projects)
-                .Include(e => e.Platforms).ThenInclude(e => e.Projects)
+                .Include(e => e.Platforms)
                 .Search(entity.Id);
+            if (dbAnalogModule.Default) 
+            {
+                throw new ArgumentException($"Сущность по умолчанию \"{entity}\" не может быть обновлена");
+            }
             var dbPlatforms = this.context.Platforms
-                .SearchManyOrDefault(entity.Platforms.Select(e => e.Id))
-                .ToHashSet();
-            dbAnalogModule.Update(entity, dbPlatforms);
+                .SearchManyOrDefault(entity.Platforms.Select(e => e.Id));
+            dbAnalogModule.GetBuilder()
+                .SetAttributes(entity)
+                .SetPlatforms(dbPlatforms)
+                .Build();
             this.context.SaveChanges();
         }
 
         public void DeleteEntity(Guid guid) 
         {
-            throw new NotImplementedException("функционал по удалению аналогового модуля на данный момент не доступен");
-            // проверить на значение по умолчанию;
-            // проверить используется ли в платформах;
-            // проверить используется ли в проекте;
-            // не удалять модуль используемый в проектах;
-            // если у платформы аналоговый модуль последний подставить в платформу значение по умолчанию;
-            //DbAnalogModule dbAnalogModule = this.GetDbAnalogModule(guid);
-            //if (dbAnalogModule.Default) 
-            //{
-            //    throw new ArgumentException($"Default entity {dbAnalogModule} can not by remove");
-            //}
-            //this.context.AnalogModules.Remove(dbAnalogModule);
-            //this.context.SaveChanges();
+            var dbRemovable = this.context.AnalogModules
+                .Include(e => e.Projects)
+                .Include(e => e.Platforms).ThenInclude(e => e.AnalogModules)
+                .AsSingleQuery()
+                .Search(guid);
+            if (dbRemovable.Default) 
+            {
+                throw new ArgumentException($"Сущность по умолчанию \"{dbRemovable}\" не может быть удалена из БД");
+            }
+            if (dbRemovable.Projects.Any()) 
+            {
+                throw new ArgumentException($"Сущность \"{dbRemovable}\" используемая в проектах не может быть удалена из БД");
+            }
+            if (dbRemovable.Platforms.Any()) 
+            {
+                var defModule = this.context.AnalogModules.First(e => e.Default);
+                foreach (var dbPlatform in dbRemovable.Platforms)
+                {
+                    dbPlatform.AnalogModules.Remove(dbRemovable);
+                    if (!dbPlatform.AnalogModules.Any()) 
+                    {
+                        dbPlatform.AnalogModules.Add(defModule);
+                    }
+                }
+            }
+            this.context.AnalogModules.Remove(dbRemovable);
+            this.context.SaveChanges();
         }
     }
 }

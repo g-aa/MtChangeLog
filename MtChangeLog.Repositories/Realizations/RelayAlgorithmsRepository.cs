@@ -2,6 +2,8 @@
 using MtChangeLog.Abstractions.Extensions;
 using MtChangeLog.Abstractions.Repositories;
 using MtChangeLog.Context.Realizations;
+using MtChangeLog.Entities.Builders.Tables;
+using MtChangeLog.Entities.Extensions.Tables;
 using MtChangeLog.Entities.Tables;
 using MtChangeLog.TransferObjects.Editable;
 using MtChangeLog.TransferObjects.Views.Shorts;
@@ -66,7 +68,9 @@ namespace MtChangeLog.Repositories.Realizations
 
         public void AddEntity(RelayAlgorithmEditable entity)
         {
-            var dbAlgorithm = new RelayAlgorithm(entity);
+            var dbAlgorithm = RelayAlgorithmBuilder.GetBuilder()
+                .SetAttributes(entity)
+                .Build();
             if (this.context.RelayAlgorithms.IsContained(dbAlgorithm)) 
             {
                 throw new ArgumentException($"Сущность \"{entity}\" уже содержится в БД");
@@ -79,13 +83,31 @@ namespace MtChangeLog.Repositories.Realizations
         {
             var dbAlgorithm = this.context.RelayAlgorithms
                 .Search(entity.Id);
-            dbAlgorithm.Update(entity);
+            if (dbAlgorithm.Default)
+            {
+                throw new ArgumentException($"Сущность по умолчанию \"{entity}\" не может быть обновлена");
+            }
+            dbAlgorithm.GetBuilder()
+                .SetAttributes(entity)
+                .Build();
             this.context.SaveChanges();
         }
 
         public void DeleteEntity(Guid guid) 
         {
-            throw new NotImplementedException("функционал по удалению алгоритма РЗиА на данный момент не доступен");
+            var dbRemovable = this.context.RelayAlgorithms
+                .Include(e => e.ProjectRevisions)
+                .Search(guid);
+            if (dbRemovable.Default)
+            {
+                throw new ArgumentException($"Сущность по умолчанию \"{dbRemovable}\" нельзя удалить из БД");
+            }
+            if (dbRemovable.ProjectRevisions.Any())
+            {
+                throw new ArgumentException($"Сущность \"{dbRemovable}\" используется в редакциях БФПО и неможет быть удалена из БД");
+            }
+            this.context.RelayAlgorithms.Remove(dbRemovable);
+            this.context.SaveChanges();
         }
     }
 }
