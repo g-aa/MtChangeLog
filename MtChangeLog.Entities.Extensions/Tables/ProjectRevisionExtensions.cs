@@ -1,8 +1,8 @@
 ﻿using MtChangeLog.Entities.Builders.Tables;
 using MtChangeLog.Entities.Tables;
 using MtChangeLog.TransferObjects.Editable;
+using MtChangeLog.TransferObjects.Views.Historical;
 using MtChangeLog.TransferObjects.Views.Shorts;
-using MtChangeLog.TransferObjects.Views.Statistics;
 using MtChangeLog.TransferObjects.Views.Tables;
 using System;
 using System.Collections.Generic;
