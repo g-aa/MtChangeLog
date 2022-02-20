@@ -5,6 +5,7 @@ using MtChangeLog.Context.Realizations;
 using MtChangeLog.Entities.Extensions.Tables;
 using MtChangeLog.Entities.Extensions.Views;
 using MtChangeLog.TransferObjects.Editable;
+using MtChangeLog.TransferObjects.Views.Historical;
 using MtChangeLog.TransferObjects.Views.Shorts;
 using MtChangeLog.TransferObjects.Views.Statistics;
 using System;
