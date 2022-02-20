@@ -1,4 +1,5 @@
 ﻿using MtChangeLog.Entities.Views;
+using MtChangeLog.TransferObjects.Views.Historical;
 using MtChangeLog.TransferObjects.Views.Shorts;
 using MtChangeLog.TransferObjects.Views.Statistics;
 using System;

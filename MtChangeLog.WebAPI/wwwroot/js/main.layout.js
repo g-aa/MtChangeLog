@@ -178,7 +178,8 @@ class MainLayout{
                             icon:"mdi mdi-information", 
                             tooltip:"О программе",
                             click:function(){
-                                // добавить вывод информации о программе
+                                let win = new InfoWindow();
+                                win.show();
                             }
                         }
                     ]

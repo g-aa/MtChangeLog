@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MtChangeLog.TransferObjects.Views.Statistics
+namespace MtChangeLog.TransferObjects.Views.Historical
 {
     public class ProjectRevisionHistoryView : ProjectRevisionHistoryShortView
     {

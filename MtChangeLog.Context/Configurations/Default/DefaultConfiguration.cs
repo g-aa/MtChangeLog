@@ -18,6 +18,7 @@ namespace MtChangeLog.Context.Configurations.Default
                 DefaultConfiguration.CreateLastProjectsRevisionView(context);
                 DefaultConfiguration.CreateAuthorContributionView(context);
                 DefaultConfiguration.CreateAuthorProjectContribution(context);
+                DefaultConfiguration.CreateProjectHistoryRecord(context);
 
                 context.SaveChanges();
             }

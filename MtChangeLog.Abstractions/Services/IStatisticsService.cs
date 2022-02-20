@@ -1,5 +1,5 @@
 ﻿using MtChangeLog.TransferObjects.Editable;
-using MtChangeLog.TransferObjects.Views.Shorts;
+using MtChangeLog.TransferObjects.Views.Historical;
 using MtChangeLog.TransferObjects.Views.Statistics;
 using System;
 using System.Collections.Generic;

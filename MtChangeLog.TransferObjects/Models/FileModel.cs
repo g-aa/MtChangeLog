@@ -1,4 +1,4 @@
-﻿using MtChangeLog.TransferObjects.Views.Statistics;
+﻿using MtChangeLog.TransferObjects.Views.Historical;
 using System;
 using System.Collections.Generic;
 using System.Linq;

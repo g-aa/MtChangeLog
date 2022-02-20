@@ -2,7 +2,7 @@
 using MtChangeLog.Abstractions.Services;
 using MtChangeLog.Context.Realizations;
 using MtChangeLog.Entities.Extensions.Tables;
-using MtChangeLog.TransferObjects.Views.Statistics;
+using MtChangeLog.TransferObjects.Views.Historical;
 using System;
 using System.Collections.Generic;
 using System.Linq;
